@@ -2003,7 +2003,7 @@ function seedFeedback(id) {
   for (let i = 0; i < n; i++) out.push(FB_POOL[(h + i) % FB_POOL.length]);
   return out;
 }
-function Modal({ shot, saved, onSave, onClose, used, onUse, isPro, onAI, onCreator, onOpen, onTag, liked, onLike }) {
+function Modal({ shot, saved, onSave, onClose, used, onUse, isPro, onAI, onCreator, onOpen, onTag, liked, onLike, me = "\uAC8C\uC2A4\uD2B8" }) {
   const dlg = useDialog(onClose);
   const [pg, setPg] = useState(0), [conn, setConn] = useState("idle"), [prog, setProg] = useState(1), [out, setOut] = useState(false), [toast, setToast] = useState(""), [fb, setFb] = useState(() => SB ? [] : seedFeedback(shot.id)), [myStars, setMyStars] = useState(0), [hov, setHov] = useState(0), [fbTxt, setFbTxt] = useState("");
   const [W, H] = dims(shot.spec), item = shot.items[pg];
@@ -2037,9 +2037,9 @@ function Modal({ shot, saved, onSave, onClose, used, onUse, isPro, onAI, onCreat
   const fbAvg = fb.length ? fb.reduce((s, f) => s + f.stars, 0) / fb.length : 0;
   const submitFb = async () => {
     if (!myStars) return flash("\uBCC4\uC810\uC744 \uC120\uD0DD\uD574 \uC8FC\uC138\uC694");
-    const row = { who: "Young", stars: myStars, txt: fbTxt.trim() || "(\uCF54\uBA58\uD2B8 \uC5C6\uC74C)" };
+    const row = { who: me, stars: myStars, txt: fbTxt.trim() || "(\uCF54\uBA58\uD2B8 \uC5C6\uC74C)" };
     if (SB) {
-      const { error } = await SB.from("feedback").insert({ graphic_id: shot.id, stars: myStars, comment: row.txt, author: "Young" });
+      const { error } = await SB.from("feedback").insert({ graphic_id: shot.id, stars: myStars, comment: row.txt, author: me });
       if (error) return flash("\uC800\uC7A5 \uC911 \uBB38\uC81C\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694. \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694");
     }
     setFb((l) => [row, ...l]);
@@ -2286,6 +2286,63 @@ function ReviewPanel() {
     const [W, H] = dims(q.spec), st = status[q.id];
     return /* @__PURE__ */ React.createElement("div", { key: q.id, className: "rev-card" + (st === "approved" ? " done" : st === "rejected" ? " no" : "") }, /* @__PURE__ */ React.createElement("div", { className: "rev-pv" }, /* @__PURE__ */ React.createElement(DotMatrix, { hex: q.data, w: W, h: H, cell: W === 96 ? 1.7 : 2.6, variant: "pins" })), /* @__PURE__ */ React.createElement("div", { className: "rev-body" }, /* @__PURE__ */ React.createElement("div", { className: "rev-ti" }, q.title), /* @__PURE__ */ React.createElement("div", { className: "rev-su" }, q.creator, " \xB7 ", q.spec), !st && /* @__PURE__ */ React.createElement("div", { className: "rev-chk" }, CRIT.map((cr, i) => /* @__PURE__ */ React.createElement("label", { key: i, className: "std-chk" }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: !!(checks[q.id] || [])[i], onChange: () => toggle(q.id, i) }), cr))), !st ? /* @__PURE__ */ React.createElement("div", { className: "rev-act" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", disabled: !allChecked(q.id), onClick: () => decide(q.id, "approved") }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 15 }), "\uC2B9\uC778 \xB7 \uACF5\uAC1C"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => decide(q.id, "rejected") }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 15 }), "\uBC18\uB824")) : /* @__PURE__ */ React.createElement("span", { className: "rev-badge " + (st === "approved" ? "ok" : "x") }, st === "approved" ? "\uACF5\uAC1C \uC2B9\uC778\uB428" : "\uBC18\uB824\uB428")));
   })));
+}
+function AuthModal({ onClose }) {
+  const dlg = useDialog(onClose);
+  const [mode, setMode] = useState("login");
+  const [email, setEmail] = useState(""), [pw, setPw] = useState(""), [name, setName] = useState("");
+  const [err, setErr] = useState(""), [busy, setBusy] = useState(false), [note, setNote] = useState("");
+  const submit = async () => {
+    if (!SB) {
+      setErr("\uC5F0\uACB0\uC774 \uC5C6\uC5B4 \uC9C0\uAE08\uC740 \uB85C\uADF8\uC778\uD560 \uC218 \uC5C6\uC5B4\uC694.");
+      return;
+    }
+    if (!email.trim() || !pw) {
+      setErr("\uC774\uBA54\uC77C\uACFC \uBE44\uBC00\uBC88\uD638\uB97C \uC785\uB825\uD574 \uC8FC\uC138\uC694.");
+      return;
+    }
+    if (mode === "signup" && !name.trim()) {
+      setErr("\uC774\uB984\uC744 \uC785\uB825\uD574 \uC8FC\uC138\uC694.");
+      return;
+    }
+    if (pw.length < 6) {
+      setErr("\uBE44\uBC00\uBC88\uD638\uB294 6\uC790 \uC774\uC0C1\uC774\uC5B4\uC57C \uD574\uC694.");
+      return;
+    }
+    setErr("");
+    setNote("");
+    setBusy(true);
+    try {
+      if (mode === "signup") {
+        const { data, error } = await SB.auth.signUp({ email: email.trim(), password: pw, options: { data: { name: name.trim() } } });
+        if (error) throw error;
+        if (!data.session) {
+          setNote("\uAC00\uC785\uB410\uC5B4\uC694! \uD655\uC778 \uBA54\uC77C\uC758 \uB9C1\uD06C\uB97C \uB204\uB974\uBA74 \uB85C\uADF8\uC778\uB429\uB2C8\uB2E4.");
+          setBusy(false);
+          return;
+        }
+      } else {
+        const { error } = await SB.auth.signInWithPassword({ email: email.trim(), password: pw });
+        if (error) throw error;
+      }
+      onClose();
+    } catch (e) {
+      const m = e && e.message || "";
+      if (/Invalid login/i.test(m)) setErr("\uC774\uBA54\uC77C \uB610\uB294 \uBE44\uBC00\uBC88\uD638\uAC00 \uC62C\uBC14\uB974\uC9C0 \uC54A\uC544\uC694.");
+      else if (/already registered|already been registered|exists/i.test(m)) setErr("\uC774\uBBF8 \uAC00\uC785\uB41C \uC774\uBA54\uC77C\uC774\uC5D0\uC694. \uB85C\uADF8\uC778\uD574 \uC8FC\uC138\uC694.");
+      else setErr(m || "\uBB38\uC81C\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694. \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");
+      setBusy(false);
+    }
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": "\uB85C\uADF8\uC778", style: { maxWidth: 420 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 20, color: "#FF4F00" }), mode === "login" ? "\uB85C\uADF8\uC778" : "\uD68C\uC6D0\uAC00\uC785"), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 8, color: "var(--ink-soft)", fontSize: "var(--fs-sm)" } }, "TIB \uACC4\uC815\uC73C\uB85C \uB0B4 \uD65C\uB3D9\uC744 \uC800\uC7A5\uD558\uACE0 \uC774\uC5B4\uAC00\uC694."))), /* @__PURE__ */ React.createElement("div", { className: "seg", role: "group", "aria-label": "\uB85C\uADF8\uC778/\uD68C\uC6D0\uAC00\uC785", style: { margin: "0 var(--s6) var(--s4)" } }, /* @__PURE__ */ React.createElement("button", { type: "button", className: mode === "login" ? "act" : "", "aria-pressed": mode === "login", onClick: () => {
+    setMode("login");
+    setErr("");
+    setNote("");
+  } }, "\uB85C\uADF8\uC778"), /* @__PURE__ */ React.createElement("button", { type: "button", className: mode === "signup" ? "act" : "", "aria-pressed": mode === "signup", onClick: () => {
+    setMode("signup");
+    setErr("");
+    setNote("");
+  } }, "\uD68C\uC6D0\uAC00\uC785")), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 var(--s6) var(--s6)", display: "flex", flexDirection: "column", gap: "var(--s3)" } }, mode === "signup" && /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uC774\uB984"), /* @__PURE__ */ React.createElement("input", { value: name, onChange: (e) => setName(e.target.value), placeholder: "\uD654\uBA74\uC5D0 \uD45C\uC2DC\uB420 \uC774\uB984", maxLength: 24 })), /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uC774\uBA54\uC77C"), /* @__PURE__ */ React.createElement("input", { type: "email", value: email, onChange: (e) => setEmail(e.target.value), placeholder: "you@example.com" })), /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uBE44\uBC00\uBC88\uD638"), /* @__PURE__ */ React.createElement("input", { type: "password", value: pw, onChange: (e) => setPw(e.target.value), placeholder: "6\uC790 \uC774\uC0C1" })), err && /* @__PURE__ */ React.createElement("div", { className: "contact-err" }, err), note && /* @__PURE__ */ React.createElement("div", { className: "req-posted", style: { marginBottom: 0 } }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 15 }), note), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", style: { width: "100%", justifyContent: "center", marginTop: 4 }, onClick: submit, disabled: busy }, busy ? /* @__PURE__ */ React.createElement("span", { className: "spin" }) : /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 16, color: "#fff" }), busy ? "\uCC98\uB9AC \uC911\u2026" : mode === "login" ? "\uB85C\uADF8\uC778" : "\uD68C\uC6D0\uAC00\uC785"))));
 }
 function PricingModal({ onClose }) {
   const dlg = useDialog(onClose);
@@ -2660,7 +2717,7 @@ const SEED_REQUESTS = [
   { id: "r4", title: "\uD0DC\uC591\uACC4 \uD589\uC131 \uD06C\uAE30 \uBE44\uAD50", cat: "\uACFC\uD559", desc: "\uD589\uC131 \uD06C\uAE30 \uCC28\uC774\uB97C \uC190\uB05D\uC73C\uB85C \uB290\uB084 \uC218 \uC788\uAC8C \uB2E8\uC21C\uD654\uD574 \uC8FC\uC138\uC694.", author: "\uC815\uC120\uC0DD", status: "done", votes: 56, ts: 2 },
   { id: "r5", title: "\uC813\uAC00\uB77D \uC7A1\uB294 \uC190 \uBAA8\uC591", cat: "\uC0DD\uD65C", desc: "\uC0DD\uD65C \uC790\uB9BD \uC218\uC5C5\uC6A9\uC73C\uB85C \uC190\uAC00\uB77D \uC704\uCE58\uB97C \uB2E8\uC21C\uD654\uD574 \uC8FC\uC138\uC694.", author: "\uCD5C\uBCF4\uC870", status: "open", votes: 9, ts: 1 }
 ];
-function RequestsPage({ onBrowse }) {
+function RequestsPage({ onBrowse, me = "\uAC8C\uC2A4\uD2B8" }) {
   const FILTERS = [["\uC804\uCCB4", null], ["\uC694\uCCAD\uC911", "open"], ["\uC81C\uC791\uC911", "making"], ["\uC644\uB8CC", "done"]];
   const mapRow = (d) => ({ id: d.id, title: d.title, cat: d.cat, desc: d.description, author: d.author, status: d.status, votes: d.votes, ts: d.created_at });
   const [list, setList] = useState(SB ? [] : SEED_REQUESTS);
@@ -2693,7 +2750,7 @@ function RequestsPage({ onBrowse }) {
       return;
     }
     setErr("");
-    const base = { title: title.trim(), cat, description: desc.trim(), author: "Young", status: "open", votes: 0 };
+    const base = { title: title.trim(), cat, description: desc.trim(), author: me, status: "open", votes: 0 };
     let newId;
     if (SB) {
       setBusy(true);
@@ -2707,7 +2764,7 @@ function RequestsPage({ onBrowse }) {
       setList((l) => [mapRow(data), ...l]);
     } else {
       newId = "r" + Date.now();
-      setList((l) => [{ id: newId, title: base.title, cat, desc: base.description, author: "Young", status: "open", votes: 0, ts: Date.now() }, ...l]);
+      setList((l) => [{ id: newId, title: base.title, cat, desc: base.description, author: me, status: "open", votes: 0, ts: Date.now() }, ...l]);
     }
     setTitle("");
     setDesc("");
@@ -2773,6 +2830,18 @@ function BackToTop() {
 function App() {
   const [tab, setTab] = useState("\uC804\uCCB4"), [q, setQ] = useState(""), [res, setRes] = useState("all"), [lic, setLic] = useState("all"), [sort, setSort] = useState("popular");
   const [saved, setSaved] = useState(/* @__PURE__ */ new Set()), [liked, setLiked] = useState(/* @__PURE__ */ new Set()), [open, setOpen] = useState(null), [used, setUsed] = useState(0), [ai, setAi] = useState(null), [menu, setMenu] = useState(null), [creator, setCreator] = useState(null), [pricing, setPricing] = useState(false), [profTab, setProfTab] = useState("uploads"), [opsTab, setOpsTab] = useState("dash"), [view, setView] = useState("home"), [profile, setProfile] = useState({ name: "Young", region: "\u{1F1F0}\u{1F1F7} \uD55C\uAD6D", bio: "\uCD09\uAC01 \uADF8\uB798\uD53D\uC73C\uB85C \uBAA8\uB450\uAC00 \uC77D\uB294 \uC138\uC0C1\uC744 \uB9CC\uB4ED\uB2C8\uB2E4.", avatar: "linear-gradient(135deg,#9DE,#FF4F00)" }), [hc, setHc] = useState(false), [lang, setLang] = useState("ko"), [following, setFollowing] = useState(/* @__PURE__ */ new Set()), [collections, setCollections] = useState([]);
+  const [authUser, setAuthUser] = useState(null), [authOpen, setAuthOpen] = useState(false);
+  useEffect(() => {
+    if (!SB) return;
+    SB.auth.getSession().then(({ data: data2 }) => setAuthUser(data2.session ? data2.session.user : null));
+    const { data } = SB.auth.onAuthStateChange((_e, session) => setAuthUser(session ? session.user : null));
+    return () => data.subscription.unsubscribe();
+  }, []);
+  useEffect(() => {
+    if (!authUser) return;
+    const nm = authUser.user_metadata && authUser.user_metadata.name || (authUser.email ? authUser.email.split("@")[0] : "\uC0AC\uC6A9\uC790");
+    setProfile((p) => ({ ...p, name: nm }));
+  }, [authUser]);
   useMenuA11y(menu, () => setMenu(null));
   const isPro = false;
   const toggleSave = (id) => setSaved((s) => {
@@ -2867,7 +2936,13 @@ function App() {
     setMenu(null);
     setView("activity");
     window.scrollTo({ top: 0 });
-  } }, "\uD65C\uB3D9 \uD53C\uB4DC \uBAA8\uB450 \uBCF4\uAE30", /* @__PURE__ */ React.createElement(Icon, { n: "arrow-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "menuwrap" }, /* @__PURE__ */ React.createElement("button", { className: "avbtn", onClick: () => setMenu(menu === "profile" ? null : "profile"), "aria-label": "\uB0B4 \uACC4\uC815 \uBA54\uB274", "aria-haspopup": "true", "aria-expanded": menu === "profile" }, /* @__PURE__ */ React.createElement(Avatar, { src: profile.avatar, on: true })), menu === "profile" && /* @__PURE__ */ React.createElement("div", { className: "menu", style: { minWidth: 264 } }, /* @__PURE__ */ React.createElement("div", { className: "ph" }, /* @__PURE__ */ React.createElement(Avatar, { src: profile.avatar, lg: true, on: true }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "phn" }, profile.name), /* @__PURE__ */ React.createElement("div", { className: "phu" }, /* @__PURE__ */ React.createElement(Icon, { n: "download", size: 13 }), "\uC624\uB298 \uBB34\uB8CC \uCD9C\uB825 ", used, "/", FREE_LIMIT))), /* @__PURE__ */ React.createElement("div", { className: "sep" }), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goProfile("collections") }, /* @__PURE__ */ React.createElement(Icon, { n: "bookmark", size: 18 }), "\uB0B4 \uCEEC\uB809\uC158", /* @__PURE__ */ React.createElement("span", { className: "gr" }, collections.length)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goProfile("liked") }, /* @__PURE__ */ React.createElement(Icon, { n: "heart", size: 18 }), "\uC88B\uC544\uC694", /* @__PURE__ */ React.createElement("span", { className: "gr" }, liked.size)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goProfile("uploads") }, /* @__PURE__ */ React.createElement(Icon, { n: "photo", size: 18 }), "\uB0B4 \uC5C5\uB85C\uB4DC"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goOps("dash") }, /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 18 }), "\uCC3D\uC791\uC790 \uB300\uC2DC\uBCF4\uB4DC"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goOps("review") }, /* @__PURE__ */ React.createElement(Icon, { n: "license", size: 18 }), "\uAC80\uC218 \uB300\uAE30\uC5F4"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goOps("autogen") }, /* @__PURE__ */ React.createElement(Icon, { n: "wand", size: 18 }), "AI \uC790\uB3D9 \uC0DD\uC131 \uD050"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goSettings() }, /* @__PURE__ */ React.createElement(Icon, { n: "settings", size: 18 }), "\uC124\uC815"), /* @__PURE__ */ React.createElement("div", { className: "sep" }), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => setMenu(null) }, /* @__PURE__ */ React.createElement(Icon, { n: "logout", size: 18 }), "\uB85C\uADF8\uC544\uC6C3"))), menu === "nav" && /* @__PURE__ */ React.createElement("div", { className: "navpanel" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
+  } }, "\uD65C\uB3D9 \uD53C\uB4DC \uBAA8\uB450 \uBCF4\uAE30", /* @__PURE__ */ React.createElement(Icon, { n: "arrow-right", size: 15 })))), /* @__PURE__ */ React.createElement("div", { className: "menuwrap" }, /* @__PURE__ */ React.createElement("button", { className: "avbtn", onClick: () => setMenu(menu === "profile" ? null : "profile"), "aria-label": "\uB0B4 \uACC4\uC815 \uBA54\uB274", "aria-haspopup": "true", "aria-expanded": menu === "profile" }, /* @__PURE__ */ React.createElement(Avatar, { src: profile.avatar, on: true })), menu === "profile" && /* @__PURE__ */ React.createElement("div", { className: "menu", style: { minWidth: 264 } }, /* @__PURE__ */ React.createElement("div", { className: "ph" }, /* @__PURE__ */ React.createElement(Avatar, { src: profile.avatar, lg: true, on: true }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "phn" }, profile.name), /* @__PURE__ */ React.createElement("div", { className: "phu" }, authUser ? authUser.email : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "download", size: 13 }), "\uC624\uB298 \uBB34\uB8CC \uCD9C\uB825 ", used, "/", FREE_LIMIT)))), /* @__PURE__ */ React.createElement("div", { className: "sep" }), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goProfile("collections") }, /* @__PURE__ */ React.createElement(Icon, { n: "bookmark", size: 18 }), "\uB0B4 \uCEEC\uB809\uC158", /* @__PURE__ */ React.createElement("span", { className: "gr" }, collections.length)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goProfile("liked") }, /* @__PURE__ */ React.createElement(Icon, { n: "heart", size: 18 }), "\uC88B\uC544\uC694", /* @__PURE__ */ React.createElement("span", { className: "gr" }, liked.size)), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goProfile("uploads") }, /* @__PURE__ */ React.createElement(Icon, { n: "photo", size: 18 }), "\uB0B4 \uC5C5\uB85C\uB4DC"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goOps("dash") }, /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 18 }), "\uCC3D\uC791\uC790 \uB300\uC2DC\uBCF4\uB4DC"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goOps("review") }, /* @__PURE__ */ React.createElement(Icon, { n: "license", size: 18 }), "\uAC80\uC218 \uB300\uAE30\uC5F4"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goOps("autogen") }, /* @__PURE__ */ React.createElement(Icon, { n: "wand", size: 18 }), "AI \uC790\uB3D9 \uC0DD\uC131 \uD050"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => goSettings() }, /* @__PURE__ */ React.createElement(Icon, { n: "settings", size: 18 }), "\uC124\uC815"), /* @__PURE__ */ React.createElement("div", { className: "sep" }), authUser ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: async () => {
+    setMenu(null);
+    if (SB) await SB.auth.signOut();
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "logout", size: 18 }), "\uB85C\uADF8\uC544\uC6C3") : /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => {
+    setMenu(null);
+    setAuthOpen(true);
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "logout", size: 18 }), "\uB85C\uADF8\uC778 / \uD68C\uC6D0\uAC00\uC785"))), menu === "nav" && /* @__PURE__ */ React.createElement("div", { className: "navpanel" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     setMenu(null);
@@ -2904,7 +2979,7 @@ function App() {
     setMenu(null);
     setView("activity");
     window.scrollTo({ top: 0 });
-  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC"))), /* @__PURE__ */ React.createElement("main", { id: "tib-main", tabIndex: -1 }, view === "activity" ? /* @__PURE__ */ React.createElement(ActivityPage, null) : view === "requests" ? /* @__PURE__ */ React.createElement(RequestsPage, { onBrowse: () => {
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC"))), /* @__PURE__ */ React.createElement("main", { id: "tib-main", tabIndex: -1 }, view === "activity" ? /* @__PURE__ */ React.createElement(ActivityPage, null) : view === "requests" ? /* @__PURE__ */ React.createElement(RequestsPage, { me: profile.name, onBrowse: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     window.scrollTo({ top: 0 });
@@ -2943,7 +3018,7 @@ function App() {
   }, onActivity: () => {
     setView("activity");
     window.scrollTo({ top: 0 });
-  } })), menu && /* @__PURE__ */ React.createElement("div", { className: "menuback" + (menu === "nav" ? " dim" : ""), onClick: () => setMenu(null) }), open && /* @__PURE__ */ React.createElement(Modal, { key: open.id, shot: open, saved: saved.has(open.id), onSave: toggleSave, onClose: () => setOpen(null), used, onUse: () => setUsed((u) => u + 1), isPro, onAI: (seed) => setAi(seed), onCreator: (nm) => {
+  } })), menu && /* @__PURE__ */ React.createElement("div", { className: "menuback" + (menu === "nav" ? " dim" : ""), onClick: () => setMenu(null) }), open && /* @__PURE__ */ React.createElement(Modal, { key: open.id, me: profile.name, shot: open, saved: saved.has(open.id), onSave: toggleSave, onClose: () => setOpen(null), used, onUse: () => setUsed((u) => u + 1), isPro, onAI: (seed) => setAi(seed), onCreator: (nm) => {
     setOpen(null);
     setCreator(nm);
   }, onOpen: (s) => {
@@ -2960,7 +3035,7 @@ function App() {
   } }), creator && /* @__PURE__ */ React.createElement(CreatorModal, { name: creator, following, onFollow: toggleFollow, onClose: () => setCreator(null), onOpen: (s) => {
     setCreator(null);
     setOpen(s);
-  } }), pricing && /* @__PURE__ */ React.createElement(PricingModal, { onClose: () => setPricing(false) }), /* @__PURE__ */ React.createElement(BackToTop, null));
+  } }), pricing && /* @__PURE__ */ React.createElement(PricingModal, { onClose: () => setPricing(false) }), authOpen && /* @__PURE__ */ React.createElement(AuthModal, { onClose: () => setAuthOpen(false) }), /* @__PURE__ */ React.createElement(BackToTop, null));
 }
 
   ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
