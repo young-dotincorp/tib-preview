@@ -2873,6 +2873,7 @@ function App() {
   const [tab, setTab] = useState("\uC804\uCCB4"), [q, setQ] = useState(""), [res, setRes] = useState("all"), [lic, setLic] = useState("all"), [sort, setSort] = useState("popular");
   const [saved, setSaved] = useState(/* @__PURE__ */ new Set()), [liked, setLiked] = useState(/* @__PURE__ */ new Set()), [open, setOpen] = useState(null), [used, setUsed] = useState(0), [ai, setAi] = useState(null), [menu, setMenu] = useState(null), [creator, setCreator] = useState(null), [pricing, setPricing] = useState(false), [profTab, setProfTab] = useState("uploads"), [opsTab, setOpsTab] = useState("dash"), [view, setView] = useState("home"), [profile, setProfile] = useState({ name: "Young", region: "\u{1F1F0}\u{1F1F7} \uD55C\uAD6D", bio: "\uCD09\uAC01 \uADF8\uB798\uD53D\uC73C\uB85C \uBAA8\uB450\uAC00 \uC77D\uB294 \uC138\uC0C1\uC744 \uB9CC\uB4ED\uB2C8\uB2E4.", avatar: "linear-gradient(135deg,#9DE,#FF4F00)" }), [hc, setHc] = useState(false), [lang, setLang] = useState("ko"), [following, setFollowing] = useState(/* @__PURE__ */ new Set()), [collections, setCollections] = useState([]);
   const [authUser, setAuthUser] = useState(null), [authOpen, setAuthOpen] = useState(false);
+  const hydratedRef = useRef(false), saveTimer = useRef(null);
   useEffect(() => {
     if (!SB) return;
     SB.auth.getSession().then(({ data: data2 }) => setAuthUser(data2.session ? data2.session.user : null));
@@ -2884,6 +2885,50 @@ function App() {
     const nm = authUser.user_metadata && authUser.user_metadata.name || (authUser.email ? authUser.email.split("@")[0] : "\uC0AC\uC6A9\uC790");
     setProfile((p) => ({ ...p, name: nm }));
   }, [authUser]);
+  useEffect(() => {
+    if (!SB) return;
+    if (!authUser) {
+      hydratedRef.current = false;
+      setLiked(/* @__PURE__ */ new Set());
+      setSaved(/* @__PURE__ */ new Set());
+      setFollowing(/* @__PURE__ */ new Set());
+      setCollections([]);
+      return;
+    }
+    let active = true;
+    (async () => {
+      try {
+        const { data, error } = await SB.from("user_state").select("*").eq("user_id", authUser.id).maybeSingle();
+        if (!active) return;
+        if (!error && data) {
+          if (Array.isArray(data.liked)) setLiked(new Set(data.liked));
+          if (Array.isArray(data.saved)) setSaved(new Set(data.saved));
+          if (Array.isArray(data.following)) setFollowing(new Set(data.following));
+          if (Array.isArray(data.collections)) setCollections(data.collections);
+          if (data.profile && data.profile.name) setProfile((p) => ({ ...p, ...data.profile }));
+        } else if (!error && !data) {
+          await SB.from("user_state").insert({ user_id: authUser.id });
+        }
+      } catch (e) {
+      }
+      if (active) hydratedRef.current = true;
+    })();
+    return () => {
+      active = false;
+    };
+  }, [authUser]);
+  useEffect(() => {
+    if (!SB || !authUser || !hydratedRef.current) return;
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      SB.from("user_state").upsert({ user_id: authUser.id, liked: [...liked], saved: [...saved], following: [...following], collections, profile, updated_at: (/* @__PURE__ */ new Date()).toISOString() }, { onConflict: "user_id" }).then(() => {
+      }, () => {
+      });
+    }, 700);
+    return () => {
+      if (saveTimer.current) clearTimeout(saveTimer.current);
+    };
+  }, [liked, saved, following, collections, profile, authUser]);
   useMenuA11y(menu, () => setMenu(null));
   const isPro = false;
   const toggleSave = (id) => setSaved((s) => {
