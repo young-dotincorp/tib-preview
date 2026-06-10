@@ -2934,11 +2934,22 @@ function App() {
     window.scrollTo({ top: 0 });
     pulseSearch();
   };
-  const list = useMemo(() => POOL.filter((s) => (tab === "\uC804\uCCB4" || s.cat === tab) && (res === "all" || s.spec === (res === "60" ? "60\xD740" : "96\xD764")) && (lic === "all" || s.lic === lic) && matchShot(s, q)).sort((a, b) => sort === "downloads" ? b.downloads - a.downloads : sort === "recent" ? b.id - a.id : b.likes - a.likes), [tab, res, lic, sort, q]);
+  const [qDeb, setQDeb] = useState(q);
+  useEffect(() => {
+    if (view !== "search") {
+      setQDeb(q);
+      return;
+    }
+    if (q === qDeb) return;
+    pulseSearch();
+    const t = setTimeout(() => setQDeb(q), 360);
+    return () => clearTimeout(t);
+  }, [q, view]);
+  const list = useMemo(() => POOL.filter((s) => (tab === "\uC804\uCCB4" || s.cat === tab) && (res === "all" || s.spec === (res === "60" ? "60\xD740" : "96\xD764")) && (lic === "all" || s.lic === lic) && matchShot(s, qDeb)).sort((a, b) => sort === "downloads" ? b.downloads - a.downloads : sort === "recent" ? b.id - a.id : b.likes - a.likes), [tab, res, lic, sort, qDeb]);
   const [shown, setShown] = useState(9), [loadingMore, setLoadingMore] = useState(false);
   useEffect(() => {
     setShown(9);
-  }, [tab, res, lic, sort, q]);
+  }, [tab, res, lic, sort, qDeb]);
   const loadMore = () => {
     setLoadingMore(true);
     setTimeout(() => {
