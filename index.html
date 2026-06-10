@@ -2445,7 +2445,6 @@ function SaveModal({ shot, collections, setCollections, onClose }) {
 function ProfilePage({ profile, saved, liked, collections, setCollections, onOpen, onSave, onLike, tab, setTab, used, onEditProfile, onUpgrade, onUpload }) {
   const [openKey, setOpenKey] = useState(null);
   const [newName, setNewName] = useState("");
-  const [adding, setAdding] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [editName, setEditName] = useState("");
   const [toast, setToast] = useState("");
@@ -2474,7 +2473,6 @@ function ProfilePage({ profile, saved, liked, collections, setCollections, onOpe
     setNewName("");
     flash("'" + n + "' \uCEEC\uB809\uC158\uC744 \uB9CC\uB4E4\uC5C8\uC5B4\uC694");
   };
-  const toggleIn = (cid, sid) => setCollections((cs) => cs.map((c) => c.id === cid ? { ...c, ids: c.ids.includes(sid) ? c.ids.filter((x) => x !== sid) : [...c.ids, sid] } : c));
   const del = (cid, name) => {
     setCollections((cs) => cs.filter((c) => c.id !== cid));
     setOpenKey(null);
@@ -2520,21 +2518,7 @@ function ProfilePage({ profile, saved, liked, collections, setCollections, onOpe
   }, autoFocus: true, maxLength: 24, "aria-label": "\uCEEC\uB809\uC158 \uC774\uB984" }), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", onClick: () => rename(cur.cid, editName) }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 15, color: "#fff" }), "\uC800\uC7A5"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => setRenaming(false) }, "\uCDE8\uC18C")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { fontSize: 20 } }, cur.name), /* @__PURE__ */ React.createElement("div", { className: "col-count" }, cur.ids.length, "\uAC1C \uADF8\uB798\uD53D")), cur.user && /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => {
     setEditName(cur.name);
     setRenaming(true);
-  }, "aria-label": "\uC774\uB984 \uC218\uC815" }, /* @__PURE__ */ React.createElement(Icon, { n: "pencil", size: 15 }), "\uC774\uB984 \uC218\uC815"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => share(cur.name) }, /* @__PURE__ */ React.createElement(Icon, { n: "share-2", size: 15 }), "\uACF5\uC720"), cur.user && /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => del(cur.cid, cur.name), "aria-label": "\uCEEC\uB809\uC158 \uC0AD\uC81C" }, /* @__PURE__ */ React.createElement(Icon, { n: "trash", size: 15 })))), cur.user && /* @__PURE__ */ React.createElement("div", { style: { marginBottom: "var(--s3)" } }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: () => setAdding((a) => !a) }, /* @__PURE__ */ React.createElement(Icon, { n: adding ? "check" : "plus", size: 15 }), adding ? "\uB2F4\uAE30 \uC644\uB8CC" : "\uADF8\uB798\uD53D \uB2F4\uAE30")), cur.user && adding && (() => {
-    const pool = [.../* @__PURE__ */ new Set([...saved, ...liked])];
-    return pool.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "col-empty" }, "\uBA3C\uC800 \uADF8\uB798\uD53D\uC744 \uC800\uC7A5\uD558\uAC70\uB098 \uC88B\uC544\uC694\uD558\uBA74 \uC5EC\uAE30\uC11C \uB2F4\uC744 \uC218 \uC788\uC5B4\uC694.") : /* @__PURE__ */ React.createElement("div", { className: "col-add-grid" }, pool.map((id) => {
-      const s = find(id);
-      if (!s) return null;
-      const on = cur.ids.includes(id);
-      const [W, H] = dims(s.spec);
-      return /* @__PURE__ */ React.createElement("div", { key: id, className: "col-add-card" + (on ? " on" : ""), onClick: () => toggleIn(cur.cid, id), role: "button", tabIndex: 0, "aria-pressed": on, title: s.title, onKeyDown: (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggleIn(cur.cid, id);
-        }
-      } }, on && /* @__PURE__ */ React.createElement("span", { className: "tag" }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 12 })), /* @__PURE__ */ React.createElement(DotMatrix, { hex: s.items[0].data, w: W, h: H, cell: W === 96 ? 1.6 : 2.4, variant: "thumb", alt: "\uCD09\uAC01 \uADF8\uB798\uD53D: " + s.title }));
-    }));
-  })(), cur.ids.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "prof-empty" }, /* @__PURE__ */ React.createElement(Icon, { n: cur.icon, size: 30 }), /* @__PURE__ */ React.createElement("p", { style: { marginTop: 10 } }, cur.user ? "\uC544\uC9C1 \uB2F4\uC740 \uADF8\uB798\uD53D\uC774 \uC5C6\uC5B4\uC694. \u2018\uADF8\uB798\uD53D \uB2F4\uAE30\u2019\uB85C \uCD94\uAC00\uD574\uBCF4\uC138\uC694." : cur.key === "saved" ? "\uC544\uC9C1 \uC800\uC7A5\uD55C \uADF8\uB798\uD53D\uC774 \uC5C6\uC5B4\uC694." : "\uC544\uC9C1 \uC88B\uC544\uC694\uD55C \uADF8\uB798\uD53D\uC774 \uC5C6\uC5B4\uC694.")) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid" }, POOL.filter((s) => cur.ids.includes(s.id)).map(cardOf))), toast && /* @__PURE__ */ React.createElement("div", { className: "toast lib-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 16 }), toast));
+  }, "aria-label": "\uC774\uB984 \uC218\uC815" }, /* @__PURE__ */ React.createElement(Icon, { n: "pencil", size: 15 }), "\uC774\uB984 \uC218\uC815"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => share(cur.name) }, /* @__PURE__ */ React.createElement(Icon, { n: "share-2", size: 15 }), "\uACF5\uC720"), cur.user && /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => del(cur.cid, cur.name), "aria-label": "\uCEEC\uB809\uC158 \uC0AD\uC81C" }, /* @__PURE__ */ React.createElement(Icon, { n: "trash", size: 15 })))), cur.ids.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "prof-empty" }, /* @__PURE__ */ React.createElement(Icon, { n: cur.icon, size: 30 }), /* @__PURE__ */ React.createElement("p", { style: { marginTop: 10 } }, "\uC544\uC9C1 \uB2F4\uC740 \uADF8\uB798\uD53D\uC774 \uC5C6\uC5B4\uC694. \uADF8\uB798\uD53D\uC758 \uBD81\uB9C8\uD06C(\uC800\uC7A5) \uBC84\uD2BC\uC73C\uB85C \uC774 \uCEEC\uB809\uC158\uC5D0 \uB2F4\uC544\uBCF4\uC138\uC694.")) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid" }, POOL.filter((s) => cur.ids.includes(s.id)).map(cardOf))), toast && /* @__PURE__ */ React.createElement("div", { className: "toast lib-toast", role: "status", "aria-live": "polite" }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 16 }), toast));
 }
 function SettingsPage({ profile, setProfile, hc, setHc, lang, setLang, used, savedCount, onUpgrade }) {
   const fileRef = useRef(null);
