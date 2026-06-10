@@ -395,7 +395,7 @@ const CSS = `
 .av .on{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:var(--r-full);background:var(--ok);border:2px solid var(--cream);}
 .btn{font-family:inherit;font-weight:var(--w-semi);font-size:var(--fs-body);border-radius:var(--r-full);cursor:pointer;border:1.5px solid transparent;
   display:inline-flex;align-items:center;gap:var(--s2);padding:10px 16px;transition:transform .12s, background .15s, color .15s, border-color .15s;}
-.btn:active{transform:translateY(1px);}
+.btn:active{transform:translateY(1px) scale(.985);}
 .btn:disabled{opacity:.45;cursor:default;}
 .btn-ink{background:var(--ink);color:#fff;} .btn-ink:hover{background:#322f29;}
 .btn-accent{background:var(--accent);color:#fff;} .btn-accent:hover{background:var(--accent-deep);}
@@ -468,6 +468,8 @@ const CSS = `
 .skel-line{height:11px;margin:13px 14px 0;border-radius:6px;background:linear-gradient(100deg,#ECE8DF 28%,#F6F3ED 50%,#ECE8DF 72%);background-size:200% 100%;animation:tibShimmer 1.25s ease-in-out infinite;}
 .skel-line.s{width:52%;}
 .sr-fade{animation:tibFadeUp .34s cubic-bezier(.2,.7,.3,1) both;}
+.view-anim{animation:tibFadeUp .34s cubic-bezier(.2,.7,.3,1) both;}
+@media(prefers-reduced-motion:reduce){.view-anim{animation:none;}}
 .card{cursor:pointer;}
 .card .thumb{position:relative;aspect-ratio:4/3;border-radius:var(--r-lg);overflow:hidden;border:1.5px solid var(--line);
   background:var(--paper);transition:transform .18s, box-shadow .18s;display:grid;place-items:center;}
@@ -499,10 +501,13 @@ const CSS = `
 .stat span{display:inline-flex;align-items:center;gap:var(--s1);}
 
 /* modal */
-.ovl{position:fixed;inset:0;z-index:200;background:rgba(31,29,26,.5);backdrop-filter:blur(3px);display:flex;justify-content:center;overflow-y:auto;padding:var(--s7) var(--s4);}
+.ovl{position:fixed;inset:0;z-index:200;background:rgba(31,29,26,.5);backdrop-filter:blur(3px);display:flex;justify-content:center;overflow-y:auto;padding:var(--s7) var(--s4);animation:ovlIn .22s ease both;}
+@keyframes ovlIn{from{opacity:0;}to{opacity:1;}}
+@keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.985);}to{opacity:1;transform:none;}}
 .ovl-x{position:fixed;top:var(--s5);right:var(--s5);z-index:201;width:46px;height:46px;border-radius:var(--r-full);border:none;background:#fff;color:var(--ink);box-shadow:var(--sh-2);display:grid;place-items:center;cursor:pointer;}
 .ovl-x:hover{background:var(--cream);}
-.modal{background:#fff;border-radius:var(--r-xl);max-width:940px;width:100%;height:fit-content;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);}
+.modal{background:#fff;border-radius:var(--r-xl);max-width:940px;width:100%;height:fit-content;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);animation:modalIn .34s cubic-bezier(.2,.7,.3,1) both;}
+@media(prefers-reduced-motion:reduce){.ovl,.modal{animation:none;}}
 .modal:focus{outline:none;}
 .mh{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s4);padding:var(--s5) var(--s5) var(--s4);}
 .mt{font-weight:var(--w-bold);font-size:var(--fs-h2);letter-spacing:-.02em;}
@@ -3255,7 +3260,7 @@ function App() {
     setMenu(null);
     setView("activity");
     window.scrollTo({ top: 0 });
-  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC"))), /* @__PURE__ */ React.createElement("main", { id: "tib-main", tabIndex: -1 }, view === "activity" ? /* @__PURE__ */ React.createElement(ActivityPage, null) : view === "requests" ? /* @__PURE__ */ React.createElement(RequestsPage, { me: profile.name, onBrowse: () => {
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC"))), /* @__PURE__ */ React.createElement("main", { id: "tib-main", tabIndex: -1 }, /* @__PURE__ */ React.createElement("div", { className: "view-anim", key: view }, view === "activity" ? /* @__PURE__ */ React.createElement(ActivityPage, null) : view === "requests" ? /* @__PURE__ */ React.createElement(RequestsPage, { me: profile.name, onBrowse: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     window.scrollTo({ top: 0 });
@@ -3272,7 +3277,7 @@ function App() {
     setTab("\uC804\uCCB4");
     setRes("all");
     setLic("all");
-  } }, t)))) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid" + (view === "search" ? " sr-fade" : ""), key: view === "search" ? "sr-" + q : "grid" }, list.slice(0, shown).map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, shot: s, saved: savedIds.has(s.id), onSave: openSave, onOpen: setOpen, onPrint: setOpen, liked: liked.has(s.id), onLike: toggleLike }))), !searching && list.length > 0 && (shown < list.length ? /* @__PURE__ */ React.createElement("div", { className: "loadmore" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: loadMore, disabled: loadingMore }, loadingMore ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "loader-2", size: 16, className: "spin" }), "\uBD88\uB7EC\uC624\uB294 \uC911\u2026") : /* @__PURE__ */ React.createElement(React.Fragment, null, "\uB354 \uBCF4\uAE30 ", /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 15 })))) : /* @__PURE__ */ React.createElement("div", { className: "loadend" }, "\uBAA8\uB4E0 \uCD09\uAC01 \uADF8\uB798\uD53D\uC744 \uBD88\uB7EC\uC654\uC5B4\uC694 \xB7 ", list.length, "\uAC1C")))), /* @__PURE__ */ React.createElement(Footer, { onBrowse: () => {
+  } }, t)))) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid" + (view === "search" ? " sr-fade" : ""), key: view === "search" ? "sr-" + q : "grid" }, list.slice(0, shown).map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, shot: s, saved: savedIds.has(s.id), onSave: openSave, onOpen: setOpen, onPrint: setOpen, liked: liked.has(s.id), onLike: toggleLike }))), !searching && list.length > 0 && (shown < list.length ? /* @__PURE__ */ React.createElement("div", { className: "loadmore" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: loadMore, disabled: loadingMore }, loadingMore ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "loader-2", size: 16, className: "spin" }), "\uBD88\uB7EC\uC624\uB294 \uC911\u2026") : /* @__PURE__ */ React.createElement(React.Fragment, null, "\uB354 \uBCF4\uAE30 ", /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 15 })))) : /* @__PURE__ */ React.createElement("div", { className: "loadend" }, "\uBAA8\uB4E0 \uCD09\uAC01 \uADF8\uB798\uD53D\uC744 \uBD88\uB7EC\uC654\uC5B4\uC694 \xB7 ", list.length, "\uAC1C"))))), /* @__PURE__ */ React.createElement(Footer, { onBrowse: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     window.scrollTo({ top: 0 });
