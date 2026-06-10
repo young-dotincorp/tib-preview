@@ -2005,7 +2005,7 @@ function seedFeedback(id) {
 }
 function Modal({ shot, saved, onSave, onClose, used, onUse, isPro, onAI, onCreator, onOpen, onTag, liked, onLike }) {
   const dlg = useDialog(onClose);
-  const [pg, setPg] = useState(0), [conn, setConn] = useState("idle"), [prog, setProg] = useState(1), [out, setOut] = useState(false), [toast, setToast] = useState(""), [fb, setFb] = useState(() => seedFeedback(shot.id)), [myStars, setMyStars] = useState(0), [hov, setHov] = useState(0), [fbTxt, setFbTxt] = useState("");
+  const [pg, setPg] = useState(0), [conn, setConn] = useState("idle"), [prog, setProg] = useState(1), [out, setOut] = useState(false), [toast, setToast] = useState(""), [fb, setFb] = useState(() => SB ? [] : seedFeedback(shot.id)), [myStars, setMyStars] = useState(0), [hov, setHov] = useState(0), [fbTxt, setFbTxt] = useState("");
   const [W, H] = dims(shot.spec), item = shot.items[pg];
   const related = useMemo(() => {
     const tagset = new Set(shot.tags), seen = /* @__PURE__ */ new Set([shot.title]);
@@ -2014,6 +2014,16 @@ function Modal({ shot, saved, onSave, onClose, used, onUse, isPro, onAI, onCreat
       seen.add(s.title);
       return true;
     }).sort((a, b) => b.likes - a.likes).slice(0, 6);
+  }, [shot.id]);
+  useEffect(() => {
+    if (!SB) return;
+    let active = true;
+    SB.from("feedback").select("*").eq("graphic_id", shot.id).order("created_at", { ascending: false }).then(({ data, error }) => {
+      if (active && !error && data) setFb(data.map((d) => ({ who: d.author, stars: d.stars, txt: d.comment })));
+    });
+    return () => {
+      active = false;
+    };
   }, [shot.id]);
   const isProAsset = shot.lic === "pro", needPro = isProAsset && !isPro, limited = !isPro && used >= FREE_LIMIT;
   const connect = () => {
@@ -2025,12 +2035,17 @@ function Modal({ shot, saved, onSave, onClose, used, onUse, isPro, onAI, onCreat
     setTimeout(() => setToast(""), 2600);
   };
   const fbAvg = fb.length ? fb.reduce((s, f) => s + f.stars, 0) / fb.length : 0;
-  const submitFb = () => {
+  const submitFb = async () => {
     if (!myStars) return flash("\uBCC4\uC810\uC744 \uC120\uD0DD\uD574 \uC8FC\uC138\uC694");
-    setFb((l) => [{ who: "Young", stars: myStars, txt: fbTxt.trim() || "(\uCF54\uBA58\uD2B8 \uC5C6\uC74C)" }, ...l]);
+    const row = { who: "Young", stars: myStars, txt: fbTxt.trim() || "(\uCF54\uBA58\uD2B8 \uC5C6\uC74C)" };
+    if (SB) {
+      const { error } = await SB.from("feedback").insert({ graphic_id: shot.id, stars: myStars, comment: row.txt, author: "Young" });
+      if (error) return flash("\uC800\uC7A5 \uC911 \uBB38\uC81C\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694. \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694");
+    }
+    setFb((l) => [row, ...l]);
     setMyStars(0);
     setFbTxt("");
-    flash("\uC0AC\uC6A9\uC131 \uD3C9\uAC00\uB97C \uB0A8\uACBC\uC5B4\uC694");
+    flash(SB ? "\uD3C9\uAC00\uAC00 \uC800\uC7A5\uB410\uC5B4\uC694" : "\uC0AC\uC6A9\uC131 \uD3C9\uAC00\uB97C \uB0A8\uACBC\uC5B4\uC694");
   };
   const output = () => {
     if (needPro || limited) return;
