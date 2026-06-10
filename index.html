@@ -468,6 +468,9 @@ const CSS = `
 .tabs-arrow:hover{background:var(--cream);color:var(--ink);}
 .tabs-scroll.sl .tabs-arrow.left{display:flex;}
 .tabs-scroll.sr .tabs-arrow.right{display:flex;}
+.tabs-scroll.sl .tib-tabs{-webkit-mask-image:linear-gradient(90deg,transparent,#000 22px);mask-image:linear-gradient(90deg,transparent,#000 22px);}
+.tabs-scroll.sr .tib-tabs{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 22px),transparent);}
+.tabs-scroll.sl.sr .tib-tabs{-webkit-mask-image:linear-gradient(90deg,transparent,#000 22px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(90deg,transparent,#000 22px,#000 calc(100% - 22px),transparent);}
 .toolbar .filt-toggle{flex-shrink:0;}
 .filt-toggle{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--paper);font-family:inherit;font-size:var(--fs-sm);font-weight:var(--w-med);color:var(--ink);padding:7px 14px;border-radius:var(--r-full);cursor:pointer;}
 .filt-toggle:hover{border-color:var(--line-2);}
