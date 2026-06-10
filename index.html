@@ -899,6 +899,11 @@ const CSS = `
 .seg button.act{background:var(--paper);color:var(--ink);font-weight:700;box-shadow:var(--sh-1);}
 .seg.full{display:flex;width:100%;}
 .seg.full button{flex:1;text-align:center;}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);padding:11px 16px;cursor:pointer;transition:background .15s,box-shadow .15s,border-color .15s;}
+.btn-google:hover{background:var(--cream);box-shadow:var(--sh-1);border-color:var(--ink-faint);}
+.btn-google:disabled{opacity:.55;cursor:default;}
+.or-div{display:flex;align-items:center;gap:12px;color:var(--ink-faint);font-size:12.5px;margin:2px 0;}
+.or-div::before,.or-div::after{content:"";flex:1;height:1px;background:var(--line);}
 @media(max-width:640px){.mh{flex-wrap:wrap;}.price-toggle{width:100%;justify-content:flex-start;align-self:auto;margin-top:var(--s2);}.seg{flex:1;}.seg button{flex:1;text-align:center;padding:9px 12px;font-size:13.5px;}}
 .col-create{display:flex;gap:10px;padding:var(--s5) 0 var(--s5);align-items:stretch;}
 .col-create input{flex:1;min-width:0;font-family:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;background:var(--paper);color:var(--ink);}
@@ -2336,6 +2341,22 @@ function AuthModal({ onClose }) {
       setBusy(false);
     }
   };
+  const googleLogin = async () => {
+    if (!SB) {
+      setErr("\uC5F0\uACB0\uC774 \uC5C6\uC5B4 \uC9C0\uAE08\uC740 \uB85C\uADF8\uC778\uD560 \uC218 \uC5C6\uC5B4\uC694.");
+      return;
+    }
+    setErr("");
+    setNote("");
+    setBusy(true);
+    try {
+      const { error } = await SB.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } });
+      if (error) throw error;
+    } catch (e) {
+      setErr(e && e.message || "\uAD6C\uAE00 \uB85C\uADF8\uC778\uC744 \uC2DC\uC791\uD560 \uC218 \uC5C6\uC5B4\uC694. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");
+      setBusy(false);
+    }
+  };
   return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": "\uB85C\uADF8\uC778", style: { maxWidth: 420 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 20, color: "#FF4F00" }), mode === "login" ? "\uB85C\uADF8\uC778" : "\uD68C\uC6D0\uAC00\uC785"), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 8, color: "var(--ink-soft)", fontSize: "var(--fs-sm)" } }, "TIB \uACC4\uC815\uC73C\uB85C \uB0B4 \uD65C\uB3D9\uC744 \uC800\uC7A5\uD558\uACE0 \uC774\uC5B4\uAC00\uC694."))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 var(--s6) var(--s6)", display: "flex", flexDirection: "column", gap: "var(--s3)" } }, /* @__PURE__ */ React.createElement("div", { className: "seg full", role: "group", "aria-label": "\uB85C\uADF8\uC778/\uD68C\uC6D0\uAC00\uC785", style: { marginBottom: "var(--s2)" } }, /* @__PURE__ */ React.createElement("button", { type: "button", className: mode === "login" ? "act" : "", "aria-pressed": mode === "login", onClick: () => {
     setMode("login");
     setErr("");
@@ -2344,7 +2365,7 @@ function AuthModal({ onClose }) {
     setMode("signup");
     setErr("");
     setNote("");
-  } }, "\uD68C\uC6D0\uAC00\uC785")), mode === "signup" && /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uC774\uB984"), /* @__PURE__ */ React.createElement("input", { value: name, onChange: (e) => setName(e.target.value), placeholder: "\uD654\uBA74\uC5D0 \uD45C\uC2DC\uB420 \uC774\uB984", maxLength: 24 })), /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uC774\uBA54\uC77C"), /* @__PURE__ */ React.createElement("input", { type: "email", value: email, onChange: (e) => setEmail(e.target.value), placeholder: "you@example.com" })), /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uBE44\uBC00\uBC88\uD638"), /* @__PURE__ */ React.createElement("input", { type: "password", value: pw, onChange: (e) => setPw(e.target.value), placeholder: "6\uC790 \uC774\uC0C1" })), err && /* @__PURE__ */ React.createElement("div", { className: "contact-err" }, err), note && /* @__PURE__ */ React.createElement("div", { className: "req-posted", style: { marginBottom: 0 } }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 15 }), note), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", style: { width: "100%", justifyContent: "center", marginTop: 4 }, onClick: submit, disabled: busy }, busy ? /* @__PURE__ */ React.createElement("span", { className: "spin" }) : /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 16, color: "#fff" }), busy ? "\uCC98\uB9AC \uC911\u2026" : mode === "login" ? "\uB85C\uADF8\uC778" : "\uD68C\uC6D0\uAC00\uC785"))));
+  } }, "\uD68C\uC6D0\uAC00\uC785")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-google", onClick: googleLogin, disabled: busy }, /* @__PURE__ */ React.createElement("svg", { width: "18", height: "18", viewBox: "0 0 18 18", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { fill: "#4285F4", d: "M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.62z" }), /* @__PURE__ */ React.createElement("path", { fill: "#34A853", d: "M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.33A9 9 0 0 0 9 18z" }), /* @__PURE__ */ React.createElement("path", { fill: "#FBBC05", d: "M3.97 10.72a5.4 5.4 0 0 1 0-3.44V4.95H.96a9 9 0 0 0 0 8.1l3.01-2.33z" }), /* @__PURE__ */ React.createElement("path", { fill: "#EA4335", d: "M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58A9 9 0 0 0 .96 4.95l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z" })), "Google\uB85C \uACC4\uC18D\uD558\uAE30"), /* @__PURE__ */ React.createElement("div", { className: "or-div" }, /* @__PURE__ */ React.createElement("span", null, "\uB610\uB294")), mode === "signup" && /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uC774\uB984"), /* @__PURE__ */ React.createElement("input", { value: name, onChange: (e) => setName(e.target.value), placeholder: "\uD654\uBA74\uC5D0 \uD45C\uC2DC\uB420 \uC774\uB984", maxLength: 24 })), /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uC774\uBA54\uC77C"), /* @__PURE__ */ React.createElement("input", { type: "email", value: email, onChange: (e) => setEmail(e.target.value), placeholder: "you@example.com" })), /* @__PURE__ */ React.createElement("div", { className: "set-field" }, /* @__PURE__ */ React.createElement("label", null, "\uBE44\uBC00\uBC88\uD638"), /* @__PURE__ */ React.createElement("input", { type: "password", value: pw, onChange: (e) => setPw(e.target.value), placeholder: "6\uC790 \uC774\uC0C1" })), err && /* @__PURE__ */ React.createElement("div", { className: "contact-err" }, err), note && /* @__PURE__ */ React.createElement("div", { className: "req-posted", style: { marginBottom: 0 } }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 15 }), note), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", style: { width: "100%", justifyContent: "center", marginTop: 4 }, onClick: submit, disabled: busy }, busy ? /* @__PURE__ */ React.createElement("span", { className: "spin" }) : /* @__PURE__ */ React.createElement(Icon, { n: "users", size: 16, color: "#fff" }), busy ? "\uCC98\uB9AC \uC911\u2026" : mode === "login" ? "\uB85C\uADF8\uC778" : "\uD68C\uC6D0\uAC00\uC785"))));
 }
 function PricingModal({ onClose }) {
   const dlg = useDialog(onClose);
