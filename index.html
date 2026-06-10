@@ -665,8 +665,8 @@ const CSS = `
 .menuwrap.fopen{z-index:70;}
 .avbtn{border:none;background:none;padding:0;cursor:pointer;display:flex;align-items:center;border-radius:var(--r-full);}
 .avbtn:hover{box-shadow:0 0 0 3px var(--accent-tint);}
-.menuback{position:fixed;inset:0;z-index:55;}
-.menuback.dim{background:rgba(31,29,26,.45);backdrop-filter:blur(2px);}
+.menuback{position:fixed;inset:0;z-index:55;pointer-events:none;}
+.menuback.dim{background:rgba(31,29,26,.45);backdrop-filter:blur(2px);pointer-events:auto;}
 .navpanel{position:absolute;top:100%;left:0;right:0;margin-left:calc(var(--gutter)*-1);margin-right:calc(var(--gutter)*-1);z-index:5;background:var(--paper);
   border-bottom:1.5px solid var(--line);box-shadow:0 14px 26px rgba(31,29,26,.10);padding:var(--s2) var(--gutter) var(--s5);animation:npdrop .2s ease;}
 @keyframes npdrop{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
@@ -2106,8 +2106,16 @@ function useMenuA11y(menu, close) {
           closeRef.current();
         }
       };
+      const onDown = (e) => {
+        const el = e.target;
+        if (!(el && el.closest && el.closest(".menuwrap, .navpanel, .navham"))) closeRef.current();
+      };
       document.addEventListener("keydown", onKey);
-      return () => document.removeEventListener("keydown", onKey);
+      document.addEventListener("pointerdown", onDown);
+      return () => {
+        document.removeEventListener("keydown", onKey);
+        document.removeEventListener("pointerdown", onDown);
+      };
     }
     if (prev) {
       const t = trigRef.current;
