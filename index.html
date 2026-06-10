@@ -3058,7 +3058,7 @@ function App() {
   const list = useMemo(() => POOL.filter((s) => (tab === "\uC804\uCCB4" || s.cat === tab) && (res === "all" || s.spec === (res === "60" ? "60\xD740" : "96\xD764")) && (lic === "all" || s.lic === lic) && matchShot(s, qDeb)).sort((a, b) => sort === "downloads" ? b.downloads - a.downloads : sort === "recent" ? b.id - a.id : b.likes - a.likes), [tab, res, lic, sort, qDeb]);
   const [shown, setShown] = useState(16), [loadingMore, setLoadingMore] = useState(false);
   useEffect(() => {
-    setShown(9);
+    setShown(16);
   }, [tab, res, lic, sort, qDeb]);
   const loadMore = () => {
     setLoadingMore(true);
