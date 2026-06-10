@@ -932,20 +932,24 @@ const CSS = `
 .col-add-card.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-tint);}
 .col-add-card .tag{position:absolute;top:5px;right:5px;width:18px;height:18px;border-radius:var(--r-full);background:var(--accent);color:#fff;display:grid;place-items:center;}
 .col-empty{padding:var(--s7) 0;text-align:center;color:var(--ink-faint);font-weight:600;}
-.save-modal{max-width:460px;width:100%;}
-.save-body{display:flex;flex-direction:column;gap:8px;padding:var(--s2) 0;max-height:46vh;overflow:auto;}
-.save-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--r-md);background:var(--paper);cursor:pointer;font-family:inherit;font-size:var(--fs-sm);transition:border-color .12s,background .12s;}
+.save-modal{max-width:440px;width:100%;}
+.save-body{display:flex;flex-direction:column;gap:var(--s2);padding:var(--s2) var(--s5) 0;}
+.save-list{display:flex;flex-direction:column;gap:var(--s2);max-height:38vh;overflow:auto;margin:var(--s1) 0;}
+.save-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--r-md);background:var(--paper);cursor:pointer;font-family:inherit;font-size:var(--fs-sm);transition:border-color .12s,background .12s;}
 .save-row:hover{border-color:var(--ink-soft);}
-.save-row.on{border-color:var(--accent);background:#FFF1E8;}
+.save-row.on{border-color:var(--accent);background:#FFF4EE;}
 .save-row-l{display:flex;align-items:center;gap:9px;min-width:0;color:var(--ink);font-weight:600;}
 .save-row-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .save-row-ct{color:var(--ink-faint);font-weight:600;font-size:12px;flex:none;}
-.save-chk{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-content:center;}
+.save-chk{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-content:center;background:var(--cream);}
 .save-chk.on{background:var(--accent);border-color:var(--accent);}
-.save-new{display:flex;gap:8px;margin-top:4px;}
-.save-new input{flex:1;min-width:0;padding:10px 12px;border:1.5px solid var(--line);border-radius:var(--r-md);font-family:inherit;font-size:var(--fs-sm);background:var(--paper);color:var(--ink);}
+.save-empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:var(--s4) 0 var(--s2);color:var(--ink-soft);}
+.save-empty .ic{width:46px;height:46px;border-radius:var(--r-md);background:var(--cream);border:1.5px solid var(--line);display:grid;place-content:center;color:var(--accent);}
+.save-empty p{font-size:var(--fs-sm);line-height:1.5;}
+.save-new{display:flex;gap:8px;padding-top:var(--s3);border-top:1px solid var(--line);}
+.save-new input{flex:1;min-width:0;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--r-md);font-family:inherit;font-size:var(--fs-sm);background:var(--paper);color:var(--ink);}
 .save-new input:focus{outline:none;border-color:var(--accent);}
-.save-foot{margin-top:var(--s3);}
+.save-foot{padding:var(--s4) var(--s5) var(--s5);}
 @media(max-width:680px){.col-list{grid-template-columns:1fr;}.col-add-grid{grid-template-columns:repeat(4,1fr);}}
 .lib{padding-bottom:var(--s6);}
 .lib-head{padding:var(--s6) 0 0;}
@@ -2428,10 +2432,10 @@ function SaveModal({ shot, collections, setCollections, onClose }) {
     setCollections((cs) => [...cs, { id: Date.now(), name: n, ids: [shot.id] }]);
     setNewName("");
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal save-modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": "\uCEEC\uB809\uC158\uC5D0 \uC800\uC7A5", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement(Icon, { n: "bookmark", size: 20, color: "#FF4F00" }), "\uCEEC\uB809\uC158\uC5D0 \uC800\uC7A5"), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 6, color: "var(--ink-soft)", fontSize: "var(--fs-sm)" } }, "\u2018", shot.title, "\u2019\uC744(\uB97C) \uB2F4\uC744 \uCEF4\uB809\uC158\uC744 \uACE0\uB974\uC138\uC694."))), /* @__PURE__ */ React.createElement("div", { className: "save-body" }, collections.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "col-empty" }, "\uC544\uC9C1 \uCEF4\uB809\uC158\uC774 \uC5C6\uC5B4\uC694. \uC544\uB798\uC5D0\uC11C \uC0C8 \uD3F4\uB354\uB97C \uB9CC\uB4E4\uC5B4 \uB2F4\uC544\uBCF4\uC138\uC694."), collections.map((c) => {
+  return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal save-modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": "\uCEF4\uB809\uC158\uC5D0 \uC800\uC7A5", onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement(Icon, { n: "bookmark", size: 20, color: "#FF4F00" }), "\uCEF4\uB809\uC158\uC5D0 \uC800\uC7A5"), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 6, color: "var(--ink-soft)", fontSize: "var(--fs-sm)" } }, "\u2018", shot.title, "\u2019\uC744(\uB97C) \uB2F4\uC744 \uCEF4\uB809\uC158\uC744 \uACE0\uB974\uC138\uC694."))), /* @__PURE__ */ React.createElement("div", { className: "save-body" }, collections.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "save-empty" }, /* @__PURE__ */ React.createElement("span", { className: "ic" }, /* @__PURE__ */ React.createElement(Icon, { n: "folder", size: 22 })), /* @__PURE__ */ React.createElement("p", null, "\uC544\uC9C1 \uCEF4\uB809\uC158\uC774 \uC5C6\uC5B4\uC694.", /* @__PURE__ */ React.createElement("br", null), "\uC544\uB798\uC5D0\uC11C \uC0C8 \uD3F4\uB354\uB97C \uB9CC\uB4E4\uC5B4 \uB2F4\uC544\uBCF4\uC138\uC694.")) : /* @__PURE__ */ React.createElement("div", { className: "save-list" }, collections.map((c) => {
     const on = inIds(c);
     return /* @__PURE__ */ React.createElement("button", { key: c.id, type: "button", className: "save-row" + (on ? " on" : ""), "aria-pressed": on, onClick: () => toggle(c.id) }, /* @__PURE__ */ React.createElement("span", { className: "save-row-l" }, /* @__PURE__ */ React.createElement(Icon, { n: "folder", size: 17 }), /* @__PURE__ */ React.createElement("span", { className: "save-row-nm" }, c.name), /* @__PURE__ */ React.createElement("span", { className: "save-row-ct" }, c.ids.length)), /* @__PURE__ */ React.createElement("span", { className: "save-chk" + (on ? " on" : "") }, on && /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 14, color: "#fff" })));
-  }), /* @__PURE__ */ React.createElement("div", { className: "save-new" }, /* @__PURE__ */ React.createElement("input", { value: newName, onChange: (e) => setNewName(e.target.value), onKeyDown: (e) => {
+  })), /* @__PURE__ */ React.createElement("div", { className: "save-new" }, /* @__PURE__ */ React.createElement("input", { value: newName, onChange: (e) => setNewName(e.target.value), onKeyDown: (e) => {
     if (e.key === "Enter") create();
   }, placeholder: "\uC0C8 \uCEF4\uB809\uC158 \uB9CC\uB4E4\uAE30 (\uC608: \uCD08\uB4F1 \uC218\uD559 \uC790\uB8CC)", "aria-label": "\uC0C8 \uCEF4\uB809\uC158 \uC774\uB984", maxLength: 24 }), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: create, disabled: !newName.trim() }, /* @__PURE__ */ React.createElement(Icon, { n: "plus", size: 15 }), "\uB9CC\uB4E4\uAE30"))), /* @__PURE__ */ React.createElement("div", { className: "save-foot" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", style: { width: "100%", justifyContent: "center" }, onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 16, color: "#fff" }), "\uC644\uB8CC"))));
 }
