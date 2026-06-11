@@ -3217,9 +3217,39 @@ function BackToTop() {
   if (!show) return null;
   return /* @__PURE__ */ React.createElement("button", { className: "backtop", "aria-label": "\uB9E8 \uC704\uB85C", onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }) }, /* @__PURE__ */ React.createElement("span", { style: { display: "inline-flex", transform: "rotate(180deg)" } }, /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 20 })));
 }
+const ROUTE_VIEWS = ["browse", "search", "dotgames", "contact", "activity", "about", "tibabout", "requests", "terms", "privacy", "settings", "profile", "ops", "inbox"];
+function viewToHash(view, q) {
+  if (view === "search" && q && q.trim()) return "#/search?q=" + encodeURIComponent(q.trim());
+  if (!view || view === "home") return "#/";
+  return "#/" + view;
+}
+function parseHash(hash) {
+  try {
+    let h = (hash || "").replace(/^#\/?/, "");
+    let query = "";
+    const qi = h.indexOf("?");
+    if (qi >= 0) {
+      query = h.slice(qi + 1);
+      h = h.slice(0, qi);
+    }
+    const view = ROUTE_VIEWS.includes(h) ? h : "home";
+    let q = "";
+    if (view === "search" && query) {
+      const p = query.split("&").find((s) => s.indexOf("q=") === 0);
+      if (p) q = decodeURIComponent(p.slice(2));
+    }
+    return { view, q };
+  } catch (e) {
+    return { view: "home", q: "" };
+  }
+}
+function initialRoute() {
+  if (typeof window === "undefined" || !window.location) return { view: "home", q: "" };
+  return parseHash(window.location.hash);
+}
 function App() {
-  const [tab, setTab] = useState("\uC804\uCCB4"), [q, setQ] = useState(""), [res, setRes] = useState("all"), [lic, setLic] = useState("all"), [sort, setSort] = useState("popular"), [twMsg, setTwMsg] = useState(null);
-  const [liked, setLiked] = useState(/* @__PURE__ */ new Set()), [open, setOpen] = useState(null), [used, setUsed] = useState(0), [ai, setAi] = useState(null), [menu, setMenu] = useState(null), [creator, setCreator] = useState(null), [pricing, setPricing] = useState(false), [profTab, setProfTab] = useState("uploads"), [opsTab, setOpsTab] = useState("dash"), [view, setView] = useState("home"), [profile, setProfile] = useState({ name: "Young", region: "\u{1F1F0}\u{1F1F7} \uD55C\uAD6D", bio: "\uCD09\uAC01 \uADF8\uB798\uD53D\uC73C\uB85C \uBAA8\uB450\uAC00 \uC77D\uB294 \uC138\uC0C1\uC744 \uB9CC\uB4ED\uB2C8\uB2E4.", avatar: "linear-gradient(135deg,#9DE,#FF4F00)" }), [hc, setHc] = useState(false), [lang, setLang] = useState("ko"), [following, setFollowing] = useState(/* @__PURE__ */ new Set()), [collections, setCollections] = useState([]);
+  const [tab, setTab] = useState("\uC804\uCCB4"), [q, setQ] = useState(() => initialRoute().q), [res, setRes] = useState("all"), [lic, setLic] = useState("all"), [sort, setSort] = useState("popular"), [twMsg, setTwMsg] = useState(null);
+  const [liked, setLiked] = useState(/* @__PURE__ */ new Set()), [open, setOpen] = useState(null), [used, setUsed] = useState(0), [ai, setAi] = useState(null), [menu, setMenu] = useState(null), [creator, setCreator] = useState(null), [pricing, setPricing] = useState(false), [profTab, setProfTab] = useState("uploads"), [opsTab, setOpsTab] = useState("dash"), [view, setView] = useState(() => initialRoute().view), [profile, setProfile] = useState({ name: "Young", region: "\u{1F1F0}\u{1F1F7} \uD55C\uAD6D", bio: "\uCD09\uAC01 \uADF8\uB798\uD53D\uC73C\uB85C \uBAA8\uB450\uAC00 \uC77D\uB294 \uC138\uC0C1\uC744 \uB9CC\uB4ED\uB2C8\uB2E4.", avatar: "linear-gradient(135deg,#9DE,#FF4F00)" }), [hc, setHc] = useState(false), [lang, setLang] = useState("ko"), [following, setFollowing] = useState(/* @__PURE__ */ new Set()), [collections, setCollections] = useState([]);
   const isPlatform = view === "about" || view === "contact" || view === "terms" || view === "privacy";
   const savedIds = useMemo(() => new Set(collections.flatMap((c) => c.ids)), [collections]);
   const [saveTarget, setSaveTarget] = useState(null);
@@ -3282,7 +3312,8 @@ function App() {
   }, [liked, following, collections, profile, authUser]);
   useMenuA11y(menu, () => setMenu(null));
   const modalSig = open ? "graphic" : ai !== null ? "ai" : saveTarget ? "save" : creator ? "creator" : commission ? "commission" : pricing ? "pricing" : authOpen ? "auth" : null;
-  const navRef = useRef({ view: "home", modal: null });
+  const navRef = useRef(null);
+  if (navRef.current === null) navRef.current = { view, modal: modalSig };
   useEffect(() => {
     if (typeof window === "undefined" || !window.history) return;
     const prev = navRef.current;
@@ -3294,11 +3325,11 @@ function App() {
         return;
       }
       if (prev.view !== view && prev.modal && !modalSig) {
-        window.history.replaceState({ tibView: view, tibModal: null }, "");
+        window.history.replaceState({ tibView: view, tibModal: null }, "", viewToHash(view, q));
         navRef.current = { view, modal: null };
         return;
       }
-      window.history.pushState({ tibView: view, tibModal: modalSig }, "");
+      window.history.pushState({ tibView: view, tibModal: modalSig }, "", viewToHash(view, q));
       navRef.current = { view, modal: modalSig };
     } catch (e) {
     }
@@ -3306,11 +3337,12 @@ function App() {
   useEffect(() => {
     if (typeof window === "undefined" || !window.history) return;
     try {
-      window.history.replaceState({ tibView: "home", tibModal: null }, "");
+      window.history.replaceState({ tibView: view, tibModal: null }, "", viewToHash(view, q));
     } catch (e) {
     }
     const onPop = (e) => {
-      const v = e && e.state && e.state.tibView || "home";
+      const parsed = parseHash(window.location.hash);
+      const v = e && e.state && e.state.tibView || parsed.view;
       navRef.current = { view: v, modal: null };
       setOpen(null);
       setAi(null);
@@ -3321,6 +3353,7 @@ function App() {
       setAuthOpen(false);
       setMenu(null);
       setTwMsg(null);
+      if (v === "search") setQ(parsed.q || "");
       setView(v);
       window.scrollTo({ top: 0 });
     };
