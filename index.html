@@ -418,9 +418,6 @@ const CSS = `
 .tib-link{color:var(--ink-soft);font-weight:var(--w-med);font-size:var(--fs-body);cursor:pointer;border:none;background:none;font-family:inherit;padding:0;display:inline-flex;align-items:center;gap:4px;}
 .tib-link:hover{color:var(--ink);}
 .sp{flex:1;}
-.pill{display:inline-flex;align-items:center;gap:var(--s1);border:1.5px solid var(--line);background:var(--paper);
-  border-radius:var(--r-full);padding:8px 13px;font-size:var(--fs-xs);font-weight:var(--w-semi);color:var(--ink-soft);}
-.pill b{color:var(--ink);}
 .icbtn{width:38px;height:38px;border-radius:var(--r-full);border:1.5px solid var(--line);background:var(--paper);
   display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:border-color .15s,color .15s,background .15s;}
 .icbtn:hover{background:var(--accent-tint);border-color:var(--accent);color:var(--accent);}
@@ -549,7 +546,6 @@ const CSS = `
 .fseg button{border:none;background:transparent;font-family:inherit;font-size:var(--fs-xs);font-weight:var(--w-med);color:var(--ink-soft);
   padding:7px 11px;cursor:pointer;}
 .fseg button.act{background:var(--ink);color:#fff;}
-.fcount{margin-left:auto;font-size:var(--fs-sm);font-weight:var(--w-semi);color:var(--ink-soft);}
 
 /* grid */
 .tib-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s5);padding:var(--s5) 0;}
@@ -575,7 +571,6 @@ const CSS = `
 .skel-thumb{aspect-ratio:4/3;background:linear-gradient(100deg,#EFEBE2 28%,#F8F5EF 50%,#EFEBE2 72%);background-size:200% 100%;animation:tibShimmer 1.25s ease-in-out infinite;}
 .skel-line{height:11px;margin:13px 14px 0;border-radius:6px;background:linear-gradient(100deg,#ECE8DF 28%,#F6F3ED 50%,#ECE8DF 72%);background-size:200% 100%;animation:tibShimmer 1.25s ease-in-out infinite;}
 .skel-line.s{width:52%;}
-.sr-fade{animation:tibFadeUp .34s cubic-bezier(.2,.7,.3,1) both;}
 .view-anim{animation:tibFade .34s cubic-bezier(.2,.7,.3,1) both;}
 @media(prefers-reduced-motion:reduce){.view-anim{animation:none;}}
 .swap-anim{animation:tibFadeUp .3s cubic-bezier(.2,.7,.3,1) both;}
@@ -709,7 +704,6 @@ const CSS = `
 .std-drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;border:2px dashed var(--line-2);border-radius:var(--r-md);padding:30px 18px;color:var(--ink-faint);font-size:var(--fs-sm);font-weight:var(--w-med);cursor:pointer;}
 .std-drop:hover{border-color:var(--accent);background:var(--accent-tint);color:var(--accent-deep);}
 .std-drop span{display:block;font-size:var(--fs-xs);margin-top:4px;}
-.std-ctrls{display:flex;align-items:center;gap:var(--s3) var(--s4);flex-wrap:wrap;}
 .std-panel{background:#FCFAF6;border:1px solid var(--line);border-radius:var(--r-md,12px);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s4);margin-top:var(--s4);}
 .std-row{display:flex;align-items:center;gap:var(--s3) var(--s4);flex-wrap:wrap;}
 .ai-slider input[type=range]{flex:1;accent-color:var(--accent);height:5px;cursor:pointer;}
@@ -1069,14 +1063,6 @@ const CSS = `
 .col-create{display:flex;gap:10px;padding:var(--s5) 0 var(--s5);align-items:stretch;}
 .col-create input{flex:1;min-width:0;font-family:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;background:var(--paper);color:var(--ink);}
 .col-create input:focus{outline:none;border-color:var(--accent);}
-.col-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:0 var(--s5) var(--s5);}
-.col-card{text-align:left;border:1.5px solid var(--line);border-radius:var(--r-lg);background:var(--paper);padding:10px;cursor:pointer;font-family:inherit;transition:border-color .15s,transform .15s,box-shadow .15s;}
-.col-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--sh-1);}
-.col-cover{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;background:var(--cream);border-radius:10px;padding:6px;height:96px;overflow:hidden;}
-.col-cover>div{display:grid;place-items:center;overflow:hidden;}
-.col-cover .empty{background:rgba(0,0,0,.04);border-radius:6px;}
-.col-name{font-size:14px;font-weight:var(--w-semi);margin-top:9px;display:flex;align-items:center;gap:6px;}
-.col-name svg{color:var(--accent);flex:none;}
 .col-count{font-size:12px;color:var(--ink-faint);margin-top:2px;}
 .col-head{display:flex;align-items:center;gap:10px;padding:var(--s5) 0 var(--s3);}
 .col-back{border:none;background:none;cursor:pointer;color:var(--ink-soft);display:grid;place-items:center;padding:5px;border-radius:var(--r-full);}
@@ -1109,10 +1095,7 @@ const CSS = `
 .save-new input{flex:1;min-width:0;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--r-md);font-family:inherit;font-size:var(--fs-sm);background:var(--paper);color:var(--ink);}
 .save-new input:focus{outline:none;border-color:var(--accent);}
 .save-foot{padding:var(--s4) var(--s5) var(--s5);}
-@media(max-width:680px){.col-list{grid-template-columns:1fr;}}
 .lib{padding-bottom:var(--s6);}
-.lib-head{padding:var(--s6) 0 0;}
-.lib-head h2{font-size:28px;font-weight:800;margin:0 0 var(--s4);letter-spacing:-.02em;}
 .lib-tabs{display:flex;gap:var(--s5);border-bottom:1.5px solid var(--line);margin-bottom:var(--s3);}
 .lib-tabs button{font-family:inherit;display:inline-flex;align-items:center;gap:7px;background:none;border:none;font-size:15px;font-weight:600;color:var(--ink-soft);padding:10px 2px;margin-bottom:-1.5px;border-bottom:2.5px solid transparent;cursor:pointer;}
 .lib-tabs button.act{color:var(--ink);border-bottom-color:var(--accent);}
@@ -1146,13 +1129,6 @@ const CSS = `
 .up-st.ok{background:#E7F7EE;color:#1E7A45;}
 .up-st.wait{background:var(--accent-tint);color:var(--accent-deep);}
 .up-st.rej{background:#FBE7E7;color:#B23B3B;}
-.prof-about{padding:var(--s5) 0;max-width:680px;}
-.prof-about h3{font-size:18px;font-weight:800;margin:0 0 8px;}
-.prof-about p{color:var(--ink-soft);line-height:1.6;margin:0 0 var(--s5);}
-.prof-dl{display:grid;gap:0;margin:0;}
-.prof-dl>div{display:flex;gap:16px;border-top:1px solid var(--line);padding:12px 0;}
-.prof-dl dt{width:72px;flex:none;color:var(--ink-faint);font-size:13px;font-weight:600;}
-.prof-dl dd{margin:0;font-size:14px;}
 @media(max-width:640px){.prof-hd{flex-direction:column;text-align:center;align-items:center;}.prof-actions{justify-content:center;}}
 .settings{padding-bottom:var(--s7);}
 .set-pagehd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:var(--s7) 0 var(--s6);flex-wrap:wrap;}
@@ -1193,9 +1169,6 @@ const CSS = `
 @media(max-width:760px){.set-body{grid-template-columns:1fr;}.set-side{flex-direction:row;flex-wrap:wrap;gap:6px;border-right:none;border-bottom:1px solid var(--line);padding:0 0 var(--s3);}}
 @media(max-width:680px){.price-grid{grid-template-columns:1fr;}}
 /* \uC124\uC815\xB7\uACC4\uC815 */
-.set-acct{display:flex;align-items:center;gap:var(--s3);padding:var(--s4);background:var(--cream);border-radius:var(--r-lg);margin-bottom:var(--s4);}
-.set-name{font-weight:700;font-size:15px;}
-.set-sub{font-size:12.5px;color:var(--ink-faint);}
 .set-row{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);padding:var(--s3) 0;border-bottom:1px solid var(--line);cursor:pointer;}
 .set-l{font-size:14px;font-weight:500;}
 .set-d{font-size:12px;color:var(--ink-faint);margin-top:2px;}
@@ -1251,15 +1224,6 @@ const CSS = `
 .dash-st.wait{background:var(--accent-tint);color:var(--accent-deep);}
 .dash-st.rej{background:#FBE7E7;color:#B23B3B;}
 @media(max-width:560px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
-/* \uB0B4 \uC5C5\uB85C\uB4DC */
-.up-list{padding:0 var(--s5) var(--s5);}
-.up-row{display:flex;align-items:center;gap:var(--s4);padding:12px 0;border-bottom:1px solid var(--line);}
-.up-row:last-child{border-bottom:none;}
-.up-thumb{flex:none;border:1px solid var(--line);border-radius:var(--r-md,12px);background:var(--cream);padding:5px;display:grid;place-items:center;overflow:hidden;}
-.up-info{flex:1;min-width:0;}
-.up-n{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.up-m{font-size:12px;color:var(--ink-faint);margin-top:3px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.up-m span{display:inline-flex;align-items:center;gap:4px;}
 .up-empty{text-align:center;color:var(--ink-faint);font-size:14px;padding:var(--s7) 0;}
 /* AI \uC790\uB3D9 \uC0DD\uC131 \uD050 (\uAD00\uB9AC\uC790 \uD050\uB808\uC774\uC158) */
 .ag-modal{max-width:840px;max-height:calc(100vh - 80px);display:flex;flex-direction:column;}
@@ -2824,23 +2788,6 @@ function DashboardPanel({ profile }) {
   ];
   return /* @__PURE__ */ React.createElement("div", { className: "ops-panel" }, /* @__PURE__ */ React.createElement("div", { className: "dash-head" }, /* @__PURE__ */ React.createElement(Avatar, { src: profile.avatar, lg: true, on: true }), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "dash-name" }, profile.name), /* @__PURE__ */ React.createElement("div", { className: "dash-sub" }, profile.region, " \xB7 \uCD09\uAC01 \uADF8\uB798\uD53D \uCC3D\uC791\uC790"))), /* @__PURE__ */ React.createElement("div", { className: "dash-stats" }, stats.map(([n, l]) => /* @__PURE__ */ React.createElement("div", { key: l, className: "dash-stat" }, /* @__PURE__ */ React.createElement("b", null, n), /* @__PURE__ */ React.createElement("span", null, l)))), /* @__PURE__ */ React.createElement("div", { className: "dash-sec" }, /* @__PURE__ */ React.createElement("h4", null, "\uCD5C\uADFC 6\uAC1C\uC6D4 \uB2E4\uC6B4\uB85C\uB4DC")), /* @__PURE__ */ React.createElement("div", { className: "dash-bars" }, months.map(([m, v]) => /* @__PURE__ */ React.createElement("div", { key: m, className: "dash-bar" }, /* @__PURE__ */ React.createElement("div", { className: "bar" + (v === max ? " hi" : ""), style: { height: v / max * 76 + "px" } }), /* @__PURE__ */ React.createElement("small", null, m)))), /* @__PURE__ */ React.createElement("div", { className: "dash-sec" }, /* @__PURE__ */ React.createElement("h4", null, "\uB0B4 \uC5C5\uB85C\uB4DC"), ups.map(([t, meta, st, cls]) => /* @__PURE__ */ React.createElement("div", { key: t, className: "dash-up" }, /* @__PURE__ */ React.createElement("div", { className: "ut" }, /* @__PURE__ */ React.createElement("div", { className: "un" }, t), /* @__PURE__ */ React.createElement("div", { className: "um" }, meta)), /* @__PURE__ */ React.createElement("span", { className: "dash-st " + cls }, st)))));
 }
-function MyUploads({ onClose, onUpload }) {
-  const dlg = useDialog(onClose);
-  const byId = (id, idx = 0) => {
-    const s = POOL.find((p) => p.id === id);
-    return s ? s.items[idx].data : "";
-  };
-  const mine = [
-    { title: "\uD55C\uAE00 \uC790\uC74C \uC77C\uB78C\uD45C (\uC218\uC815\uBCF8)", spec: "60\xD740", st: "\uACF5\uAC1C", cls: "ok", dl: 5300, likes: 421, hex: byId(9001) },
-    { title: "\uD329\uB9E8 8\uBE44\uD2B8 (\uD53D\uC140 \uC544\uD2B8)", spec: "60\xD740", st: "\uACF5\uAC1C", cls: "ok", dl: 2600, likes: 502, hex: byId(9005, 2) },
-    { title: "\uBD84\uC218 \uB9C9\uB300 \uBAA8\uD615", spec: "96\xD764", st: "\uAC80\uC218\uC911", cls: "wait", dl: 0, likes: 0, hex: hx("flower", 96, 64) },
-    { title: "\uC545\uBCF4 \uAE30\uCD08 (\uC74C\uD45C)", spec: "60\xD740", st: "\uBC18\uB824", cls: "rej", dl: 0, likes: 0, hex: hx("tree") }
-  ];
-  return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": "\uB0B4 \uC5C5\uB85C\uB4DC", style: { maxWidth: 600 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh", style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 } }, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { display: "flex", alignItems: "center", gap: 9 } }, /* @__PURE__ */ React.createElement(Icon, { n: "photo", size: 22, color: "#FF4F00" }), "\uB0B4 \uC5C5\uB85C\uB4DC", /* @__PURE__ */ React.createElement("span", { className: "chip-s", style: { marginLeft: 4 } }, mine.length, "\uAC74")), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", onClick: onUpload }, /* @__PURE__ */ React.createElement(Icon, { n: "upload", size: 15 }), "\uC5C5\uB85C\uB4DC\uD558\uAE30")), /* @__PURE__ */ React.createElement("div", { className: "up-list" }, mine.map((u) => {
-    const [w, h] = dims(u.spec);
-    return /* @__PURE__ */ React.createElement("div", { key: u.title, className: "up-row" }, /* @__PURE__ */ React.createElement("div", { className: "up-thumb" }, /* @__PURE__ */ React.createElement(DotMatrix, { hex: u.hex, w, h, cell: 60 / h, variant: "thumb" })), /* @__PURE__ */ React.createElement("div", { className: "up-info" }, /* @__PURE__ */ React.createElement("div", { className: "up-n" }, u.title), /* @__PURE__ */ React.createElement("div", { className: "up-m" }, /* @__PURE__ */ React.createElement("span", null, u.spec), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement(Icon, { n: "heart", size: 12 }), u.likes), /* @__PURE__ */ React.createElement("span", null, /* @__PURE__ */ React.createElement(Icon, { n: "download", size: 12 }), u.dl.toLocaleString()))), /* @__PURE__ */ React.createElement("span", { className: "dash-st " + u.cls }, u.st));
-  }))));
-}
 function AutoGenPanel() {
   const SUBJECTS = [
     ["\uC0AC\uACFC", "apple", "60\xD740"],
@@ -3302,6 +3249,51 @@ function App() {
     };
   }, [liked, following, collections, profile, authUser]);
   useMenuA11y(menu, () => setMenu(null));
+  const modalSig = open ? "graphic" : ai !== null ? "ai" : saveTarget ? "save" : creator ? "creator" : pricing ? "pricing" : authOpen ? "auth" : null;
+  const navRef = useRef({ view: "home", modal: null });
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.history) return;
+    const prev = navRef.current;
+    if (prev.view === view && prev.modal === modalSig) return;
+    try {
+      if (prev.view === view && prev.modal && !modalSig) {
+        navRef.current = { view, modal: null };
+        window.history.back();
+        return;
+      }
+      if (prev.view !== view && prev.modal && !modalSig) {
+        window.history.replaceState({ tibView: view, tibModal: null }, "");
+        navRef.current = { view, modal: null };
+        return;
+      }
+      window.history.pushState({ tibView: view, tibModal: modalSig }, "");
+      navRef.current = { view, modal: modalSig };
+    } catch (e) {
+    }
+  }, [view, modalSig]);
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.history) return;
+    try {
+      window.history.replaceState({ tibView: "home", tibModal: null }, "");
+    } catch (e) {
+    }
+    const onPop = (e) => {
+      const v = e && e.state && e.state.tibView || "home";
+      navRef.current = { view: v, modal: null };
+      setOpen(null);
+      setAi(null);
+      setSaveTarget(null);
+      setCreator(null);
+      setPricing(false);
+      setAuthOpen(false);
+      setMenu(null);
+      setTwMsg(null);
+      setView(v);
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
   const isPro = false;
   const openSave = (id) => {
     const s = POOL.find((p) => p.id === id);
@@ -3594,7 +3586,7 @@ function App() {
   } }), authOpen && /* @__PURE__ */ React.createElement(AuthModal, { onClose: () => setAuthOpen(false) }), /* @__PURE__ */ React.createElement(BackToTop, null));
 }
 
-  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
 })();</script>
 </body>
 </html>
