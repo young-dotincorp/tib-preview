@@ -854,12 +854,14 @@ const CSS = `
 .rev-badge.x{background:var(--line);color:var(--ink-soft);}
 /* \uD478\uD130 */
 .tib-foot{border-top:1px solid var(--line);margin-top:var(--s8);padding:var(--s6) 0 var(--s5);}
-.tf-main{display:flex;align-items:center;justify-content:space-between;gap:var(--s5);flex-wrap:wrap;margin-bottom:var(--s5);}
+.tf-main{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s6);flex-wrap:wrap;margin-bottom:var(--s5);}
 .tf-logo{display:flex;align-items:center;} .tf-logo svg{height:32px;width:auto;display:block;}
 .tf-logo.is-dg svg{height:44px;}
-.tf-links{display:flex;gap:var(--s5);flex-wrap:wrap;}
-.tf-links button{background:none;border:none;font-family:inherit;color:var(--ink-soft);font-size:14px;font-weight:500;cursor:pointer;padding:0;}
-.tf-links button:hover{color:var(--accent-deep);}
+.tf-cols{display:flex;gap:var(--s7);flex-wrap:wrap;}
+.tf-col{display:flex;flex-direction:column;gap:var(--s2);min-width:130px;}
+.tf-col-h{font-size:13px;font-weight:var(--w-semi);color:var(--ink);margin-bottom:4px;}
+.tf-col button{background:none;border:none;font-family:inherit;color:var(--ink-soft);font-size:14px;font-weight:500;cursor:pointer;padding:0;text-align:left;}
+.tf-col button:hover{color:var(--accent-deep);}
 .tf-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;padding-top:var(--s4);border-top:1px solid var(--line);color:var(--ink-faint);font-size:11px;}
 @media(max-width:620px){.tf-main{flex-direction:column;align-items:flex-start;gap:var(--s4);}}
 /* \uD68C\uC0AC \uC18C\uAC1C */
@@ -2904,8 +2906,8 @@ function AutoGenPanel() {
     } }, /* @__PURE__ */ React.createElement(Icon, { n: "heart", size: 17, fill: likes.has(c.id) ? "currentColor" : "none" }))));
   }), cands.length === 0 && /* @__PURE__ */ React.createElement("div", { className: "up-empty", style: { gridColumn: "1 / -1" } }, "\uC624\uB298 \uD6C4\uBCF4\uB97C \uBAA8\uB450 \uCC98\uB9AC\uD588\uC5B4\uC694. \uB0B4\uC77C \uC0C8 \uBC30\uCE58\uAC00 \uC0DD\uC131\uB3FC\uC694.")), /* @__PURE__ */ React.createElement("div", { className: "ag-foot" }, /* @__PURE__ */ React.createElement("div", { className: "ag-stats" }, /* @__PURE__ */ React.createElement("span", null, "\uC120\uD0DD ", /* @__PURE__ */ React.createElement("b", null, sel.size)), /* @__PURE__ */ React.createElement("span", null, "\uC624\uB298 \uACF5\uAC1C ", /* @__PURE__ */ React.createElement("b", null, pub)), /* @__PURE__ */ React.createElement("span", null, "\uCE74\uD0C8\uB85C\uADF8 \uCD1D ", /* @__PURE__ */ React.createElement("b", null, total.toLocaleString()))), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", disabled: !sel.size, onClick: publish }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 16 }), "\uC120\uD0DD ", sel.size, "\uC7A5 \uACF5\uAC1C")));
 }
-function Footer({ isDG, onBrowse, onPricing, onAbout, onContact, onTerms, onPrivacy, onRequests, onActivity }) {
-  return /* @__PURE__ */ React.createElement("footer", { className: "tib-foot" }, /* @__PURE__ */ React.createElement("div", { className: "tf-main" }, /* @__PURE__ */ React.createElement("div", { className: "tf-logo" + (isDG ? " is-dg" : ""), dangerouslySetInnerHTML: { __html: isDG ? DG_LOGO : TIB_LOGO } }), /* @__PURE__ */ React.createElement("nav", { className: "tf-links" }, /* @__PURE__ */ React.createElement("button", { onClick: onBrowse }, "\uB458\uB7EC\uBCF4\uAE30"), /* @__PURE__ */ React.createElement("button", { onClick: onRequests }, "\uC694\uCCAD \uAC8C\uC2DC\uD310"), /* @__PURE__ */ React.createElement("button", { onClick: onActivity }, "\uD65C\uB3D9 \uD53C\uB4DC"), /* @__PURE__ */ React.createElement("button", { onClick: onPricing }, "\uAC00\uACA9"), /* @__PURE__ */ React.createElement("button", { onClick: onAbout }, "\uC18C\uAC1C"), /* @__PURE__ */ React.createElement("button", { onClick: onContact }, "\uBB38\uC758\uD558\uAE30"))), /* @__PURE__ */ React.createElement("div", { className: "tf-bot" }, /* @__PURE__ */ React.createElement("span", null, "\xA9 2026 Dot Inc. \xB7 ", isDG ? "Dot Games \u2014 \uCD09\uAC01 \uAC8C\uC784 \uD50C\uB7AB\uD3FC" : "TIB \u2014 Tactile Image Bank"), /* @__PURE__ */ React.createElement("span", { className: "tf-legal" }, /* @__PURE__ */ React.createElement("button", { onClick: onTerms }, "\uC774\uC6A9\uC57D\uAD00"), /* @__PURE__ */ React.createElement("span", { className: "sep" }, "\xB7"), /* @__PURE__ */ React.createElement("button", { onClick: onPrivacy }, "\uAC1C\uC778\uC815\uBCF4 \uCC98\uB9AC\uBC29\uCE68"), /* @__PURE__ */ React.createElement("span", { className: "sep" }, "\xB7"), "Made for tactile literacy")));
+function Footer({ isDG, onBrowse, onPricing, onAbout, onContact, onTerms, onPrivacy, onRequests, onActivity, onDotGames }) {
+  return /* @__PURE__ */ React.createElement("footer", { className: "tib-foot" }, /* @__PURE__ */ React.createElement("div", { className: "tf-main" }, /* @__PURE__ */ React.createElement("div", { className: "tf-logo" + (isDG ? " is-dg" : ""), dangerouslySetInnerHTML: { __html: isDG ? DG_LOGO : TIB_LOGO } }), /* @__PURE__ */ React.createElement("div", { className: "tf-cols" }, /* @__PURE__ */ React.createElement("div", { className: "tf-col" }, /* @__PURE__ */ React.createElement("div", { className: "tf-col-h" }, "Tactile World"), /* @__PURE__ */ React.createElement("button", { onClick: onAbout }, "\uC18C\uAC1C"), /* @__PURE__ */ React.createElement("button", { onClick: onContact }, "\uBB38\uC758\uD558\uAE30"), /* @__PURE__ */ React.createElement("button", { onClick: onTerms }, "\uC774\uC6A9\uC57D\uAD00"), /* @__PURE__ */ React.createElement("button", { onClick: onPrivacy }, "\uAC1C\uC778\uC815\uBCF4 \uCC98\uB9AC\uBC29\uCE68")), /* @__PURE__ */ React.createElement("div", { className: "tf-col" }, /* @__PURE__ */ React.createElement("div", { className: "tf-col-h" }, "Tactile Image Bank"), /* @__PURE__ */ React.createElement("button", { onClick: onBrowse }, "\uB458\uB7EC\uBCF4\uAE30"), /* @__PURE__ */ React.createElement("button", { onClick: onRequests }, "\uC694\uCCAD \uAC8C\uC2DC\uD310"), /* @__PURE__ */ React.createElement("button", { onClick: onActivity }, "\uD65C\uB3D9 \uD53C\uB4DC"), /* @__PURE__ */ React.createElement("button", { onClick: onPricing }, "\uAC00\uACA9")), /* @__PURE__ */ React.createElement("div", { className: "tf-col" }, /* @__PURE__ */ React.createElement("div", { className: "tf-col-h" }, "Dot Games"), /* @__PURE__ */ React.createElement("button", { onClick: onDotGames }, "\uAC8C\uC784 \uB458\uB7EC\uBCF4\uAE30"), /* @__PURE__ */ React.createElement("button", { onClick: onDotGames }, "\uC778\uAE30 \uAC8C\uC784")))), /* @__PURE__ */ React.createElement("div", { className: "tf-bot" }, /* @__PURE__ */ React.createElement("span", null, "\xA9 2026 Dot Inc. \xB7 Tactile World"), /* @__PURE__ */ React.createElement("span", { className: "tf-legal" }, "Made for tactile literacy")));
 }
 function DotArt({ mask, w }) {
   const gap = 17, r = 5, pad = 6;
@@ -3414,16 +3416,7 @@ function App() {
   } }, "\uB458\uB7EC\uBCF4\uAE30"), /* @__PURE__ */ React.createElement("button", { className: "tib-link", onClick: () => {
     setMenu(null);
     document.getElementById("dg-featured")?.scrollIntoView({ behavior: "smooth", block: "start" });
-  } }, "\uC778\uAE30 \uAC8C\uC784"), /* @__PURE__ */ React.createElement("button", { className: "tib-link", onClick: () => {
-    setView("about");
-    setMenu(null);
-    window.scrollTo({ top: 0 });
-  } }, "\uC18C\uAC1C"), /* @__PURE__ */ React.createElement("button", { className: "tib-link", onClick: () => {
-    setView("contact");
-    setContactSeed(null);
-    setMenu(null);
-    window.scrollTo({ top: 0 });
-  } }, "\uBB38\uC758\uD558\uAE30")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "tib-link", onClick: () => {
+  } }, "\uC778\uAE30 \uAC8C\uC784")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { className: "tib-link", onClick: () => {
     setView("browse");
     setMenu(null);
     window.scrollTo({ top: 0 });
@@ -3442,7 +3435,22 @@ function App() {
   } }, /* @__PURE__ */ React.createElement(Icon, { n: "wand", size: 18, color: "#FF4F00" }), "AI\uB85C \uC0DD\uC131"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "mi", onClick: () => {
     setMenu(null);
     setAi("__image__");
-  } }, /* @__PURE__ */ React.createElement(Icon, { n: "upload", size: 18 }), "\uD30C\uC77C \uC5C5\uB85C\uB4DC"))), menu === "nav" && /* @__PURE__ */ React.createElement("div", { className: "navpanel" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "upload", size: 18 }), "\uD30C\uC77C \uC5C5\uB85C\uB4DC"))), menu === "nav" && /* @__PURE__ */ React.createElement("div", { className: "navpanel" }, view === "dotgames" ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
+    setMenu(null);
+    document.getElementById("dg-all")?.scrollIntoView({ behavior: "smooth" });
+  } }, "\uB458\uB7EC\uBCF4\uAE30"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
+    setMenu(null);
+    document.getElementById("dg-featured")?.scrollIntoView({ behavior: "smooth" });
+  } }, "\uC778\uAE30 \uAC8C\uC784"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
+    setMenu(null);
+    setContactSeed(null);
+    setView("contact");
+    window.scrollTo({ top: 0 });
+  } }, "\uBB38\uC758\uD558\uAE30"), /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
+    setMenu(null);
+    setView("activity");
+    window.scrollTo({ top: 0 });
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("button", { type: "button", className: "np-row", onClick: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     setMenu(null);
@@ -3480,7 +3488,7 @@ function App() {
     setMenu(null);
     setView("activity");
     window.scrollTo({ top: 0 });
-  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC"))), /* @__PURE__ */ React.createElement("main", { id: "tib-main", tabIndex: -1 }, /* @__PURE__ */ React.createElement("div", { className: "view-anim", key: view }, view === "dotgames" ? /* @__PURE__ */ React.createElement(DotGamesPage, null) : view === "activity" ? /* @__PURE__ */ React.createElement(ActivityPage, null) : view === "requests" ? /* @__PURE__ */ React.createElement(RequestsPage, { me: profile.name, onBrowse: () => {
+  } }, /* @__PURE__ */ React.createElement(Icon, { n: "bell", size: 20 }), "\uC54C\uB9BC")))), /* @__PURE__ */ React.createElement("main", { id: "tib-main", tabIndex: -1 }, /* @__PURE__ */ React.createElement("div", { className: "view-anim", key: view }, view === "dotgames" ? /* @__PURE__ */ React.createElement(DotGamesPage, null) : view === "activity" ? /* @__PURE__ */ React.createElement(ActivityPage, null) : view === "requests" ? /* @__PURE__ */ React.createElement(RequestsPage, { me: profile.name, onBrowse: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     window.scrollTo({ top: 0 });
@@ -3518,7 +3526,11 @@ function App() {
     setTab("\uC804\uCCB4");
     setRes("all");
     setLic("all");
-  } }, t)))) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid swap-anim", key: view + "|" + tab + "|" + res + "|" + lic + "|" + sort + "|" + q }, list.slice(0, shown).map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, shot: s, saved: savedIds.has(s.id), onSave: openSave, onOpen: setOpen, onPrint: setOpen, liked: liked.has(s.id), onLike: toggleLike }))), !searching && list.length > 0 && (shown < list.length ? /* @__PURE__ */ React.createElement("div", { className: "loadmore" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: loadMore, disabled: loadingMore }, loadingMore ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "loader-2", size: 16, className: "spin" }), "\uBD88\uB7EC\uC624\uB294 \uC911\u2026") : /* @__PURE__ */ React.createElement(React.Fragment, null, "\uB354 \uBCF4\uAE30 ", /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 15 })))) : /* @__PURE__ */ React.createElement("div", { className: "loadend" }, "\uBAA8\uB4E0 \uCD09\uAC01 \uADF8\uB798\uD53D\uC744 \uBD88\uB7EC\uC654\uC5B4\uC694 \xB7 ", list.length, "\uAC1C"))))), /* @__PURE__ */ React.createElement(Footer, { isDG: view === "dotgames", onBrowse: () => {
+  } }, t)))) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid swap-anim", key: view + "|" + tab + "|" + res + "|" + lic + "|" + sort + "|" + q }, list.slice(0, shown).map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, shot: s, saved: savedIds.has(s.id), onSave: openSave, onOpen: setOpen, onPrint: setOpen, liked: liked.has(s.id), onLike: toggleLike }))), !searching && list.length > 0 && (shown < list.length ? /* @__PURE__ */ React.createElement("div", { className: "loadmore" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: loadMore, disabled: loadingMore }, loadingMore ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "loader-2", size: 16, className: "spin" }), "\uBD88\uB7EC\uC624\uB294 \uC911\u2026") : /* @__PURE__ */ React.createElement(React.Fragment, null, "\uB354 \uBCF4\uAE30 ", /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 15 })))) : /* @__PURE__ */ React.createElement("div", { className: "loadend" }, "\uBAA8\uB4E0 \uCD09\uAC01 \uADF8\uB798\uD53D\uC744 \uBD88\uB7EC\uC654\uC5B4\uC694 \xB7 ", list.length, "\uAC1C"))))), /* @__PURE__ */ React.createElement(Footer, { isDG: view === "dotgames", onDotGames: () => {
+    setTwMsg(null);
+    setView("dotgames");
+    window.scrollTo({ top: 0 });
+  }, onBrowse: () => {
     setView("browse");
     setTab("\uC804\uCCB4");
     window.scrollTo({ top: 0 });
