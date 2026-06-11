@@ -461,14 +461,8 @@ const CSS = `
 .tib-tab:hover{color:var(--ink);} .tib-tab.act{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);font-weight:var(--w-semi);}
 .toolbar{display:flex;align-items:center;gap:var(--s4);margin-top:var(--s4);padding-top:var(--s3);border-top:1.5px solid var(--line);}
 .tb-sort{flex-shrink:0;}
-.tabs-scroll{flex:1;min-width:0;position:relative;}
-.tabs-scroll .tib-tabs{display:flex;align-items:center;gap:var(--s2);width:100%;margin:0;padding:0;border:none;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;}
-.tabs-scroll .tib-tabs::-webkit-scrollbar{display:none;}
-.tabs-scroll::before,.tabs-scroll::after{content:"";position:absolute;top:0;bottom:0;width:22px;pointer-events:none;opacity:0;transition:opacity .15s ease;z-index:1;}
-.tabs-scroll::before{left:0;background:linear-gradient(to right,var(--cream),transparent);}
-.tabs-scroll::after{right:0;background:linear-gradient(to left,var(--cream),transparent);}
-.tabs-scroll.sl::before{opacity:1;}
-.tabs-scroll.sr::after{opacity:1;}
+.toolbar .tib-tabs{flex:1;min-width:0;display:flex;align-items:center;gap:var(--s2);margin:0;padding:0;border:none;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;}
+.toolbar .tib-tabs::-webkit-scrollbar{display:none;}
 .toolbar .filt-toggle{flex-shrink:0;}
 .filt-toggle{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:var(--paper);font-family:inherit;font-size:var(--fs-sm);font-weight:var(--w-med);color:var(--ink);padding:7px 14px;border-radius:var(--r-full);cursor:pointer;}
 .filt-toggle:hover{border-color:var(--line-2);}
@@ -2051,25 +2045,7 @@ function PinEditor({ grid, w, h, cell, onPaint }) {
 }
 const dims = (spec) => spec === "96\xD764" ? [96, 64] : [60, 40];
 function CategoryTabs({ tabs, active, onSelect }) {
-  const ref = useRef(null);
-  const [arr, setArr] = useState({ l: false, r: false });
-  const update = () => {
-    const el = ref.current;
-    if (!el) return;
-    setArr({ l: el.scrollLeft > 4, r: el.scrollLeft + el.clientWidth < el.scrollWidth - 4 });
-  };
-  useEffect(() => {
-    update();
-    const el = ref.current;
-    if (!el) return;
-    el.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      el.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-  return /* @__PURE__ */ React.createElement("div", { className: "tabs-scroll" + (arr.l ? " sl" : "") + (arr.r ? " sr" : "") }, /* @__PURE__ */ React.createElement("nav", { className: "tib-tabs", "aria-label": "\uCE74\uD14C\uACE0\uB9AC", ref }, tabs.map((t) => /* @__PURE__ */ React.createElement("button", { key: t, type: "button", className: "tib-tab" + (t === active ? " act" : ""), "aria-current": t === active ? "true" : void 0, onClick: () => onSelect(t) }, t))));
+  return /* @__PURE__ */ React.createElement("nav", { className: "tib-tabs", "aria-label": "\uCE74\uD14C\uACE0\uB9AC" }, tabs.map((t) => /* @__PURE__ */ React.createElement("button", { key: t, type: "button", className: "tib-tab" + (t === active ? " act" : ""), "aria-current": t === active ? "true" : void 0, onClick: () => onSelect(t) }, t)));
 }
 function HeroShowcase() {
   const items = [...SHOW_A, ...SHOW_B];
