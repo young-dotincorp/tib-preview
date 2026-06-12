@@ -547,9 +547,18 @@ const CSS = `
 .dg-tag:hover{color:var(--ink-soft);}
 @media(max-width:1080px){.dg-feat{grid-template-columns:repeat(4,1fr);}.dg-grid{grid-template-columns:repeat(4,1fr);}}
 @media(max-width:760px){
-  .dg-hero-in{flex-direction:column;align-items:flex-start;gap:var(--s5);min-height:0;padding-top:var(--s6);padding-bottom:var(--s6);}
+  .dg-hero-in{flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:var(--s3);min-height:300px;padding-top:var(--s6);padding-bottom:var(--s5);}
   .dg-hero-art{width:190px;height:190px;align-self:center;}
-  .dg-hero h1{font-size:32px;}
+  .dg-hero h1{font-size:30px;margin-bottom:var(--s2);}
+  .dg-hero p{font-size:16px;margin-bottom:var(--s4);}
+  .dg-badge{margin-bottom:var(--s3);}
+  .dg-hero-cover{background:linear-gradient(180deg,rgba(12,7,28,.3),rgba(12,7,28,.5) 42%,rgba(12,7,28,.82));}
+  .dg-hero-nav{justify-content:center;gap:var(--s4);padding-bottom:var(--s5);}
+  .dg-hero-labels{flex:0 1 auto;gap:9px;justify-content:center;overflow:visible;}
+  .dg-hlabel{flex:0 0 auto;width:9px;height:9px;min-width:9px;padding:0;font-size:0;line-height:0;border-radius:var(--r-full);background:rgba(255,255,255,.42);transition:width .2s ease,background .2s ease;}
+  .dg-hlabel.on{background:#fff;width:26px;border-radius:5px;text-decoration:none;}
+  .dg-hlabel:hover{background:rgba(255,255,255,.7);}
+  .dg-arrow{width:34px;height:34px;}
   .dg-feat{grid-template-columns:repeat(3,1fr);}
   .dg-grid{grid-template-columns:repeat(3,1fr);}
 }
