@@ -547,12 +547,13 @@ const CSS = `
 .dg-tag:hover{color:var(--ink-soft);}
 @media(max-width:1080px){.dg-feat{grid-template-columns:repeat(4,1fr);}.dg-grid{grid-template-columns:repeat(4,1fr);}}
 @media(max-width:760px){
-  .dg-hero-in{flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:var(--s3);min-height:300px;padding-top:var(--s6);padding-bottom:var(--s5);}
+  .dg-hero-in{flex-direction:column;align-items:flex-start;justify-content:center;gap:var(--s3);min-height:300px;padding-top:var(--s6);padding-bottom:var(--s5);}
+  .dg-hero-txt{flex:0 0 auto;width:100%;}
   .dg-hero-art{width:190px;height:190px;align-self:center;}
   .dg-hero h1{font-size:30px;margin-bottom:var(--s2);}
   .dg-hero p{font-size:16px;margin-bottom:var(--s4);}
   .dg-badge{margin-bottom:var(--s3);}
-  .dg-hero-cover{background:linear-gradient(180deg,rgba(12,7,28,.3),rgba(12,7,28,.5) 42%,rgba(12,7,28,.82));}
+  .dg-hero-cover{background:linear-gradient(180deg,rgba(12,7,28,.42),rgba(12,7,28,.55) 50%,rgba(12,7,28,.8));}
   .dg-hero-nav{justify-content:center;gap:var(--s4);padding-bottom:var(--s5);}
   .dg-hero-labels{flex:0 1 auto;gap:9px;justify-content:center;overflow:visible;}
   .dg-hlabel{flex:0 0 auto;width:9px;height:9px;min-width:9px;padding:0;font-size:0;line-height:0;border-radius:var(--r-full);background:rgba(255,255,255,.42);transition:width .2s ease,background .2s ease;}
@@ -761,6 +762,11 @@ const CSS = `
 .banner code{background:var(--paper);border:1px solid var(--line-2);padding:2px 8px;border-radius:6px;font-family:ui-monospace,monospace;color:var(--ink-soft);}
 .banner-x{position:absolute;right:var(--gutter);top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:none;background:none;border-radius:var(--r-sm);color:var(--ink-soft);cursor:pointer;}
 .banner-x:hover{background:rgba(31,29,26,.06);color:var(--ink);}
+@media(max-width:560px){
+  .banner{font-size:12.5px;padding:9px 44px;gap:7px;line-height:1.5;flex-wrap:wrap;}
+  .banner code{padding:1px 7px;}
+  .banner-x{right:8px;}
+}
 
 /* GNB dropdown menus (Dribbble\uC2DD) */
 .menuwrap{position:relative;display:flex;}
