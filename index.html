@@ -3450,7 +3450,32 @@ function App() {
     const t = setTimeout(() => setQDeb(q), 360);
     return () => clearTimeout(t);
   }, [q, view]);
-  const list = useMemo(() => POOL.filter((s) => (tab === "\uC804\uCCB4" || s.cat === tab) && (res === "all" || s.spec === (res === "60" ? "60\xD740" : "96\xD764")) && (lic === "all" || s.lic === lic) && matchShot(s, qDeb)).sort((a, b) => sort === "downloads" ? b.downloads - a.downloads : sort === "recent" ? b.id - a.id : b.likes - a.likes), [tab, res, lic, sort, qDeb]);
+  const [dbGraphics, setDbGraphics] = useState([]);
+  useEffect(() => {
+    if (!SB) return;
+    SB.from("graphics").select("*").eq("status", "published").order("published_at", { ascending: false }).then(({ data, error }) => {
+      if (error || !Array.isArray(data) || !data.length) return;
+      setDbGraphics(data.map((r) => ({
+        id: r.id,
+        title: r.title,
+        cat: r.category || "\uAE30\uD0C0",
+        spec: r.spec,
+        lic: r.license,
+        price: r.price || void 0,
+        creator: { name: r.creator_name || "\uC775\uBA85", grad: r.creator_grad || "linear-gradient(135deg,#16150F,#FF4F00)", region: r.creator_region || "\u{1F310} \uAE00\uB85C\uBC8C" },
+        available: r.available !== false,
+        likes: r.likes || 0,
+        downloads: r.downloads || 0,
+        tags: Array.isArray(r.tags) ? r.tags : [],
+        items: Array.isArray(r.items) ? r.items : [],
+        _ts: Date.parse(r.published_at || r.created_at || "") || 0
+      })));
+    });
+  }, []);
+  const list = useMemo(() => [...dbGraphics, ...POOL].filter((s) => (tab === "\uC804\uCCB4" || s.cat === tab) && (res === "all" || s.spec === (res === "60" ? "60\xD740" : "96\xD764")) && (lic === "all" || s.lic === lic) && matchShot(s, qDeb)).sort((a, b) => {
+    const rk = (x) => x._ts ? 1e15 + x._ts : typeof x.id === "number" ? x.id : 0;
+    return sort === "downloads" ? b.downloads - a.downloads : sort === "recent" ? rk(b) - rk(a) : b.likes - a.likes;
+  }), [tab, res, lic, sort, qDeb, dbGraphics]);
   const [shown, setShown] = useState(16), [loadingMore, setLoadingMore] = useState(false);
   useEffect(() => {
     setShown(16);
