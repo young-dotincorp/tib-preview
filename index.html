@@ -824,8 +824,8 @@ const CSS = `
 .cre-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:var(--sh-2);}
 .cre-card .pv{background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:var(--s4);aspect-ratio:4/3;overflow:hidden;}
 .cre-card .pv canvas,.rev-pv canvas{display:block;margin:auto;max-width:100%;height:auto;}
-.cre-card .ti{font-size:var(--fs-body);font-weight:var(--w-semi);padding:var(--s4) var(--s4) 2px;line-height:1.35;}
-.cre-card .mt2{font-size:var(--fs-sm);color:var(--ink-faint);padding:0 var(--s4) var(--s4);}
+.cre-card .ti{font-size:var(--fs-body);font-weight:var(--w-semi);padding:var(--s5) var(--s4) 6px;line-height:1.4;}
+.cre-card .mt2{font-size:var(--fs-sm);color:var(--ink-faint);padding:2px var(--s4) var(--s5);}
 @media(max-width:760px){.cre-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
 @media(max-width:480px){.cre-grid{grid-template-columns:minmax(0,1fr);}}
 /* \uAC80\uC218 \uB300\uAE30\uC5F4 */
@@ -1149,15 +1149,23 @@ const CSS = `
 .prof-empty p{margin:0 0 16px;}
 .prof-upbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:var(--s4) var(--s5) 0;font-size:13.5px;color:var(--ink-soft);font-weight:600;}
 .up-card .pv{position:relative;}
-.up-st{position:absolute;top:8px;left:8px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;}
+.up-st{position:absolute;top:12px;left:12px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;}
 .up-st.ok{background:#E7F7EE;color:#1E7A45;}
 .up-st.wait{background:var(--accent-tint);color:var(--accent-deep);}
 .up-st.rej{background:#FBE7E7;color:#B23B3B;}
 .up-card{cursor:pointer;}
 .up-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:14px;}
-.up-pv-big{position:relative;display:flex;align-items:center;justify-content:center;padding:var(--s4) 0 var(--s5);}
-.up-pv-note{color:var(--ink-soft);font-size:var(--fs-sm);}
-.up-pv-foot{display:flex;align-items:center;gap:10px;margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--line);}
+.up-pv-big{position:relative;display:flex;align-items:center;justify-content:center;padding:var(--s4) 0 var(--s2);}
+.up-pv-meta{margin-top:6px;color:var(--ink-soft);font-size:var(--fs-sm);}
+.st-badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:3px 11px;border-radius:999px;}
+.st-badge.ok{background:#E7F7EE;color:#1E7A45;}
+.st-badge.wait{background:var(--accent-tint);color:var(--accent-deep);}
+.st-badge.rej{background:#FBE7E7;color:#B23B3B;}
+.up-pv-note{display:flex;align-items:center;gap:9px;font-size:var(--fs-sm);color:var(--ink-soft);background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:11px 14px;margin-top:var(--s4);}
+.up-dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--ink-faint);}
+.up-pv-note.ok .up-dot{background:#2FB36B;} .up-pv-note.wait .up-dot{background:var(--accent);} .up-pv-note.rej .up-dot{background:#D92D20;}
+.up-pv-foot{display:flex;align-items:center;gap:10px;margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid var(--line);justify-content:flex-end;}
+.up-pv-foot .del-q{margin-right:auto;}
 @media(max-width:640px){.prof-hd{flex-direction:column;text-align:center;align-items:center;}.prof-actions{justify-content:center;}}
 .settings{padding-bottom:var(--s7);}
 .set-pagehd{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:var(--s7) 0 var(--s6);flex-wrap:wrap;}
@@ -2707,7 +2715,7 @@ function UploadPreviewModal({ up, onDelete, onClose }) {
       setErr("\uC0AD\uC81C\uD558\uC9C0 \uBABB\uD588\uC5B4\uC694. \uAD8C\uD55C \uC124\uC815(RLS)\uC744 \uD655\uC778\uD558\uAC70\uB098 \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");
     }
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": up.title, style: { maxWidth: 560 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "mt", style: { fontSize: 19 } }, up.title), /* @__PURE__ */ React.createElement("div", { style: { marginTop: 6, color: "var(--ink-soft)", fontSize: "var(--fs-sm)" } }, up.spec, " \xB7 \uB2E4\uC6B4\uB85C\uB4DC ", (up.dl || 0).toLocaleString(), " \xB7 \u2665 ", up.likes || 0))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 var(--s6) var(--s6)" } }, /* @__PURE__ */ React.createElement("div", { className: "up-pv-big" }, /* @__PURE__ */ React.createElement(DotMatrix, { hex: up.hex, w: W, h: H, cell: W === 96 ? 4.4 : 6.6, variant: "pins", alt: "\uCD09\uAC01 \uADF8\uB798\uD53D: " + up.title }), /* @__PURE__ */ React.createElement("span", { className: "up-st " + up.cls }, up.st)), /* @__PURE__ */ React.createElement("div", { className: "up-pv-note" }, STMSG[up.cls] || ""), err && /* @__PURE__ */ React.createElement("div", { className: "contact-err", style: { marginTop: "var(--s3)" } }, err), canDelete && /* @__PURE__ */ React.createElement("div", { className: "up-pv-foot" }, confirmDel ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "del-q" }, "\uC0AD\uC81C\uD560\uAE4C\uC694? \uB418\uB3CC\uB9B4 \uC218 \uC5C6\uC5B4\uC694."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-danger", onClick: remove, disabled: busy }, busy ? /* @__PURE__ */ React.createElement("span", { className: "spin" }) : /* @__PURE__ */ React.createElement(Icon, { n: "trash", size: 15, color: "#fff" }), "\uC0AD\uC81C"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => setConfirmDel(false), disabled: busy }, "\uCDE8\uC18C")) : /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => setConfirmDel(true) }, /* @__PURE__ */ React.createElement(Icon, { n: "trash", size: 15 }), "\uC0AD\uC81C")))));
+  return /* @__PURE__ */ React.createElement("div", { className: "ovl", onClick: onClose }, /* @__PURE__ */ React.createElement("button", { className: "ovl-x", onClick: onClose, "aria-label": "\uB2EB\uAE30" }, /* @__PURE__ */ React.createElement(Icon, { n: "x", size: 20 })), /* @__PURE__ */ React.createElement("div", { className: "modal", ref: dlg, tabIndex: -1, role: "dialog", "aria-modal": "true", "aria-label": up.title, style: { maxWidth: 560 }, onClick: (e) => e.stopPropagation() }, /* @__PURE__ */ React.createElement("div", { className: "mh" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("span", { className: "st-badge " + up.cls }, up.st), /* @__PURE__ */ React.createElement("div", { className: "mt", style: { fontSize: 20, marginTop: 8 } }, up.title), /* @__PURE__ */ React.createElement("div", { className: "up-pv-meta" }, up.spec, " \xB7 \uB2E4\uC6B4\uB85C\uB4DC ", (up.dl || 0).toLocaleString(), " \xB7 \u2665 ", up.likes || 0))), /* @__PURE__ */ React.createElement("div", { style: { padding: "0 var(--s6) var(--s6)" } }, /* @__PURE__ */ React.createElement("div", { className: "up-pv-big" }, /* @__PURE__ */ React.createElement(DotMatrix, { hex: up.hex, w: W, h: H, cell: W === 96 ? 4.4 : 6.6, variant: "pins", alt: "\uCD09\uAC01 \uADF8\uB798\uD53D: " + up.title })), /* @__PURE__ */ React.createElement("div", { className: "up-pv-note " + up.cls }, /* @__PURE__ */ React.createElement("span", { className: "up-dot" }), STMSG[up.cls] || ""), err && /* @__PURE__ */ React.createElement("div", { className: "contact-err", style: { marginTop: "var(--s3)" } }, err), canDelete && /* @__PURE__ */ React.createElement("div", { className: "up-pv-foot" }, confirmDel ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "del-q" }, "\uC0AD\uC81C\uD560\uAE4C\uC694? \uB418\uB3CC\uB9B4 \uC218 \uC5C6\uC5B4\uC694."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-danger", onClick: remove, disabled: busy }, busy ? /* @__PURE__ */ React.createElement("span", { className: "spin" }) : /* @__PURE__ */ React.createElement(Icon, { n: "trash", size: 15, color: "#fff" }), "\uC0AD\uC81C"), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => setConfirmDel(false), disabled: busy }, "\uCDE8\uC18C")) : /* @__PURE__ */ React.createElement("button", { className: "btn btn-ghost", onClick: () => setConfirmDel(true) }, /* @__PURE__ */ React.createElement(Icon, { n: "trash", size: 15 }), "\uC0AD\uC81C")))));
 }
 function ProfilePage({ profile, saved, liked, collections, setCollections, onOpen, onSave, onLike, tab, setTab, used, onEditProfile, onUpgrade, onUpload, uploads, onDeleteUpload }) {
   const [openKey, setOpenKey] = useState(null);
