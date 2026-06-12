@@ -652,13 +652,13 @@ const CSS = `
 .stat span{display:inline-flex;align-items:center;gap:var(--s1);}
 
 /* modal */
-.ovl{position:fixed;inset:0;z-index:200;display:flex;justify-content:center;overflow-y:auto;padding:var(--s7) var(--s4);animation:ovlIn .22s ease both;}
+.ovl{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:var(--s7) var(--s4);animation:ovlIn .22s ease both;}
 .ovl::before{content:"";position:fixed;inset:0;background:rgba(31,29,26,.5);backdrop-filter:blur(3px);z-index:-1;pointer-events:none;}
 @keyframes ovlIn{from{opacity:0;}to{opacity:1;}}
 @keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.985);}to{opacity:1;transform:none;}}
 .ovl-x{position:fixed;top:var(--s5);right:var(--s5);z-index:201;width:46px;height:46px;border-radius:var(--r-full);border:none;background:#fff;color:var(--ink);box-shadow:var(--sh-2);display:grid;place-items:center;cursor:pointer;}
 .ovl-x:hover{background:var(--cream);}
-.modal{background:#fff;border-radius:var(--r-xl);max-width:940px;width:100%;height:fit-content;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);animation:modalIn .34s cubic-bezier(.2,.7,.3,1) both;}
+.modal{background:#fff;border-radius:var(--r-xl);max-width:940px;width:100%;height:fit-content;margin:auto;overflow:hidden;box-shadow:0 30px 80px -20px rgba(0,0,0,.5);animation:modalIn .34s cubic-bezier(.2,.7,.3,1) both;}
 @media(prefers-reduced-motion:reduce){.ovl,.modal{animation:none;}}
 .modal:focus{outline:none;}
 .mh{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s4);padding:var(--s5) var(--s5) var(--s4);}
