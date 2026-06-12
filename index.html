@@ -1160,6 +1160,8 @@ const CSS = `
 .save-new input{flex:1;min-width:0;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--r-md);font-family:inherit;font-size:var(--fs-sm);background:var(--paper);color:var(--ink);}
 .save-new input:focus{outline:none;border-color:var(--accent);}
 .save-foot{padding:var(--s4) var(--s5) var(--s5);}
+.save-status{display:flex;align-items:center;gap:6px;font-size:var(--fs-sm);color:var(--ink-soft);margin-bottom:10px;line-height:1.45;}
+.save-status.ok{color:#1E7E48;font-weight:var(--w-semi);}
 .lib{padding-bottom:var(--s6);}
 .lib-tabs{display:flex;gap:var(--s5);border-bottom:1.5px solid var(--line);margin-bottom:var(--s3);}
 .lib-tabs button{font-family:inherit;display:inline-flex;align-items:center;gap:7px;background:none;border:none;font-size:15px;font-weight:600;color:var(--ink-soft);padding:10px 2px;margin-bottom:-1.5px;border-bottom:2.5px solid transparent;cursor:pointer;}
@@ -2735,6 +2737,7 @@ function SaveModal({ shot, collections, setCollections, onClose }) {
   const dlg = useDialog(onClose);
   const [newName, setNewName] = useState("");
   const inIds = (c) => c.ids.includes(shot.id);
+  const savedCount = collections.filter(inIds).length;
   const toggle = (cid) => setCollections((cs) => cs.map((c) => c.id === cid ? { ...c, ids: c.ids.includes(shot.id) ? c.ids.filter((x) => x !== shot.id) : [...c.ids, shot.id] } : c));
   const create = () => {
     const n = newName.trim();
@@ -2747,7 +2750,7 @@ function SaveModal({ shot, collections, setCollections, onClose }) {
     return /* @__PURE__ */ React.createElement("button", { key: c.id, type: "button", className: "save-row" + (on ? " on" : ""), "aria-pressed": on, onClick: () => toggle(c.id) }, /* @__PURE__ */ React.createElement("span", { className: "save-row-l" }, /* @__PURE__ */ React.createElement(Icon, { n: "folder", size: 17 }), /* @__PURE__ */ React.createElement("span", { className: "save-row-nm" }, c.name), /* @__PURE__ */ React.createElement("span", { className: "save-row-ct" }, c.ids.length)), /* @__PURE__ */ React.createElement("span", { className: "save-chk" + (on ? " on" : "") }, on && /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 14, color: "#fff" })));
   })), /* @__PURE__ */ React.createElement("div", { className: "save-new" }, /* @__PURE__ */ React.createElement("input", { value: newName, onChange: (e) => setNewName(e.target.value), onKeyDown: (e) => {
     if (e.key === "Enter" && !e.nativeEvent.isComposing) create();
-  }, placeholder: "\uC0C8 \uCEEC\uB809\uC158 \uB9CC\uB4E4\uAE30 (\uC608: \uCD08\uB4F1 \uC218\uD559 \uC790\uB8CC)", "aria-label": "\uC0C8 \uCEEC\uB809\uC158 \uC774\uB984", maxLength: 24 }), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: create, disabled: !newName.trim() }, /* @__PURE__ */ React.createElement(Icon, { n: "plus", size: 15 }), "\uB9CC\uB4E4\uAE30"))), /* @__PURE__ */ React.createElement("div", { className: "save-foot" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", style: { width: "100%", justifyContent: "center" }, onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 16, color: "#fff" }), "\uC644\uB8CC"))));
+  }, placeholder: "\uC0C8 \uCEEC\uB809\uC158 \uB9CC\uB4E4\uAE30 (\uC608: \uCD08\uB4F1 \uC218\uD559 \uC790\uB8CC)", "aria-label": "\uC0C8 \uCEEC\uB809\uC158 \uC774\uB984", maxLength: 24 }), /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: create, disabled: !newName.trim() }, /* @__PURE__ */ React.createElement(Icon, { n: "plus", size: 15 }), "\uB9CC\uB4E4\uAE30"))), /* @__PURE__ */ React.createElement("div", { className: "save-foot" }, savedCount > 0 ? /* @__PURE__ */ React.createElement("div", { className: "save-status ok" }, /* @__PURE__ */ React.createElement(Icon, { n: "check", size: 14 }), savedCount, "\uAC1C \uCEEC\uB809\uC158\uC5D0 \uB2F4\uACBC\uC5B4\uC694") : /* @__PURE__ */ React.createElement("div", { className: "save-status" }, "\uB2F4\uC744 \uCEEC\uB809\uC158\uC744 \uC120\uD0DD\uD558\uAC70\uB098, \uC544\uB798\uC5D0\uC11C \uC0C8\uB85C \uB9CC\uB4E4\uC5B4 \uB2F4\uC544\uBCF4\uC138\uC694."), /* @__PURE__ */ React.createElement("button", { className: "btn btn-accent", style: { width: "100%", justifyContent: "center" }, onClick: onClose }, /* @__PURE__ */ React.createElement(Icon, { n: savedCount > 0 ? "check" : "x", size: 16, color: "#fff" }), savedCount > 0 ? "\uC644\uB8CC" : "\uB2EB\uAE30"))));
 }
 function EditCollectionModal({ col, onSave, onClose }) {
   const dlg = useDialog(onClose);
