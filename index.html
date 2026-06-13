@@ -619,6 +619,15 @@ const CSS = `
 @media(prefers-reduced-motion:reduce){.view-anim{animation:none;}}
 .swap-anim{animation:tibFadeUp .3s cubic-bezier(.2,.7,.3,1) both;}
 @media(prefers-reduced-motion:reduce){.swap-anim{animation:none;}}
+.tib-stagger>*{animation:tibFadeUp .42s cubic-bezier(.2,.7,.3,1) both;}
+.tib-stagger>*:nth-child(2){animation-delay:.05s;}
+.tib-stagger>*:nth-child(3){animation-delay:.1s;}
+.tib-stagger>*:nth-child(4){animation-delay:.15s;}
+.tib-stagger>*:nth-child(5){animation-delay:.2s;}
+.tib-stagger>*:nth-child(6){animation-delay:.25s;}
+.tib-stagger>*:nth-child(7){animation-delay:.3s;}
+.tib-stagger>*:nth-child(n+8){animation-delay:.34s;}
+@media(prefers-reduced-motion:reduce){.tib-stagger>*{animation:none;}}
 .card{cursor:pointer;}
 .card .thumb{position:relative;aspect-ratio:4/3;border-radius:var(--r-lg);overflow:hidden;border:1.5px solid var(--line);
   background:var(--paper);transition:transform .18s, box-shadow .18s;display:grid;place-items:center;}
@@ -4125,7 +4134,7 @@ function App() {
     setTab("\uC804\uCCB4");
     setRes("all");
     setLic("all");
-  } }, t)))) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid swap-anim", key: view + "|" + tab + "|" + res + "|" + lic + "|" + sort + "|" + q }, list.slice(0, shown).map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, shot: s, saved: savedIds.has(s.id), onSave: openSave, onOpen: setOpen, onPrint: setOpen, liked: liked.has(s.id), onLike: toggleLike }))), !searching && list.length > 0 && (shown < list.length ? /* @__PURE__ */ React.createElement("div", { className: "loadmore" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: loadMore, disabled: loadingMore }, loadingMore ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "loader-2", size: 16, className: "spin" }), "\uBD88\uB7EC\uC624\uB294 \uC911\u2026") : /* @__PURE__ */ React.createElement(React.Fragment, null, "\uB354 \uBCF4\uAE30 ", /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 15 })))) : /* @__PURE__ */ React.createElement("div", { className: "loadend" }, "\uBAA8\uB4E0 \uCD09\uAC01 \uADF8\uB798\uD53D\uC744 \uBD88\uB7EC\uC654\uC5B4\uC694 \xB7 ", list.length, "\uAC1C"))))), /* @__PURE__ */ React.createElement(Footer, { isDG: view === "dotgames", isTW: isPlatform, onDotGames: () => {
+  } }, t)))) : /* @__PURE__ */ React.createElement("div", { className: "tib-grid tib-stagger", key: view + "|" + tab + "|" + res + "|" + lic + "|" + sort + "|" + q }, list.slice(0, shown).map((s) => /* @__PURE__ */ React.createElement(Card, { key: s.id, shot: s, saved: savedIds.has(s.id), onSave: openSave, onOpen: setOpen, onPrint: setOpen, liked: liked.has(s.id), onLike: toggleLike }))), !searching && list.length > 0 && (shown < list.length ? /* @__PURE__ */ React.createElement("div", { className: "loadmore" }, /* @__PURE__ */ React.createElement("button", { className: "btn btn-ink", onClick: loadMore, disabled: loadingMore }, loadingMore ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Icon, { n: "loader-2", size: 16, className: "spin" }), "\uBD88\uB7EC\uC624\uB294 \uC911\u2026") : /* @__PURE__ */ React.createElement(React.Fragment, null, "\uB354 \uBCF4\uAE30 ", /* @__PURE__ */ React.createElement(Icon, { n: "chevron-down", size: 15 })))) : /* @__PURE__ */ React.createElement("div", { className: "loadend" }, "\uBAA8\uB4E0 \uCD09\uAC01 \uADF8\uB798\uD53D\uC744 \uBD88\uB7EC\uC654\uC5B4\uC694 \xB7 ", list.length, "\uAC1C"))))), /* @__PURE__ */ React.createElement(Footer, { isDG: view === "dotgames", isTW: isPlatform, onDotGames: () => {
     setTwMsg(null);
     setView("dotgames");
     window.scrollTo({ top: 0 });
