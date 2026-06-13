@@ -666,7 +666,7 @@ const CSS = `
 .stat span{display:inline-flex;align-items:center;gap:var(--s1);}
 
 /* modal */
-.ovl{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:var(--s7) var(--s4);background:rgba(17,14,26,.52);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:ovlIn .22s ease both;}
+.ovl{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;overflow-y:auto;padding:var(--s7) var(--s4);background:rgba(28,22,38,.30);backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);animation:ovlIn .22s ease both;}
 .ovl::before{content:"";position:fixed;inset:0;background:rgba(31,29,26,.5);backdrop-filter:blur(3px);z-index:-1;pointer-events:none;}
 @keyframes ovlIn{from{opacity:0;}to{opacity:1;}}
 @keyframes modalIn{from{opacity:0;transform:translateY(14px) scale(.985);}to{opacity:1;transform:none;}}
