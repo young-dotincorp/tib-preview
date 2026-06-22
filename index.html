@@ -127,7 +127,7 @@ Error generating stack: `+i.message+`
   /* spacing \u2014 4/8pt grid */
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
   /* radius / shadow / layout */
-  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-full:999px;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-full:999px;--ease:cubic-bezier(.22,.61,.36,1);
   --sh-1:0 4px 12px -6px rgba(31,29,26,.2);
   --sh-2:0 8px 24px -14px rgba(31,29,26,.26);
   --sh-pop:0 16px 32px -16px rgba(31,29,26,.3);
@@ -136,7 +136,7 @@ Error generating stack: `+i.message+`
   background:var(--cream); min-height:100vh; letter-spacing:-.005em;
   font-size:var(--fs-body); font-weight:var(--w-reg); line-height:var(--lh-base);
 }
-.tib-root *{box-sizing:border-box;}
+.tib-root *{box-sizing:border-box;transition-timing-function:var(--ease)!important;}
 .tib-root :focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:var(--r-sm);}
 .tib-root :focus:not(:focus-visible){outline:none;}
 .tib-shell{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);}
