@@ -1179,7 +1179,7 @@ Error generating stack: `+i.message+`
 .col-create input{flex:1;min-width:0;font-family:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:12px;padding:13px 16px;background:var(--paper);color:var(--ink);}
 .col-create input:focus{outline:none;border-color:var(--accent);}
 .col-count{font-size:13px;color:var(--ink-faint);margin-top:2px;}
-.col-head{display:flex;align-items:center;gap:10px;padding:var(--s5) 0 var(--s3);} .col-view-in{animation:tibFadeUp .34s cubic-bezier(.2,.7,.3,1) both;}
+.col-head{display:flex;align-items:center;gap:10px;padding:var(--s5) 0 var(--s3);} @keyframes colIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}.col-view-in{animation:colIn .85s cubic-bezier(.2,.7,.3,1) both;}
 .col-back{border:none;background:none;cursor:pointer;color:var(--ink-soft);display:grid;place-items:center;padding:5px;border-radius:var(--r-full);}
 .col-back:hover{background:var(--cream);color:var(--ink);}
 .col-desc{margin-top:6px;font-size:var(--fs-sm);color:var(--ink-soft);line-height:1.5;max-width:60ch;}
