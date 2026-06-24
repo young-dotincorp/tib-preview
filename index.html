@@ -349,7 +349,7 @@ Error generating stack: `+i.message+`
 
 .fseg button{border:none;background:transparent;font-family:inherit;font-size:var(--fs-xs);font-weight:var(--w-med);color:var(--ink-soft);
   padding:7px 11px;cursor:pointer;}
-.fseg button.act{background:var(--ink);color:#fff;}
+.fseg button+button{border-left:1px solid var(--line);}.fseg button.act{background:var(--ink);color:#fff;border-left-color:transparent;}.fseg button.act+button{border-left-color:transparent;}
 
 /* grid */
 .tib-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s5);padding:var(--s5) 0;}
