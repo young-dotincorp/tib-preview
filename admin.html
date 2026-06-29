@@ -56,14 +56,14 @@
 
   /* ---------- 콘솔 ---------- */
   .top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line)}
-  .top-in{max-width:780px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:12px}
+  .top-in{max-width:1180px;margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:12px}
   .top-right{margin-left:auto;display:flex;align-items:center;gap:12px}
   .who{font-size:12.5px;color:var(--ink-faint);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .btn-ghost{background:#fff;border:1px solid var(--line);border-radius:9px;color:var(--ink-soft);font-weight:600;font-size:12.5px;padding:8px 12px;transition:border-color .14s,color .14s}
   .btn-ghost:hover{border-color:var(--accent-line);color:var(--accent)}
 
   .tabsbar{background:#fff;border-bottom:1px solid var(--line)}
-  .tabsbar-in{max-width:780px;margin:0 auto;padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap}
+  .tabsbar-in{max-width:1180px;margin:0 auto;padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap}
   /* 상태 표준: 미선택 / hover / 선택 / 준비중 (탭·필터칩 공통) */
   .tab{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:600;transition:background .14s,color .14s,border-color .14s,box-shadow .14s}
   .tab:hover{background:var(--accent-tint);border-color:var(--accent-line);color:var(--accent)}
@@ -77,7 +77,7 @@
   .tab[aria-selected="true"] .soonbadge{background:rgba(255,255,255,.25);color:#fff}
   .tab svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
 
-  .wrap{max-width:780px;margin:0 auto;padding:20px 20px 60px}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 20px 60px}
   .bar{display:flex;align-items:center;gap:14px;margin:4px 2px 16px;flex-wrap:wrap}
   .count{font-size:13px;color:var(--ink-soft)}
   .count b{color:var(--ink);font-weight:700}
@@ -156,6 +156,28 @@
   .comm-c .ci svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .comm-num{font-size:20px;font-weight:700;line-height:1}
   .comm-lb{font-size:12px;color:var(--ink-faint);margin-top:3px}
+  /* ── 월별/Top5/최근/평점 ── */
+  .sect-note{font-weight:500;font-size:12px;color:var(--ink-faint);margin-left:4px}
+  .adm-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .adm-trend{display:flex;align-items:flex-end;gap:12px;height:160px;padding-top:6px}
+  .adm-tcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%}
+  .adm-tn{font-size:12px;font-weight:700;color:var(--ink)}
+  .adm-ttrack{flex:1;width:100%;max-width:58px;background:#f4f1ea;border-radius:9px;display:flex;align-items:flex-end;overflow:hidden}
+  .adm-tbar{width:100%;background:linear-gradient(180deg,#ff7a3c,#ff4f00);border-radius:9px;min-height:4px}
+  .adm-tl{font-size:12px;color:var(--ink-faint)}
+  .adm-recent{display:flex;flex-direction:column}
+  .adm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px;border-bottom:1px solid var(--line)}
+  .adm-row:last-child{border-bottom:0}
+  .adm-rt{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--ink);min-width:0;overflow:hidden}
+  .adm-rt span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .adm-rank{width:22px;height:22px;border-radius:7px;background:#f0ede6;color:var(--ink-soft);font-size:11.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .adm-rank.r1{background:#ffd76a;color:#7a5500}
+  .adm-rank.r2{background:#e6e4e0;color:#555}
+  .adm-rank.r3{background:#f3cda2;color:#7a4a1a}
+  .adm-rm{font-size:12.5px;color:var(--ink-faint);white-space:nowrap;flex:0 0 auto}
+  .adm-avg{font-size:12.5px;color:var(--ink-soft);margin-top:14px;padding-top:13px;border-top:1px solid var(--line)}
+  .adm-avg b{color:var(--ink);font-size:14px}
+  .adm-stars{color:#ff4f00;letter-spacing:1px;margin-left:5px}
   @media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}.dash-2{grid-template-columns:1fr}}
   /* ── 관리자 설정 / 회원 관리 ── */
   .msg{font-size:12.5px;border-radius:9px;padding:8px 11px;margin:10px 0 0;display:none}
@@ -381,16 +403,19 @@
     if(!sb){panel.innerHTML='<div class="empty"><p>데이터를 불러오지 못했어요.</p></div>';return;}
     var ct=[["profiles","users"],["feedback","reviews"],["commissions","commissions"],["inquiries","inquiries"],["reports","reports"],["requests","requests"]];
     var jobs=ct.map(function(t){return sb.from(t[0]).select("*",{count:"exact",head:true}).then(function(r){return (r&&r.error)?0:(r.count||0);}).catch(function(){return 0;});});
-    var gJob=sb.from("graphics").select("*").eq("status","published").then(function(r){return (r&&!r.error&&Array.isArray(r.data))?r.data:[];}).catch(function(){return [];});
-    Promise.all(jobs.concat([gJob])).then(function(res){
+    var gJob=sb.from("graphics").select("*").eq("status","published").order("published_at",{ascending:false}).then(function(r){return (r&&!r.error&&Array.isArray(r.data))?r.data:[];}).catch(function(){return [];});
+    var fJob=sb.from("feedback").select("stars").then(function(r){return (r&&!r.error&&Array.isArray(r.data))?r.data:[];}).catch(function(){return [];});
+    Promise.all(jobs.concat([gJob,fJob])).then(function(res){
       if(activeTab!=="dashboard")return;
       var counts={};ct.forEach(function(t,i){counts[t[1]]=res[i];});
-      drawDashboard(counts,res[ct.length]);
+      var fb=res[ct.length+1]||[];
+      var avg=fb.length?fb.reduce(function(a,b){return a+(+b.stars||0);},0)/fb.length:0;
+      drawDashboard(counts,res[ct.length],avg);
     }).catch(function(){panel.innerHTML='<div class="empty"><p>대시보드를 불러오지 못했어요. 새로고침을 눌러 주세요.</p></div>';});
   }
 
-  function drawDashboard(c,works){
-    works=works||[];
+  function drawDashboard(c,works,avg){
+    works=works||[];avg=avg||0;
     var pub=works.length,dl=0,lk=0,free=0,g60=0,g96=0,cats={};
     works.forEach(function(w){
       dl+=(+w.downloads||0);lk+=(+w.likes||0);
@@ -412,12 +437,31 @@
     var bars=catArr.length?'<div class="bars">'+catArr.map(function(x){var pct=Math.round(x[1]/maxc*100);return '<div class="bar-row"><span class="bar-lb">'+esc(x[0])+'</span><span class="bar-tr"><span class="bar-fl" style="width:'+pct+'%"></span></span><span class="bar-v">'+nfmt(x[1])+'</span></div>';}).join("")+'</div>':'<p style="color:var(--ink-faint);font-size:13px;margin:0">아직 공개된 작품이 없어요.</p>';
     var comm=[["star","평가",c.reviews],["message-2","의뢰",c.commissions],["message","문의",c.inquiries],["flag","신고",c.reports],["license","요청",c.requests]];
     var commHtml=comm.map(function(x){return '<div class="comm-c"><span class="ci">'+svp(x[0])+'</span><div class="comm-num">'+nfmt(x[2])+'</div><div class="comm-lb">'+esc(x[1])+'</div></div>';}).join("");
+    var rr=Math.round(avg);
+    var avgLine='<div class="adm-avg">평균 평점 <b>'+avg.toFixed(1)+'</b> <span class="adm-stars">'+"★".repeat(rr)+"☆".repeat(5-rr)+'</span></div>';
+    // 월별 신규 작품 (최근 6개월)
+    var now=new Date(), months=[];
+    for(var mi=5;mi>=0;mi--){months.push([new Date(now.getFullYear(),now.getMonth()-mi,1),0]);}
+    works.forEach(function(w){if(!w.published_at)return;var d=new Date(w.published_at);for(var j=0;j<months.length;j++){if(months[j][0].getFullYear()===d.getFullYear()&&months[j][0].getMonth()===d.getMonth()){months[j][1]++;break;}}});
+    var mmax=Math.max.apply(null,[1].concat(months.map(function(m){return m[1];})));
+    var thisMonth=months.length?months[months.length-1][1]:0;
+    var trend='<div class="adm-trend">'+months.map(function(m){var h=Math.round(m[1]/mmax*100);return '<div class="adm-tcol"><span class="adm-tn">'+nfmt(m[1])+'</span><span class="adm-ttrack"><span class="adm-tbar" style="height:'+h+'%"></span></span><span class="adm-tl">'+(m[0].getMonth()+1)+'월</span></div>';}).join("")+'</div>';
+    // 인기 작품 Top 5 (좋아요순) / 최근 업로드 (최신 6)
+    var top5=works.slice().sort(function(a,b){return (b.likes||0)-(a.likes||0);}).slice(0,5);
+    var top5Html=top5.length?top5.map(function(w,i){return '<div class="adm-row"><span class="adm-rt"><b class="adm-rank r'+(i+1)+'">'+(i+1)+'</b><span class="t">'+esc(w.title||"제목 없음")+'</span></span><span class="adm-rm">♥ '+(w.likes||0)+' · ↓ '+(w.downloads||0)+'</span></div>';}).join(""):'<div class="muted-s">표시할 작품이 없어요.</div>';
+    var recent=works.slice(0,6);
+    var recentHtml=recent.length?recent.map(function(w){return '<div class="adm-row"><span class="adm-rt"><span class="t">'+esc(w.title||"제목 없음")+'</span></span><span class="adm-rm">'+esc(w.category||"기타")+'</span></div>';}).join(""):'<div class="muted-s">표시할 작품이 없어요.</div>';
     $("panel").innerHTML='<div class="dash">'+
       '<div class="dash-h"><h2>데이터 대시보드</h2><p>플랫폼 데이터를 실시간으로 확인하고 운영해요.</p></div>'+
       '<div class="kpis">'+kpiHtml+'</div>'+
       '<div class="dash-2">'+
         '<div class="sect"><div class="sect-h">콘텐츠 현황</div>'+chips+bars+'</div>'+
-        '<div class="sect"><div class="sect-h">커뮤니티 현황</div><div class="comm">'+commHtml+'</div></div>'+
+        '<div class="sect"><div class="sect-h">커뮤니티 현황</div><div class="comm">'+commHtml+'</div>'+avgLine+'</div>'+
+      '</div>'+
+      '<div class="sect"><div class="sect-h">월별 신규 작품 <span class="sect-note">이번 달 '+nfmt(thisMonth)+'건</span></div>'+trend+'</div>'+
+      '<div class="adm-cols">'+
+        '<div class="sect"><div class="sect-h">인기 작품 Top 5</div><div class="adm-recent">'+top5Html+'</div></div>'+
+        '<div class="sect"><div class="sect-h">최근 업로드</div><div class="adm-recent">'+recentHtml+'</div></div>'+
       '</div>'+
       '<div class="sect" id="sect-admins"><div class="sect-h">관리자 설정</div><div id="adm-body"><div class="loading"><span class="spin" aria-hidden="true"></span><div>관리자를 불러오는 중…</div></div></div></div>'+
       '<div class="sect" id="sect-members"><div class="sect-h">회원 관리</div><div id="mem-body"><div class="loading"><span class="spin" aria-hidden="true"></span><div>회원을 불러오는 중…</div></div></div></div>'+
