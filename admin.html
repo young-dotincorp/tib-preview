@@ -1646,10 +1646,10 @@ react/cjs/react-jsx-runtime.production.js:
   function confirmDel(rec,onCancel){clr();var c=document.createElement('div');c.style.cssText='background:#fff;border:1px solid #ECE6DC;border-radius:13px;padding:14px';c.innerHTML='<div style="font-size:13.5px;font-weight:700;color:#1F1D1A;margin-bottom:5px">이 문의를 삭제할까요?</div><div style="font-size:12px;color:#5C574E;line-height:1.5">내 목록에서만 사라져요. 담당자에게 접수된 기록은 그대로 남아요.</div>';var row=document.createElement('div');row.style.cssText='display:flex;gap:8px;justify-content:flex-end;margin-top:12px';var cancel=document.createElement('button');cancel.type='button';cancel.className='tw-ghost';cancel.textContent='취소';cancel.onclick=function(){clr();(onCancel||renderMyList)();};var ok=document.createElement('button');ok.type='button';ok.textContent='삭제';ok.style.cssText='border:0;border-radius:999px;background:#C0392B;color:#fff;font:inherit;font-size:13px;font-weight:700;padding:8px 16px;cursor:pointer';ok.onclick=function(){lsDel(rec.ticket);bot('문의를 삭제했어요.');renderMyList();};row.appendChild(cancel);row.appendChild(ok);c.appendChild(row);inArea.appendChild(c);try{ok.focus();}catch(e){}}
 
   function start(){ctx='일반 문의';log.innerHTML='';bot('안녕하세요! Tactile World예요. 무엇을 도와드릴까요? 아래에서 골라 주세요.');var _pv=document.createElement('div');_pv.style.cssText='font-size:11px;color:#9A9384;line-height:1.5;padding:3px 4px 2px;';_pv.textContent='계속 진행하면 개인정보 처리방침에 동의하는 것으로 간주돼요.';log.appendChild(_pv);var menu=[
-    {label:'게임 이용 방법',icon:'game',desc:'닷패드 연결·조작 안내',go:game},
-    {label:'자료 요청·문의',icon:'file',desc:'촉각 자료 요청하기',go:function(){ctx='자료 문의';docs();}},
-    {label:'오류·신고',icon:'alert',desc:'문제 신고하기',go:function(){ctx='오류·신고';bug();}},
-    DIRECT('직접 문의')
+    {label:'촉각 그래픽 문의',icon:'file',desc:'촉각 그래픽·자료 요청',go:function(){ctx='촉각 그래픽 문의';docs();}},
+    {label:'게임 관련 문의',icon:'game',desc:'닷패드 연결·게임 안내',go:game},
+    {label:'기술·오류 신고',icon:'alert',desc:'문제 신고하기',go:function(){ctx='기술·오류 신고';bug();}},
+    {label:'기타 문의',icon:'mail',desc:'그 외 문의 남기기',go:function(){ctx='기타 문의';direct();}}
   ];if(lsGet().length)menu.push({label:'내가 보낸 문의',icon:'inbox',desc:'접수 내역 다시 보기',go:myList});cards(menu);}
   function game(){ctx='게임 문의';bot('닷패드를 블루투스로 연결한 뒤 게임을 열면 점자가 핀으로 표시돼요. 키보드와 음성 안내도 지원합니다. 더 궁금한 점이 있나요?');cards([
     {label:'닷패드 연결 방법',icon:'bt',desc:'블루투스 연결 안내',go:function(){usr('닷패드 연결 방법');bot('게임 화면 우측 상단의 "DotPad 연결"을 누른 뒤 목록에서 기기를 선택하면 연결돼요. (HTTPS 환경에서만 동작합니다.)');cards([BACK,DIRECT('게임 문의')]);}},
