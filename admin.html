@@ -1655,12 +1655,12 @@ react/cjs/react-jsx-runtime.production.js:
     var row=document.createElement('div');row.className='tw-row';
     var bk=document.createElement('button');bk.type='button';bk.className='tw-ghost';bk.textContent='처음으로';bk.onclick=start;
     var sd=document.createElement('button');sd.type='button';sd.className='tw-send';sd.textContent='보내기';
-    sd.onclick=function(){var v=ta.value.trim();if(!v){ta.focus();return;}var email=em.value.trim();var tk=ticket();usr(v);sd.disabled=true;sd.textContent='보내는 중…';submit(ctx,email,v,tk,function(ok){sd.disabled=false;sd.textContent='보내기';if(ok){lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});bot('메시지를 받았어요. 접수번호는 '+tk+'예요.'+(email?' 남기신 이메일로 답변드릴게요.':' 빠른 답변을 위해 다음엔 이메일도 남겨 주시면 좋아요.'));cards([BACK]);}else{bot('전송에 실패했어요. 잠시 후 다시 시도하거나, 메뉴의 문의하기를 이용해 주세요.');}});};
+    sd.onclick=function(){var v=ta.value.trim();if(!v){ta.focus();return;}var email=em.value.trim();var tk=ticket();usr(v);sd.disabled=true;sd.textContent='보내는 중…';submit(ctx,email,v,tk,function(ok,code,detail){sd.disabled=false;sd.textContent='보내기';if(ok){lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});bot('메시지를 받았어요. 접수번호는 '+tk+'예요.'+(email?' 남기신 이메일로 답변드릴게요.':' 빠른 답변을 위해 다음엔 이메일도 남겨 주시면 좋아요.'));cards([BACK]);}else{bot('전송에 실패했어요. (진단 '+(code!=null?code:'?')+(detail?' · '+String(detail).slice(0,100):'')+') 잠시 후 다시 시도하거나 문의하기를 이용해 주세요.');}});};
     row.appendChild(bk);row.appendChild(sd);inArea.appendChild(em);inArea.appendChild(ta);inArea.appendChild(row);em.focus();}
 
   function submit(type,email,message,tk,cb){
     try{
-      fetch(URL+'/rest/v1/inquiries',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({type:'챗봇·'+type,name:email?email.split('@')[0]:'챗봇 방문자',email:email||null,message:message,user_id:null,ticket:tk})}).then(function(r){cb(r.ok);}).catch(function(){cb(false);});
+      fetch(URL+'/rest/v1/inquiries',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({type:'챗봇·'+type,name:email?email.split('@')[0]:'챗봇 방문자',email:email||null,message:message,user_id:null,ticket:tk})}).then(function(r){if(r.ok){cb(true);return;}r.text().then(function(t){try{console.error('[TIB 문의전송]',r.status,t);}catch(_){}cb(false,r.status,t);}).catch(function(){cb(false,r.status,'');});}).catch(function(e){try{console.error('[TIB 문의전송 네트워크]',e);}catch(_){}cb(false,0,(e&&e.message)||'network');});
     }catch(e){cb(false);}
   }
 
