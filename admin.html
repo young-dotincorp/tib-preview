@@ -127,6 +127,36 @@
   .spin{width:22px;height:22px;border:2.5px solid var(--line);border-top-color:var(--accent);border-radius:50%;display:inline-block;margin-bottom:12px;animation:sp .7s linear infinite}
   @keyframes sp{to{transform:rotate(360deg)}}
 
+  /* ── 대시보드 ── */
+  .dash{display:flex;flex-direction:column;gap:16px}
+  .dash-h h2{font-size:18px;font-weight:700;margin:0 0 3px;letter-spacing:-.01em}
+  .dash-h p{font-size:13px;color:var(--ink-soft);margin:0}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;display:flex;align-items:center;gap:12px}
+  .kpi-ic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .kpi-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .kpi-num{font-size:23px;font-weight:700;line-height:1.05;letter-spacing:-.02em}
+  .kpi-lb{font-size:12px;color:var(--ink-faint);margin-top:2px}
+  .dash-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .sect{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px 17px}
+  .sect-h{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;margin-bottom:14px}
+  .sect-h::before{content:"";width:4px;height:15px;border-radius:2px;background:var(--accent)}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+  .chip-s{background:#faf7f2;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12px;color:var(--ink-soft)}
+  .chip-s b{color:var(--ink);font-weight:700;margin-left:5px}
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .bar-row{display:grid;grid-template-columns:46px 1fr 36px;align-items:center;gap:9px}
+  .bar-lb{font-size:12.5px;color:var(--ink-soft)}
+  .bar-tr{height:9px;background:#f1efe8;border-radius:999px;overflow:hidden}
+  .bar-fl{height:100%;background:var(--accent);border-radius:999px}
+  .bar-v{font-size:12.5px;font-weight:700;color:var(--ink);text-align:right}
+  .comm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .comm-c{background:#faf7f2;border-radius:var(--r-sm);padding:13px 14px}
+  .comm-c .ci{color:var(--accent);margin-bottom:7px;display:block}
+  .comm-c .ci svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .comm-num{font-size:20px;font-weight:700;line-height:1}
+  .comm-lb{font-size:12px;color:var(--ink-faint);margin-top:3px}
+  @media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}.dash-2{grid-template-columns:1fr}}
   @media (max-width:480px){
     .login-card{padding:28px 22px}
     .wrap,.top-in,.tabsbar-in{padding-left:14px;padding-right:14px}
@@ -188,7 +218,10 @@
 
   <nav class="tabsbar" aria-label="운영 메뉴">
     <div class="tabsbar-in" role="tablist" id="tabs">
-      <button class="tab" role="tab" type="button" data-tab="inquiries" aria-selected="true">
+      <button class="tab" role="tab" type="button" data-tab="dashboard" aria-selected="true">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 9h8V3h-8z"/></svg>대시보드
+      </button>
+      <button class="tab" role="tab" type="button" data-tab="inquiries" aria-selected="false">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>문의 답변 <span class="tcount" id="tc-pending" hidden>0</span>
       </button>
       <button class="tab soon" role="tab" type="button" data-tab="reports" aria-selected="false">
@@ -217,7 +250,7 @@
     ? supabase.createClient(URL_BASE, KEY)
     : null;
 
-  var email=null, rows=[], filter="pending", activeTab="inquiries", entered=false;
+  var email=null, rows=[], filter="pending", activeTab="dashboard", entered=false;
 
   function $(id){return document.getElementById(id);}
   function esc(s){var d=document.createElement("div");d.textContent=(s==null?"":String(s));return d.innerHTML;}
@@ -263,7 +296,7 @@
     email=(session&&session.user&&session.user.email)||email||"";
     $("who").textContent=email;
     show("console-view");
-    setTab("inquiries");
+    setTab("dashboard");
   }
 
   function setTab(name){
@@ -271,7 +304,8 @@
     Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(t){
       t.setAttribute("aria-selected", t.getAttribute("data-tab")===name?"true":"false");
     });
-    if(name==="inquiries"){ loadList(); }
+    if(name==="dashboard"){ renderDashboard(); }
+    else if(name==="inquiries"){ loadList(); }
     else{ renderPlaceholder(name); }
   }
 
@@ -283,6 +317,70 @@
     };
     var info=map[name]||{t:"준비 중",d:"곧 제공돼요."};
     $("panel").innerHTML='<div class="empty"><span class="em-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>'+esc(info.t)+' · 준비 중</h3><p>'+esc(info.d)+'</p></div>';
+  }
+
+  /* ---------- 대시보드 ---------- */
+  var ICO={
+    photo:'M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21',
+    users:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
+    download:'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3',
+    heart:'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z',
+    star:'M12 2l3 6.3 6.9 1-5 4.8 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.8 6.9-1z',
+    msg:'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
+    flag:'M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7',
+    file:'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4'
+  };
+  function svp(n){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[n]+'"/></svg>';}
+  function nfmt(n){return (n==null?0:n).toLocaleString("ko-KR");}
+
+  function renderDashboard(){
+    if(activeTab!=="dashboard")return;
+    var panel=$("panel");
+    panel.innerHTML='<div class="loading"><span class="spin" aria-hidden="true"></span><div>대시보드를 불러오는 중…</div></div>';
+    if(!sb){panel.innerHTML='<div class="empty"><p>데이터를 불러오지 못했어요.</p></div>';return;}
+    var ct=[["profiles","users"],["feedback","reviews"],["commissions","commissions"],["inquiries","inquiries"],["reports","reports"],["requests","requests"]];
+    var jobs=ct.map(function(t){return sb.from(t[0]).select("*",{count:"exact",head:true}).then(function(r){return (r&&r.error)?0:(r.count||0);}).catch(function(){return 0;});});
+    var gJob=sb.from("graphics").select("*").eq("status","published").then(function(r){return (r&&!r.error&&Array.isArray(r.data))?r.data:[];}).catch(function(){return [];});
+    Promise.all(jobs.concat([gJob])).then(function(res){
+      if(activeTab!=="dashboard")return;
+      var counts={};ct.forEach(function(t,i){counts[t[1]]=res[i];});
+      drawDashboard(counts,res[ct.length]);
+    }).catch(function(){panel.innerHTML='<div class="empty"><p>대시보드를 불러오지 못했어요. 새로고침을 눌러 주세요.</p></div>';});
+  }
+
+  function drawDashboard(c,works){
+    works=works||[];
+    var pub=works.length,dl=0,lk=0,free=0,g60=0,g96=0,cats={};
+    works.forEach(function(w){
+      dl+=(+w.downloads||0);lk+=(+w.likes||0);
+      if(!w.price)free++;
+      var sp=w.spec||"60×40";if(sp==="96×64")g96++;else g60++;
+      var k=w.category||"기타";cats[k]=(cats[k]||0)+1;
+    });
+    var paid=pub-free;
+    var catArr=Object.keys(cats).map(function(k){return [k,cats[k]];}).sort(function(a,b){return b[1]-a[1];});
+    var maxc=catArr.length?catArr[0][1]:1;
+    var kpis=[
+      ["photo","공개 작품",pub,"#fff4ee","#ff4f00"],
+      ["users","가입 사용자",c.users,"#eaf7ef","#1f9d57"],
+      ["download","총 다운로드",dl,"#eaf1fb","#2f6fd0"],
+      ["heart","받은 좋아요",lk,"#fbf2e0","#c98a1a"]
+    ];
+    var kpiHtml=kpis.map(function(k){return '<div class="kpi"><span class="kpi-ic" style="background:'+k[3]+';color:'+k[4]+'">'+svp(k[0])+'</span><div><div class="kpi-num">'+nfmt(k[2])+'</div><div class="kpi-lb">'+esc(k[1])+'</div></div></div>';}).join("");
+    var chips='<div class="chips"><span class="chip-s">무료<b>'+nfmt(free)+'</b></span><span class="chip-s">유료<b>'+nfmt(paid)+'</b></span><span class="chip-s">60×40<b>'+nfmt(g60)+'</b></span><span class="chip-s">96×64<b>'+nfmt(g96)+'</b></span></div>';
+    var bars=catArr.length?'<div class="bars">'+catArr.map(function(x){var pct=Math.round(x[1]/maxc*100);return '<div class="bar-row"><span class="bar-lb">'+esc(x[0])+'</span><span class="bar-tr"><span class="bar-fl" style="width:'+pct+'%"></span></span><span class="bar-v">'+nfmt(x[1])+'</span></div>';}).join("")+'</div>':'<p style="color:var(--ink-faint);font-size:13px;margin:0">아직 공개된 작품이 없어요.</p>';
+    var comm=[["star","평가",c.reviews],["msg","의뢰",c.commissions],["msg","문의",c.inquiries],["flag","신고",c.reports],["file","요청",c.requests]];
+    var commHtml=comm.map(function(x){return '<div class="comm-c"><span class="ci">'+svp(x[0])+'</span><div class="comm-num">'+nfmt(x[2])+'</div><div class="comm-lb">'+esc(x[1])+'</div></div>';}).join("");
+    $("panel").innerHTML='<div class="dash">'+
+      '<div class="dash-h"><h2>데이터 대시보드</h2><p>플랫폼 데이터를 실시간으로 확인하고 운영해요.</p></div>'+
+      '<div class="kpis">'+kpiHtml+'</div>'+
+      '<div class="dash-2">'+
+        '<div class="sect"><div class="sect-h">콘텐츠 현황</div>'+chips+bars+'</div>'+
+        '<div class="sect"><div class="sect-h">커뮤니티 현황</div><div class="comm">'+commHtml+'</div></div>'+
+      '</div>'+
+      '<div style="text-align:right;margin-top:-4px"><button class="refresh" type="button" id="dash-refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg>새로고침</button></div>'+
+      '</div>';
+    var rb=$("dash-refresh");if(rb)rb.onclick=renderDashboard;
   }
 
   /* ---------- 문의 답변 ---------- */
