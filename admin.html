@@ -157,6 +157,35 @@
   .comm-num{font-size:20px;font-weight:700;line-height:1}
   .comm-lb{font-size:12px;color:var(--ink-faint);margin-top:3px}
   @media (max-width:560px){.kpis{grid-template-columns:1fr 1fr}.dash-2{grid-template-columns:1fr}}
+  /* ── 관리자 설정 / 회원 관리 ── */
+  .msg{font-size:12.5px;border-radius:9px;padding:8px 11px;margin:10px 0 0;display:none}
+  .msg.ok{display:block;background:var(--ok-tint);color:#1b8a4e;border:1px solid #cdebd9}
+  .msg.err{display:block;background:#fdeeee;color:#c0392b;border:1px solid #f4d4d1}
+  .adm-add{display:flex;gap:8px;margin-bottom:6px}
+  .adm-add input,.mem-search{flex:1;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .adm-add input:focus,.mem-search:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+  .adm-add button{border:0;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-size:13.5px;font-weight:600;padding:9px 16px;cursor:pointer;white-space:nowrap}
+  .adm-add button:hover{background:var(--accent-dark)}
+  .adm-add button:disabled{opacity:.6;cursor:default}
+  .row-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+  .urow{display:flex;align-items:center;gap:12px;padding:11px 13px;background:var(--cream);border:1px solid var(--line);border-radius:11px}
+  .uav{width:34px;height:34px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;background:linear-gradient(135deg,#16150f,#ff4f00)}
+  .uinfo{flex:1;min-width:0}
+  .uname{font-size:13.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:7px}
+  .uemail{font-size:12px;color:var(--ink-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pro-b{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;background:#fbf2e0;color:#b9791a}
+  .free-b{font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:999px;background:#f0ede6;color:#8a857c}
+  .uact{display:flex;gap:6px;flex:0 0 auto}
+  .ubtn{border:1px solid var(--line);background:#fff;border-radius:8px;font:inherit;font-size:12px;font-weight:600;padding:6px 10px;cursor:pointer;color:var(--ink-soft)}
+  .ubtn:hover{background:#f6f4f0}
+  .ubtn.pro{color:#b9791a;border-color:#f0e2c2}
+  .ubtn.pro:hover{background:#fbf5e8}
+  .ubtn.danger{color:#c0392b;border-color:#f0d3cf}
+  .ubtn.danger:hover{background:#fdeeee}
+  .mem-bar{display:flex;gap:8px;margin-bottom:4px;flex-wrap:wrap;align-items:center}
+  .mem-more{margin:12px auto 0;display:block;background:#fff;color:var(--ink-soft);border:1px solid var(--line);border-radius:10px;font:inherit;font-size:13px;font-weight:600;padding:9px 18px;cursor:pointer}
+  .mem-more:hover{background:#f6f4f0}
+  .muted-s{font-size:12.5px;color:var(--ink-faint);margin:12px 0 0}
   @media (max-width:480px){
     .login-card{padding:28px 22px}
     .wrap,.top-in,.tabsbar-in{padding-left:14px;padding-right:14px}
@@ -219,19 +248,19 @@
   <nav class="tabsbar" aria-label="운영 메뉴">
     <div class="tabsbar-in" role="tablist" id="tabs">
       <button class="tab" role="tab" type="button" data-tab="dashboard" aria-selected="true">
-        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 9h8V3h-8z"/></svg>대시보드
+        <svg viewBox="0 0 24 24"><path d="M5 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M19 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M5 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M5 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /> <path d="M19 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>대시보드
       </button>
       <button class="tab" role="tab" type="button" data-tab="inquiries" aria-selected="false">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>문의 답변 <span class="tcount" id="tc-pending" hidden>0</span>
+        <svg viewBox="0 0 24 24"><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>문의 답변 <span class="tcount" id="tc-pending" hidden>0</span>
       </button>
       <button class="tab soon" role="tab" type="button" data-tab="reports" aria-selected="false">
-        <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7"/></svg>신고 검토 <span class="soonbadge">준비 중</span>
+        <svg viewBox="0 0 24 24"><path d="M5 5a5 5 0 0 1 7 0a5 5 0 0 0 7 0v9a5 5 0 0 1 -7 0a5 5 0 0 0 -7 0v-9z" /> <path d="M5 21v-7" /></svg>신고 검토 <span class="soonbadge">준비 중</span>
       </button>
       <button class="tab soon" role="tab" type="button" data-tab="review" aria-selected="false">
-        <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>검수 대기열 <span class="soonbadge">준비 중</span>
+        <svg viewBox="0 0 24 24"><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" /><path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>검수 대기열 <span class="soonbadge">준비 중</span>
       </button>
       <button class="tab soon" role="tab" type="button" data-tab="aiqueue" aria-selected="false">
-        <svg viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4zM19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg>AI 생성 큐 <span class="soonbadge">준비 중</span>
+        <svg viewBox="0 0 24 24"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2m-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6" /></svg>AI 생성 큐 <span class="soonbadge">준비 중</span>
       </button>
     </div>
   </nav>
@@ -251,6 +280,7 @@
     : null;
 
   var email=null, rows=[], filter="pending", activeTab="dashboard", entered=false;
+  var admins=[], members=[], memQ="", memFlt="all", memOff=0, memTotal=0;
 
   function $(id){return document.getElementById(id);}
   function esc(s){var d=document.createElement("div");d.textContent=(s==null?"":String(s));return d.innerHTML;}
@@ -321,16 +351,27 @@
 
   /* ---------- 대시보드 ---------- */
   var ICO={
-    photo:'M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21',
-    users:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75',
-    download:'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3',
-    heart:'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z',
-    star:'M12 2l3 6.3 6.9 1-5 4.8 1.2 6.8L12 17.8 5.9 21l1.2-6.8-5-4.8 6.9-1z',
-    msg:'M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z',
-    flag:'M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1zM4 22v-7',
-    file:'M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h4'
+    photo:'<path d="M15 8h.01" /> <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12" /> <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" /> <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />',
+    users:'<path d="M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /> <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /> <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />',
+    download:'<path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /> <path d="M7 11l5 5l5 -5" /> <path d="M12 4l0 12" />',
+    heart:'<path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />',
+    star:'<path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245" />',
+    'message-2':'<path d="M8 9h8" /> <path d="M8 13h6" /> <path d="M9 18h-3a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-3l-3 3l-3 -3" />',
+    message:'<path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" />',
+    flag:'<path d="M5 5a5 5 0 0 1 7 0a5 5 0 0 0 7 0v9a5 5 0 0 1 -7 0a5 5 0 0 0 -7 0v-9z" /> <path d="M5 21v-7" />',
+    license:'<path d="M15 21h-9a3 3 0 0 1 -3 -3v-1h10v2a2 2 0 0 0 4 0v-14a2 2 0 1 1 2 2h-2m2 -4h-11a3 3 0 0 0 -3 3v11" /> <path d="M9 7l4 0" /> <path d="M9 11l4 0" />',
+    refresh:'<path d="M20 11a8.1 8.1 0 0 0 -15.5 -2m-.5 -4v4h4" /><path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />',
+    inbox:'<path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M4 13h3l3 3h4l3 -3h3" />',
+    settings:'<path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065" /> <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />',
+    trash:'<path d="M4 7l16 0" /> <path d="M10 11l0 6" /> <path d="M14 11l0 6" /> <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /> <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />',
+    plus:'<path d="M12 5l0 14" /> <path d="M5 12l14 0" />',
+    x:'<path d="M18 6l-12 12" /> <path d="M6 6l12 12" />',
+    check:'<path d="M5 12l5 5l10 -10" />',
+    mail:'<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" />',
+    crown:'<path d="M12 6l4 6l5 -4l-2 10h-14l-2 -10l5 4l4 -6" />',
+    world:'<path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /> <path d="M3.6 9h16.8" /> <path d="M3.6 15h16.8" /> <path d="M11.5 3a17 17 0 0 0 0 18" /> <path d="M12.5 3a17 17 0 0 1 0 18" />'
   };
-  function svp(n){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[n]+'"/></svg>';}
+  function svp(n){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[n]||"")+'</svg>';}
   function nfmt(n){return (n==null?0:n).toLocaleString("ko-KR");}
 
   function renderDashboard(){
@@ -369,7 +410,7 @@
     var kpiHtml=kpis.map(function(k){return '<div class="kpi"><span class="kpi-ic" style="background:'+k[3]+';color:'+k[4]+'">'+svp(k[0])+'</span><div><div class="kpi-num">'+nfmt(k[2])+'</div><div class="kpi-lb">'+esc(k[1])+'</div></div></div>';}).join("");
     var chips='<div class="chips"><span class="chip-s">무료<b>'+nfmt(free)+'</b></span><span class="chip-s">유료<b>'+nfmt(paid)+'</b></span><span class="chip-s">60×40<b>'+nfmt(g60)+'</b></span><span class="chip-s">96×64<b>'+nfmt(g96)+'</b></span></div>';
     var bars=catArr.length?'<div class="bars">'+catArr.map(function(x){var pct=Math.round(x[1]/maxc*100);return '<div class="bar-row"><span class="bar-lb">'+esc(x[0])+'</span><span class="bar-tr"><span class="bar-fl" style="width:'+pct+'%"></span></span><span class="bar-v">'+nfmt(x[1])+'</span></div>';}).join("")+'</div>':'<p style="color:var(--ink-faint);font-size:13px;margin:0">아직 공개된 작품이 없어요.</p>';
-    var comm=[["star","평가",c.reviews],["msg","의뢰",c.commissions],["msg","문의",c.inquiries],["flag","신고",c.reports],["file","요청",c.requests]];
+    var comm=[["star","평가",c.reviews],["message-2","의뢰",c.commissions],["message","문의",c.inquiries],["flag","신고",c.reports],["license","요청",c.requests]];
     var commHtml=comm.map(function(x){return '<div class="comm-c"><span class="ci">'+svp(x[0])+'</span><div class="comm-num">'+nfmt(x[2])+'</div><div class="comm-lb">'+esc(x[1])+'</div></div>';}).join("");
     $("panel").innerHTML='<div class="dash">'+
       '<div class="dash-h"><h2>데이터 대시보드</h2><p>플랫폼 데이터를 실시간으로 확인하고 운영해요.</p></div>'+
@@ -378,9 +419,131 @@
         '<div class="sect"><div class="sect-h">콘텐츠 현황</div>'+chips+bars+'</div>'+
         '<div class="sect"><div class="sect-h">커뮤니티 현황</div><div class="comm">'+commHtml+'</div></div>'+
       '</div>'+
-      '<div style="text-align:right;margin-top:-4px"><button class="refresh" type="button" id="dash-refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg>새로고침</button></div>'+
+      '<div class="sect" id="sect-admins"><div class="sect-h">관리자 설정</div><div id="adm-body"><div class="loading"><span class="spin" aria-hidden="true"></span><div>관리자를 불러오는 중…</div></div></div></div>'+
+      '<div class="sect" id="sect-members"><div class="sect-h">회원 관리</div><div id="mem-body"><div class="loading"><span class="spin" aria-hidden="true"></span><div>회원을 불러오는 중…</div></div></div></div>'+
+      '<div style="text-align:right;margin-top:-4px"><button class="refresh" type="button" id="dash-refresh">'+svp("refresh")+'새로고침</button></div>'+
       '</div>';
     var rb=$("dash-refresh");if(rb)rb.onclick=renderDashboard;
+    loadAdmins(); loadMembers(true);
+  }
+
+  /* ---------- 관리자 설정 ---------- */
+  function setMsg(id,ok,text){var m=$(id);if(!m)return;m.className="msg "+(ok?"ok":"err");m.textContent=text;}
+  function fmtDay(s){try{return new Date(s).toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});}catch(e){return "";}}
+
+  function loadAdmins(){
+    if(!sb)return;
+    sb.rpc("list_admins").then(function(r){
+      admins=(r&&!r.error&&Array.isArray(r.data))?r.data:[];
+      renderAdmins();
+    }).catch(function(){admins=[];renderAdmins();});
+  }
+  function renderAdmins(){
+    var body=$("adm-body");if(!body)return;
+    var list=admins.length?'<div class="row-list">'+admins.map(function(a){
+      var nm=a.name||a.email||"관리자",init=(String(nm).charAt(0)||"?").toUpperCase();
+      return '<div class="urow"><span class="uav">'+esc(init)+'</span><div class="uinfo"><div class="uname">'+esc(nm)+'</div><div class="uemail">'+esc(a.email||"")+'</div></div><div class="uact"><button class="ubtn danger" type="button" data-rv="'+esc(a.user_id)+'">해제</button></div></div>';
+    }).join("")+'</div>':'<p class="muted-s">아직 등록된 관리자가 없어요.</p>';
+    body.innerHTML='<div class="adm-add"><input id="adm-email" type="email" placeholder="추가할 관리자 이메일 (예: name@dotincorp.com)" autocomplete="off"><button id="adm-addbtn" type="button">관리자 추가</button></div><div class="msg" id="adm-msg"></div>'+list;
+    $("adm-addbtn").onclick=addAdmin;
+    $("adm-email").addEventListener("keydown",function(e){if(e.key==="Enter")addAdmin();});
+    Array.prototype.forEach.call(body.querySelectorAll("[data-rv]"),function(b){b.onclick=function(){revokeAdmin(b.getAttribute("data-rv"));};});
+  }
+  function addAdmin(){
+    var inp=$("adm-email");if(!inp)return;
+    var em=inp.value.trim();
+    if(!em){setMsg("adm-msg",false,"이메일을 입력해 주세요.");return;}
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){setMsg("adm-msg",false,"이메일 형식으로 입력해 주세요 (예: name@dotincorp.com)");return;}
+    if(admins.some(function(a){return (a.email||"").toLowerCase()===em.toLowerCase();})){setMsg("adm-msg",false,"이미 관리자예요.");return;}
+    var btn=$("adm-addbtn");btn.disabled=true;setMsg("adm-msg",true,"");$("adm-msg").className="msg";
+    sb.rpc("grant_admin",{target_email:em}).then(function(r){
+      if($("adm-addbtn"))$("adm-addbtn").disabled=false;
+      if(r&&r.error){setMsg("adm-msg",false,"오류가 발생했어요. 관리자 함수(SQL)가 적용됐는지 확인해 주세요.");return;}
+      var d=r&&r.data;
+      if(d&&d.ok){setMsg("adm-msg",true,(d.name||em)+" 님을 관리자로 추가했어요.");loadAdmins();}
+      else if(d&&d.reason==="no_user"){setMsg("adm-msg",false,"그 이메일의 가입 사용자를 찾을 수 없어요. 먼저 한 번 로그인한 적이 있어야 해요.");}
+      else if(d&&d.reason==="not_admin"){setMsg("adm-msg",false,"권한이 없어요.");}
+      else{setMsg("adm-msg",false,"추가하지 못했어요.");}
+    }).catch(function(){if($("adm-addbtn"))$("adm-addbtn").disabled=false;setMsg("adm-msg",false,"오류가 발생했어요.");});
+  }
+  function revokeAdmin(uid){
+    var a=admins.filter(function(x){return String(x.user_id)===String(uid);})[0]||{};
+    var nm=a.name||a.email||"이 관리자";
+    if(typeof window!=="undefined"&&!window.confirm(nm+" 님의 관리자 권한을 해제할까요?"))return;
+    sb.rpc("revoke_admin",{target_user:uid}).then(function(r){
+      if(r&&r.error){setMsg("adm-msg",false,"오류가 발생했어요.");return;}
+      var d=r&&r.data;
+      if(d&&d.ok){setMsg("adm-msg",true,"관리자 권한을 해제했어요.");loadAdmins();}
+      else if(d&&d.reason==="last_admin"){setMsg("adm-msg",false,"마지막 관리자는 해제할 수 없어요.");}
+      else{setMsg("adm-msg",false,"해제하지 못했어요.");}
+    }).catch(function(){setMsg("adm-msg",false,"오류가 발생했어요.");});
+  }
+
+  /* ---------- 회원 관리 ---------- */
+  function loadMembers(reset){
+    if(!sb)return;
+    if(reset){memOff=0;}
+    var arg={q:memQ,lim:30,off:memOff};
+    if(memFlt&&memFlt!=="all")arg.flt=memFlt;
+    sb.rpc("admin_list_users",arg).then(function(r){
+      if(!r||r.error||!r.data){renderMembers(true);return;}
+      var batch=Array.isArray(r.data.rows)?r.data.rows:[];
+      members=memOff?members.concat(batch):batch;
+      memTotal=typeof r.data.total==="number"?r.data.total:members.length;
+      renderMembers(false);
+    }).catch(function(){renderMembers(true);});
+  }
+  function renderMembers(sqlErr){
+    var body=$("mem-body");if(!body)return;
+    var chips=[["all","전체"],["pro","Pro"],["free","일반"]].map(function(f){
+      return '<button class="fchip" type="button" data-flt="'+f[0]+'" aria-selected="'+(memFlt===f[0]?"true":"false")+'">'+f[1]+'</button>';
+    }).join("");
+    var bar='<div class="mem-bar"><input class="mem-search" id="mem-q" type="text" placeholder="이름·이메일 검색 후 Enter" value="'+esc(memQ)+'">'+chips+'</div><div class="msg" id="mem-msg"></div>';
+    var list;
+    if(sqlErr){list='<p class="msg err" style="display:block">회원 목록을 불러오지 못했어요. 회원목록 SQL(admin_list_users)이 적용됐는지 확인해 주세요.</p>';}
+    else if(!members.length){list='<p class="muted-s">조건에 맞는 회원이 없어요.</p>';}
+    else{
+      list='<div class="row-list">'+members.map(function(u){
+        var nm=u.name||u.email||"사용자",init=(String(nm).charAt(0)||"?").toUpperCase();
+        var badge=u.pro?'<span class="pro-b">Pro</span>':'<span class="free-b">일반</span>';
+        var sub=esc(u.email||"")+(u.created_at?' · 가입 '+esc(fmtDay(u.created_at)):'');
+        return '<div class="urow"><span class="uav">'+esc(init)+'</span><div class="uinfo"><div class="uname">'+esc(nm)+' '+badge+'</div><div class="uemail">'+sub+'</div></div><div class="uact"><button class="ubtn pro" type="button" data-pro="'+esc(u.user_id)+'">'+(u.pro?"Pro 해제":"Pro 부여")+'</button><button class="ubtn danger" type="button" data-del="'+esc(u.user_id)+'">탈퇴</button></div></div>';
+      }).join("")+'</div>';
+      if(members.length<memTotal){list+='<button class="mem-more" id="mem-more" type="button">더 보기 ('+members.length+'/'+memTotal+')</button>';}
+    }
+    body.innerHTML=bar+list;
+    $("mem-q").addEventListener("keydown",function(e){if(e.key==="Enter"){memQ=$("mem-q").value.trim();loadMembers(true);}});
+    Array.prototype.forEach.call(body.querySelectorAll("[data-flt]"),function(b){b.onclick=function(){memFlt=b.getAttribute("data-flt");loadMembers(true);};});
+    var mm=$("mem-more");if(mm)mm.onclick=function(){memOff=members.length;loadMembers(false);};
+    Array.prototype.forEach.call(body.querySelectorAll("[data-pro]"),function(b){b.onclick=function(){togglePro(b.getAttribute("data-pro"));};});
+    Array.prototype.forEach.call(body.querySelectorAll("[data-del]"),function(b){b.onclick=function(){deleteMember(b.getAttribute("data-del"));};});
+  }
+  function togglePro(uid){
+    var u=members.filter(function(x){return String(x.user_id)===String(uid);})[0];if(!u)return;
+    var val=!u.pro;
+    sb.rpc("admin_set_pro",{target_user:uid,value:val}).then(function(r){
+      if(!r||r.error||!(r.data&&r.data.ok)){setMsg("mem-msg",false,"변경하지 못했어요.");return;}
+      u.pro=val;renderMembers(false);
+      setMsg("mem-msg",true,(u.name||u.email||"사용자")+" 님을 "+(val?"Pro로 전환했어요.":"Pro 해제했어요."));
+    }).catch(function(){setMsg("mem-msg",false,"오류가 발생했어요.");});
+  }
+  function deleteMember(uid){
+    var u=members.filter(function(x){return String(x.user_id)===String(uid);})[0];if(!u)return;
+    var em=u.email||"",nm=u.name||em||"이 사용자";
+    if(typeof window!=="undefined"){
+      if(!window.confirm(nm+(em?" ("+em+")":"")+" 계정을 완전 삭제할까요?\n\n이 사용자의 작품·평가·의뢰·문의·설정이 모두 삭제되며 되돌릴 수 없어요.\n(삭제 후 같은 이메일·구글로 새로 가입하는 건 가능해요.)"))return;
+      var typed=window.prompt("확인을 위해 이 사용자의 이메일을 정확히 입력하세요:\n"+em);
+      if(typed==null)return;
+      if(typed.trim()!==em){setMsg("mem-msg",false,"이메일이 일치하지 않아 취소했어요.");return;}
+    }
+    sb.rpc("admin_delete_user",{target_user:uid}).then(function(r){
+      if(r&&r.error){setMsg("mem-msg",false,"삭제 오류예요. 탈퇴 SQL(admin_delete_user)이 적용됐는지 확인해 주세요.");return;}
+      var d=r&&r.data;
+      if(d&&d.ok){members=members.filter(function(x){return String(x.user_id)!==String(uid);});memTotal=Math.max(0,memTotal-1);renderMembers(false);setMsg("mem-msg",true,nm+" 님 계정을 삭제했어요.");}
+      else if(d&&d.reason==="is_admin"){setMsg("mem-msg",false,"관리자 계정은 삭제할 수 없어요. 먼저 관리자 권한을 해제하세요.");}
+      else if(d&&d.reason==="not_admin"){setMsg("mem-msg",false,"권한이 없어요.");}
+      else{setMsg("mem-msg",false,"삭제하지 못했어요.");}
+    }).catch(function(){setMsg("mem-msg",false,"오류가 발생했어요.");});
   }
 
   /* ---------- 문의 답변 ---------- */
@@ -422,7 +585,7 @@
     });
     var rrow=document.createElement("div");rrow.style.cssText="text-align:right;margin:-6px 2px 12px";
     var rb=document.createElement("button");rb.className="refresh";rb.type="button";
-    rb.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-2.64-6.36M21 3v6h-6"/></svg>새로고침';
+    rb.innerHTML=svp("refresh")+"새로고침";
     rb.onclick=loadList;rrow.appendChild(rb);panel.appendChild(rrow);
 
     var listEl=document.createElement("div");panel.appendChild(listEl);
