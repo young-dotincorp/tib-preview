@@ -1673,9 +1673,10 @@ react/cjs/react-jsx-runtime.production.js:
 
 
 <style id="tw-reply-style">
+  /* Tactile World · 메시지 모달 표준 (/#/messages .cv-* 기준 통일) */
   .twr-ovl{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,21,15,.46);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);opacity:0;transition:opacity .18s ease;font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
   .twr-ovl.in{opacity:1}
-  .twr-x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 22px);right:24px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 14px rgba(20,21,15,.18);color:#1F1D1A;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+  .twr-x{position:absolute;top:22px;right:24px;width:38px;height:38px;border-radius:50%;border:0;background:#fff;box-shadow:0 4px 14px rgba(20,21,15,.18);color:#1F1D1A;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
   .twr-x:hover{background:#f6f4f0}
   .twr-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
   .twr-card{width:100%;max-width:520px;max-height:86vh;background:#fff;border-radius:20px;box-shadow:0 24px 60px -20px rgba(20,21,15,.4);display:flex;flex-direction:column;overflow:hidden;transform:translateY(10px) scale(.985);transition:transform .2s cubic-bezier(.22,.61,.36,1)}
@@ -1685,38 +1686,44 @@ react/cjs/react-jsx-runtime.production.js:
   .twr-hd-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .twr-hd-name{font-size:16px;font-weight:700;color:#1F1D1A;line-height:1.2}
   .twr-hd-sub{font-size:12px;color:#9A9384;margin-top:2px}
-  .twr-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:12px;background:#FBF8F2;min-height:120px}
-  .twr-row{display:flex;flex-direction:column;max-width:82%}
-  .twr-row.recv{align-self:flex-start;align-items:flex-start}
-  .twr-row.sent{align-self:flex-end;align-items:flex-end}
-  .twr-bubble{font-size:14px;line-height:1.55;padding:11px 14px;border-radius:16px;white-space:pre-wrap;word-break:break-word}
-  .twr-row.recv .twr-bubble{background:#fff;border:1px solid #ECE6DC;color:#1F1D1A;border-bottom-left-radius:5px}
-  .twr-row.sent .twr-bubble{background:#FF4F00;color:#fff;border-bottom-right-radius:5px}
-  .twr-meta{font-size:11px;color:#9A9384;margin-top:5px;padding:0 3px}
-  .twr-foot{border-top:1px solid #ECE6DC;padding:13px 16px;display:flex;gap:9px;align-items:flex-end;background:#fff}
-  .twr-input{flex:1;resize:none;border:1px solid #ECE6DC;border-radius:13px;padding:11px 13px;font:inherit;font-size:14px;line-height:1.5;color:#1F1D1A;max-height:120px;min-height:44px;background:#fff;transition:border-color .14s,box-shadow .14s}
-  .twr-input:focus{outline:none;border-color:#FF4F00;box-shadow:0 0 0 3px #FFF1EA}
-  .twr-input:disabled{background:#FBF8F2;color:#9A9384}
-  .twr-send{flex:none;height:44px;padding:0 18px;border:0;border-radius:13px;background:#FF4F00;color:#fff;font:inherit;font-size:14px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .14s,opacity .14s}
-  .twr-send:hover{background:#E04500}
-  .twr-send:disabled{opacity:.45;cursor:default}
-  .twr-send svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .twr-note{font-size:12px;color:#1E7E48;background:#E7F7EF;border:1px solid #BFE6CF;border-radius:10px;padding:8px 12px;margin:0 20px 14px;display:none}
+  .twr-body{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:10px;background:#FBF8F2;min-height:120px;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.16) transparent}
+  .twr-body::-webkit-scrollbar{width:8px}
+  .twr-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:8px;border:2px solid transparent;background-clip:content-box}
+  .twr-row{display:flex}
+  .twr-row.recv{justify-content:flex-start}
+  .twr-row.sent{justify-content:flex-end}
+  .twr-bubble{max-width:78%;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.55;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+  .twr-row.recv .twr-bubble{background:#F3F1EC;color:#1F1D1A;border-top-left-radius:4px}
+  .twr-row.sent .twr-bubble{background:#FF4F00;color:#fff;border-top-right-radius:4px}
+  .twr-b-text{white-space:pre-wrap;word-break:break-word}
+  .twr-b-meta{margin-top:4px;font-size:12px;opacity:.85}
+  .twr-b-time{margin-top:5px;font-size:11px;opacity:.6}
+  .twr-note{font-size:12px;color:#1E7E48;background:#E7F7EF;border:1px solid #BFE6CF;border-radius:10px;padding:8px 12px;margin:0 24px 14px;display:none}
   .twr-note.err{color:#C0392B;background:#FDECEA;border-color:#F7C9C2}
   .twr-note.show{display:block}
-  @media (max-width:520px){.twr-card{max-height:92vh}.twr-x{right:16px;top:16px}}
+  .twr-foot{display:flex;gap:8px;align-items:flex-end;padding:16px 24px 24px;border-top:1px solid #ECE6DC;background:#fff}
+  .twr-input{flex:1;resize:none;border:1px solid #ECE6DC;border-radius:12px;padding:11px 13px;font:inherit;font-size:14px;line-height:1.5;min-height:44px;max-height:120px;box-sizing:border-box;background:#fff;color:#1F1D1A;transition:border-color .14s}
+  .twr-input:focus{outline:none;border-color:#FF4F00}
+  .twr-input:disabled{background:#FBF8F2;color:#9A9384}
+  .twr-send{flex-shrink:0;height:44px;padding:0 16px;border:1.5px solid transparent;border-radius:999px;background:#FF4F00;color:#fff;font:inherit;font-size:15px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .12s,background .15s,opacity .15s}
+  .twr-send:hover:not(:disabled){background:#E04500;transform:translateY(-1px)}
+  .twr-send:disabled{opacity:.45;cursor:default}
+  .twr-send svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  @media (max-width:520px){.twr-card{max-height:92vh}.twr-x{right:16px;top:16px}.twr-body,.twr-foot{padding-left:18px;padding-right:18px}.twr-note{margin-left:18px;margin-right:18px}}
 </style>
 <script>
 (function(){
   "use strict";
   if (window.__TW_REPLY__) return;
   var ICON_MSG='<path d="M8 9h8"/><path d="M8 13h6"/><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"/>';
-  var ICON_SEND='<path d="M10 14l11 -11"/><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"/>';
   var ICON_X='<path d="M18 6l-12 12"/><path d="M6 6l12 12"/>';
-  function svg(inner,cls){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+inner+'</svg>';}
+  function svg(inner){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+inner+'</svg>';}
   function esc(s){var d=document.createElement("div");d.textContent=(s==null?"":String(s));return d.innerHTML;}
   function clean(t){return (t||"").replace(/^\uCC57\uBD07[\u00B7\u30FB\s]*/,"");}
-
+  function bubble(side,text,metaCls,metaText){
+    return '<div class="twr-row '+side+'"><div class="twr-bubble"><div class="twr-b-text">'+esc(text)+'</div>'+
+      (metaText?'<div class="'+metaCls+'">'+esc(metaText)+'</div>':'')+'</div></div>';
+  }
   var cur=null;
   function close(){
     if(!cur)return;
@@ -1726,7 +1733,6 @@ react/cjs/react-jsx-runtime.production.js:
     setTimeout(function(){ if(ov&&ov.parentNode) ov.parentNode.removeChild(ov); }, 200);
   }
   function onKey(e){ if(e.key==="Escape"){ e.stopPropagation(); close(); } }
-
   window.__TW_REPLY__ = function(inq, sb, onDone){
     inq = inq || {};
     close();
@@ -1737,43 +1743,35 @@ react/cjs/react-jsx-runtime.production.js:
     ov.setAttribute("role","dialog");
     ov.setAttribute("aria-modal","true");
     ov.setAttribute("aria-label", name+" \uB2D8\uC758 \uBB38\uC758 \uB2F5\uBCC0");
-
-    var sentExisting = (inq.reply!=null && String(inq.reply).trim()!=="")
-      ? '<div class="twr-row sent"><div class="twr-bubble">'+esc(inq.reply)+'</div><div class="twr-meta">\uC774\uBBF8 \uBCF4\uB0B8 \uB2F5\uBCC0</div></div>'
-      : '';
-
+    var existing = (inq.reply!=null && String(inq.reply).trim()!=="")
+      ? bubble("sent", inq.reply, "twr-b-time", "\uC774\uBBF8 \uBCF4\uB0B8 \uB2F5\uBCC0") : "";
     ov.innerHTML =
       '<button class="twr-x" type="button" aria-label="\uB2EB\uAE30">'+svg(ICON_X)+'</button>'+
       '<div class="twr-card">'+
         '<div class="twr-hd"><span class="twr-hd-ic">'+svg(ICON_MSG)+'</span>'+
           '<div><div class="twr-hd-name">'+esc(name)+'</div><div class="twr-hd-sub">'+esc(sub)+(inq.email?' \u00B7 '+esc(inq.email):'')+'</div></div></div>'+
         '<div class="twr-body">'+
-          '<div class="twr-row recv"><div class="twr-bubble">'+esc(inq.message||"(\uB0B4\uC6A9 \uC5C6\uC74C)")+'</div><div class="twr-meta">'+esc(inq.email||"")+'</div></div>'+
-          sentExisting+
+          bubble("recv", inq.message||"(\uB0B4\uC6A9 \uC5C6\uC74C)", "twr-b-meta", inq.email||"")+
+          existing+
         '</div>'+
         '<div class="twr-note" role="status"></div>'+
         '<div class="twr-foot">'+
           '<textarea class="twr-input" rows="1" placeholder="\uB2F5\uBCC0\uC744 \uC785\uB825\uD558\uC138\uC694\u2026 (Ctrl/\u2318+Enter\uB85C \uC804\uC1A1)"></textarea>'+
-          '<button class="twr-send" type="button">'+svg(ICON_SEND)+'\uBCF4\uB0B4\uAE30</button>'+
+          '<button class="twr-send" type="button">'+svg(ICON_MSG)+'\uBCF4\uB0B4\uAE30</button>'+
         '</div>'+
       '</div>';
-
     document.body.appendChild(ov);
     cur = {ov:ov};
-    var card=ov.querySelector(".twr-card");
     var body=ov.querySelector(".twr-body");
     var input=ov.querySelector(".twr-input");
     var sendBtn=ov.querySelector(".twr-send");
     var note=ov.querySelector(".twr-note");
-
     function showNote(msg,isErr){ note.textContent=msg; note.className="twr-note show"+(isErr?" err":""); }
     function autoGrow(){ input.style.height="auto"; input.style.height=Math.min(120,input.scrollHeight)+"px"; }
     input.addEventListener("input",autoGrow);
-
     ov.addEventListener("mousedown",function(e){ if(e.target===ov) close(); });
     ov.querySelector(".twr-x").addEventListener("click",close);
     document.addEventListener("keydown",onKey,true);
-
     var sending=false;
     function doSend(){
       if(sending)return;
@@ -1784,19 +1782,16 @@ react/cjs/react-jsx-runtime.production.js:
       sending=true; sendBtn.disabled=true; input.disabled=true; note.className="twr-note";
       sb.rpc("admin_reply_inquiry",{p_ticket:inq.ticket,p_reply:text}).then(function(res){
         if(res&&res.error){ sending=false; sendBtn.disabled=false; input.disabled=false; showNote("\uBCF4\uB0B4\uC9C0 \uBABB\uD588\uC5B4\uC694. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.",true); return; }
-        var row=document.createElement("div"); row.className="twr-row sent";
-        row.innerHTML='<div class="twr-bubble">'+esc(text)+'</div><div class="twr-meta">\uBC29\uBB38\uC790 \uCC57\uBD07\uC5D0 \uC804\uB2EC\uB428</div>';
-        body.appendChild(row); body.scrollTop=body.scrollHeight;
+        body.insertAdjacentHTML("beforeend", bubble("sent", text, "twr-b-time", "\uBC29\uBB38\uC790 \uCC57\uBD07\uC5D0 \uC804\uB2EC\uB428"));
+        body.scrollTop=body.scrollHeight;
         input.value=""; autoGrow();
         showNote("\uB2F5\uBCC0\uC744 \uBCF4\uB0C8\uC5B4\uC694. \uBC29\uBB38\uC790\uAC00 \uCC57\uBD07 '\uB0B4\uAC00 \uBCF4\uB0B8 \uBB38\uC758'\uC5D0\uC11C \uD655\uC778\uD574\uC694.",false);
-        sendBtn.innerHTML=svg(ICON_SEND)+"\uC804\uC1A1 \uC644\uB8CC";
-        input.disabled=false; sending=false;
+        input.disabled=false; sendBtn.disabled=false; sending=false;
         try{ if(typeof onDone==="function") onDone(); }catch(e){}
       }).catch(function(){ sending=false; sendBtn.disabled=false; input.disabled=false; showNote("\uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694.",true); });
     }
     sendBtn.addEventListener("click",doSend);
     input.addEventListener("keydown",function(e){ if((e.metaKey||e.ctrlKey)&&e.key==="Enter"){ e.preventDefault(); doSend(); } });
-
     requestAnimationFrame(function(){ ov.classList.add("in"); setTimeout(function(){ try{input.focus();}catch(e){} },120); });
   };
 })();
