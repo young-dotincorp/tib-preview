@@ -1632,7 +1632,7 @@ react/cjs/react-jsx-runtime.production.js:
   function startPoll(tk){_await[tk]=1;stopPoll(tk);setTimeout(function(){checkTicket(tk);},2500);_polls[tk]=setInterval(function(){checkTicket(tk);},6000);}
   function pausePolls(){for(var k in _polls){clearInterval(_polls[k]);}_polls={};}
   function resumePolls(){for(var k in _await){startPoll(k);}}
-  function sendMessage(v){v=(v||'').trim();if(!v)return;var tk=ticket();usr(v);submit(ctx,'',v,tk,function(ok){if(ok){lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});bot('접수됐어요. 접수번호는 '+tk+'예요. 담당자가 확인 후 여기에 바로 답변드릴게요.');pendingMsg(tk);startPoll(tk);}else{bot('전송에 실패했어요. 잠시 후 다시 시도해 주세요.');}});}
+  function sendMessage(v){v=(v||'').trim();if(!v)return;var tk=ticket();usr(v);submit(ctx,'',v,tk,function(ok){if(ok){lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});pendingMsg(tk);startPoll(tk);}else{bot('전송에 실패했어요. 잠시 후 다시 시도해 주세요.');}});}
   function clr(){inArea.innerHTML='';}
   function cards(list){clr();var wrap=document.createElement('div');wrap.className='tw-pills';list.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='tw-pill';b.textContent=o.label;b.onclick=function(){usr(o.label);if(wrap.parentNode)wrap.parentNode.removeChild(wrap);o.go();};wrap.appendChild(b);});log.appendChild(wrap);log.scrollTop=log.scrollHeight;var f=wrap.querySelector('button');if(f)f.focus();}
 
@@ -1660,7 +1660,7 @@ react/cjs/react-jsx-runtime.production.js:
     {label:'게임 관련 문의',icon:'game',desc:'닷패드 연결·게임 안내',go:game},
     {label:'기술·오류 신고',icon:'alert',desc:'문제 신고하기',go:function(){ctx='기술·오류 신고';bug();}},
     {label:'기타 문의',icon:'mail',desc:'그 외 문의 남기기',go:function(){ctx='기타 문의';direct();}}
-  ];if(lsGet().length)menu.push({label:'내가 보낸 문의',icon:'inbox',desc:'접수 내역 다시 보기',go:myList});cards(menu);}
+  ];cards(menu);}
   function game(){ctx='게임 문의';bot('닷패드를 블루투스로 연결한 뒤 게임을 열면 점자가 핀으로 표시돼요. 키보드와 음성 안내도 지원합니다. 더 궁금한 점이 있나요?');cards([
     {label:'닷패드 연결 방법',icon:'bt',desc:'블루투스 연결 안내',go:function(){usr('닷패드 연결 방법');bot('게임 화면 우측 상단의 "DotPad 연결"을 누른 뒤 목록에서 기기를 선택하면 연결돼요. (HTTPS 환경에서만 동작합니다.)');cards([BACK,DIRECT('게임 문의')]);}},
     BACK,DIRECT('게임 문의')
