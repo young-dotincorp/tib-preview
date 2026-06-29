@@ -1534,7 +1534,6 @@ react/cjs/react-jsx-runtime.production.js:
    *)
 */
 </script>
-
 <style id="tw-cb-style">
 #tw-cb-root,#tw-cb-root *{box-sizing:border-box;font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif}
 .backtop{bottom:94px !important;right:24px !important;z-index:2147482900 !important}
@@ -1630,8 +1629,9 @@ react/cjs/react-jsx-runtime.production.js:
   function esc(s){var d=document.createElement('div');d.textContent=(s==null?'':String(s));return d.innerHTML;}
   function lsGet(){try{return JSON.parse(localStorage.getItem('tw_cb_my')||'[]');}catch(e){return [];}}
   function lsAdd(rec){try{var a=lsGet();a.unshift(rec);if(a.length>10)a=a.slice(0,10);localStorage.setItem('tw_cb_my',JSON.stringify(a));}catch(e){}}
-  function ticket(){var d=new Date(),p=function(n){return ('0'+n).slice(-2);};return 'TW-'+(''+d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'-'+(Math.floor(Math.random()*9000)+1000);}
-  function myList(){bot('지금까지 남기신 문의예요. 답변은 남기신 이메일로 보내드려요.');clr();var a=lsGet();if(!a.length){bot('아직 남긴 문의가 없어요.');}a.forEach(function(rec){var box=document.createElement('div');box.style.cssText='background:#fff;border:1px solid #ece7df;border-radius:12px;padding:11px 13px';box.innerHTML='<div style="font-weight:600;color:#16150f;font-size:13.5px">'+esc(rec.type)+'</div><div style="color:#5f5e5a;margin:4px 0;line-height:1.45;font-size:13.5px;white-space:pre-wrap;word-break:break-word">'+esc(rec.msg)+'</div><div style="color:#a8a39a;font-size:12px">접수 '+esc(rec.ticket)+' · '+esc(rec.at)+'</div>';inArea.appendChild(box);});var bk=document.createElement('button');bk.type='button';bk.className='tw-ghost';bk.style.alignSelf='flex-end';bk.textContent='처음으로';bk.onclick=start;inArea.appendChild(bk);bk.focus();}
+  function ticket(){var A='23456789ABCDEFGHJKMNPQRSTUVWXYZ',n=8,o='';try{var b=new Uint32Array(n),c=window.crypto||window.msCrypto;c.getRandomValues(b);for(var i=0;i<n;i++)o+=A[b[i]%A.length];}catch(e){o='';for(var j=0;j<n;j++)o+=A[Math.floor(Math.random()*A.length)];}return 'TW-'+o.slice(0,4)+'-'+o.slice(4);}
+  function lookupTicket(tk,cb){try{fetch(URL+'/rest/v1/rpc/get_inquiry_by_ticket',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_ticket:tk})}).then(function(r){return r.ok?r.json():null;}).then(function(j){cb(j&&j.length?j[0]:null);}).catch(function(){cb(null);});}catch(e){cb(null);}}
+  function myList(){bot('지금까지 남기신 문의예요. 답변이 도착하면 여기에 표시돼요.');clr();var a=lsGet();if(!a.length){bot('아직 남긴 문의가 없어요.');}a.forEach(function(rec){var box=document.createElement('div');box.style.cssText='background:#fff;border:1px solid #ece7df;border-radius:12px;padding:11px 13px';box.innerHTML='<div style="font-weight:600;color:#16150f;font-size:13.5px">'+esc(rec.type)+'</div><div style="color:#5f5e5a;margin:4px 0;line-height:1.45;font-size:13.5px;white-space:pre-wrap;word-break:break-word">'+esc(rec.msg)+'</div><div style="color:#a8a39a;font-size:12px">접수 '+esc(rec.ticket)+' · '+esc(rec.at)+'</div>';var st=document.createElement('div');st.style.cssText='margin-top:8px;font-size:12.5px;color:#a8a39a';st.textContent='답변 확인 중…';box.appendChild(st);inArea.appendChild(box);lookupTicket(rec.ticket,function(d){if(d&&d.reply){st.style.cssText='margin-top:9px;background:#fff4ee;border:1px solid #ffd9c7;border-radius:10px;padding:9px 11px';st.innerHTML='<div style="font-weight:700;color:#ff4f00;font-size:12.5px;margin-bottom:3px">답변이 도착했어요</div><div style="color:#3a3934;font-size:13.5px;line-height:1.5;white-space:pre-wrap;word-break:break-word">'+esc(d.reply)+'</div>';}else if(d){st.textContent='상태: '+(d.status||'접수됨');}else{st.textContent='상태: 접수됨';}});});var bk=document.createElement('button');bk.type='button';bk.className='tw-ghost';bk.style.alignSelf='flex-end';bk.textContent='처음으로';bk.onclick=start;inArea.appendChild(bk);bk.focus();}
 
   function start(){ctx='일반 문의';log.innerHTML='';bot('안녕하세요! Tactile World예요. 무엇을 도와드릴까요? 아래에서 골라 주세요.');var menu=[
     {label:'게임 이용 방법',icon:'game',desc:'닷패드 연결·조작 안내',go:game},
@@ -1652,12 +1652,12 @@ react/cjs/react-jsx-runtime.production.js:
     var row=document.createElement('div');row.className='tw-row';
     var bk=document.createElement('button');bk.type='button';bk.className='tw-ghost';bk.textContent='처음으로';bk.onclick=start;
     var sd=document.createElement('button');sd.type='button';sd.className='tw-send';sd.textContent='보내기';
-    sd.onclick=function(){var v=ta.value.trim();if(!v){ta.focus();return;}var email=em.value.trim();usr(v);sd.disabled=true;sd.textContent='보내는 중…';submit(ctx,email,v,function(ok){sd.disabled=false;sd.textContent='보내기';if(ok){var tk=ticket();lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});bot('메시지를 받았어요. 접수번호는 '+tk+'예요.'+(email?' 남기신 이메일로 답변드릴게요.':' 빠른 답변을 위해 다음엔 이메일도 남겨 주시면 좋아요.'));cards([BACK]);}else{bot('전송에 실패했어요. 잠시 후 다시 시도하거나, 메뉴의 문의하기를 이용해 주세요.');}});};
+    sd.onclick=function(){var v=ta.value.trim();if(!v){ta.focus();return;}var email=em.value.trim();var tk=ticket();usr(v);sd.disabled=true;sd.textContent='보내는 중…';submit(ctx,email,v,tk,function(ok){sd.disabled=false;sd.textContent='보내기';if(ok){lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});bot('메시지를 받았어요. 접수번호는 '+tk+'예요.'+(email?' 남기신 이메일로 답변드릴게요.':' 빠른 답변을 위해 다음엔 이메일도 남겨 주시면 좋아요.'));cards([BACK]);}else{bot('전송에 실패했어요. 잠시 후 다시 시도하거나, 메뉴의 문의하기를 이용해 주세요.');}});};
     row.appendChild(bk);row.appendChild(sd);inArea.appendChild(em);inArea.appendChild(ta);inArea.appendChild(row);em.focus();}
 
-  function submit(type,email,message,cb){
+  function submit(type,email,message,tk,cb){
     try{
-      fetch(URL+'/rest/v1/inquiries',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({type:'챗봇·'+type,name:email?email.split('@')[0]:'챗봇 방문자',email:email||null,message:message,user_id:null})}).then(function(r){cb(r.ok);}).catch(function(){cb(false);});
+      fetch(URL+'/rest/v1/inquiries',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({type:'챗봇·'+type,name:email?email.split('@')[0]:'챗봇 방문자',email:email||null,message:message,user_id:null,ticket:tk})}).then(function(r){cb(r.ok);}).catch(function(){cb(false);});
     }catch(e){cb(false);}
   }
 
