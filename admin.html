@@ -11,11 +11,13 @@
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
   :root{
-    --accent:#ff4f00; --accent-dark:#e84800; --accent-tint:#fff4ee; --accent-line:#ffd9c7;
-    --cream:#faf7f2; --card:#ffffff; --line:#ece7df;
-    --ink:#16150f; --ink-soft:#5f5e5a; --ink-faint:#a8a39a; --ink-mute:#b4b2a9;
+    --accent:#FF4F00; --accent-dark:#E04500; --accent-deep:#E04500; --accent-tint:#FFF1EA; --accent-line:#FAD9C8;
+    --cream:#FBF8F2; --paper:#FFFFFF; --card:#FFFFFF; --line:#ECE6DC; --line-2:#E2DACB;
+    --ink:#1F1D1A; --ink-soft:#5C574E; --ink-faint:#9A9384; --ink-mute:#9A9384;
     --ok:#1f9d57; --ok-tint:#eaf7ef;
-    --r:14px; --r-sm:10px;
+    --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
+    --fs-h1:32px;
+    --r:14px; --r-sm:8px; --r-md:12px; --r-lg:16px; --r-full:999px;
     --font:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;
   }
   *{box-sizing:border-box}
@@ -214,6 +216,155 @@
     .who{max-width:130px}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* ===== 본체 /#/admin 디자인 시스템 (그대로 이식) ===== */
+.page-wrap{max-width:760px;margin:0 auto;padding:var(--s7) 0 var(--s8);}
+.page-hd{text-align:center;margin-bottom:var(--s6);}
+.page-hd .badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-tint);color:var(--accent-deep);font-size:12px;font-weight:700;padding:5px 12px;border-radius:var(--r-full);margin-bottom:var(--s3);}
+.page-hd h1{font-size:var(--fs-h1);letter-spacing:-.02em;margin:0 0 var(--s2);}
+.page-hd p{color:var(--ink-soft);font-size:15px;line-height:1.65;margin:0 auto;max-width:560px;}
+.page-note{display:flex;gap:9px;align-items:flex-start;background:var(--accent-tint);border:1px solid #FAD9C8;border-radius:var(--r-md);padding:11px 14px;font-size:12.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:var(--s6);}
+.page-note .ic{flex:none;color:var(--accent-deep);margin-top:1px;}
+.adm{max-width:1080px;}
+.adm-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s4);margin-top:var(--s5);}
+.adm-kpi{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5);background:#fff;box-shadow:0 1px 3px rgba(31,29,26,.04);transition:transform .15s,box-shadow .15s;}
+.adm-kpi:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(31,29,26,.09);}
+.adm-ic{width:42px;height:42px;border-radius:12px;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;}
+.adm-ic.sm{width:28px;height:28px;border-radius:9px;}
+.adm-v{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.05;}
+.adm-l{font-size:13px;color:var(--ink-soft);margin-top:2px;}
+.adm-cols{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4);margin-top:var(--s6);align-items:stretch;}
+.adm-block{border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s5);background:#fff;box-shadow:0 1px 3px rgba(31,29,26,.03);}
+.adm-h2{font-size:15px;font-weight:700;margin:0 0 var(--s4);display:flex;align-items:center;gap:9px;}
+.adm-h2::before{content:"";width:4px;height:15px;border-radius:99px;background:var(--accent);flex:none;}
+.adm-mini{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:var(--s4);}
+.adm-mi{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);background:var(--cream);border:1px solid var(--line);border-radius:99px;padding:5px 12px;}
+.adm-mi b{color:var(--ink);font-weight:700;}
+.adm-bars{display:flex;flex-direction:column;gap:10px;}
+.adm-bar{display:grid;grid-template-columns:86px 1fr 30px;align-items:center;gap:10px;font-size:13px;}
+.adm-bl{color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.adm-bt{height:9px;background:var(--cream);border-radius:99px;overflow:hidden;}
+.adm-bf{display:block;height:100%;background:linear-gradient(90deg,#FF7A33,var(--accent));border-radius:99px;transition:width .5s cubic-bezier(.22,.61,.36,1);}
+.adm-bn{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;}
+.adm-stat2{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s3);}
+.adm-s2{display:flex;flex-direction:column;align-items:flex-start;gap:5px;background:var(--cream);border:1px solid transparent;border-radius:var(--r-md);padding:13px 13px;}
+.adm-s2 .adm-ic{background:#fff;}
+.adm-s2 b{font-size:19px;font-weight:800;line-height:1;}
+.adm-s2 span:last-child{font-size:12px;color:var(--ink-faint);}
+.adm-avg{margin-top:var(--s4);padding-top:var(--s4);border-top:1px solid var(--line);font-size:13px;color:var(--ink-soft);}
+.adm-avg b{font-size:17px;color:var(--ink);}
+.adm-stars{color:var(--accent);letter-spacing:1px;margin-left:4px;}
+.adm-recent{display:flex;flex-direction:column;}
+.adm-row{display:flex;justify-content:space-between;align-items:center;gap:var(--s4);padding:11px 2px;border-bottom:1px solid var(--line);}
+.adm-row:last-child{border-bottom:none;}
+.adm-recent .adm-row{transition:background .12s;}
+.adm-recent .adm-row:hover{background:var(--cream);}
+.adm-recent .adm-row:nth-child(1) .adm-rank{background:linear-gradient(135deg,#FFE19A,#EFAE34);color:#5e3f00;}
+.adm-recent .adm-row:nth-child(2) .adm-rank{background:#E7E4DE;color:#6a665e;}
+.adm-recent .adm-row:nth-child(3) .adm-rank{background:#F2DEC8;color:#875428;}
+.adm-block.adm-fill{display:flex;flex-direction:column;}
+.adm-block.adm-fill .adm-recent{flex:1;}
+.adm-block.adm-fill .adm-recent .adm-row{flex:1;}
+.mem-search{display:flex;gap:8px;margin:10px 0 10px;}
+.mem-search input{flex:1;padding:9px 12px;border:1px solid var(--line-2);border-radius:var(--r-sm);background:#fff;font:inherit;font-size:14px;}
+.mem-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px;}
+.mem-bar-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.mem-size{appearance:none;-webkit-appearance:none;-moz-appearance:none;padding:9px 34px 9px 12px;border:1px solid var(--line-2);border-radius:var(--r-sm);background-color:#fff;background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235C574E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:11px;font:inherit;font-size:13px;color:var(--ink-soft);cursor:pointer;min-width:92px;}
+.mem-count{font-size:13px;color:var(--ink-faint);font-weight:600;margin:0;white-space:nowrap;}
+.mem-table{border:1px solid var(--line);border-radius:var(--r-md);overflow-x:auto;background:#fff;}
+.mem-head,.mem-row{display:grid;grid-template-columns:minmax(220px,1fr) 110px 120px 220px;align-items:center;gap:12px;padding:12px 16px;min-width:600px;}
+.mem-head{background:#F6F1E8;font-size:12px;font-weight:700;color:var(--ink-soft);letter-spacing:.02em;border-bottom:1px solid var(--line);}
+.mem-sortbtn{background:none;border:none;padding:0;font:inherit;font-size:12px;font-weight:700;color:var(--ink-soft);cursor:pointer;display:inline-flex;align-items:center;letter-spacing:.02em;text-align:left;}
+.mem-sortbtn:hover{color:var(--accent-deep);}
+.mem-caret{margin-left:4px;font-size:9px;color:var(--accent);}
+.mem-rpp{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);white-space:nowrap;}
+.mem-sortarr{margin-left:7px;flex:none;vertical-align:middle;}
+.mem-row{border-bottom:1px solid var(--line);transition:background .1s;}
+.mem-row:last-child{border-bottom:none;}
+.mem-row:hover{background:var(--cream);}
+.mem-user{display:flex;align-items:center;gap:12px;min-width:0;}
+.mem-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex:none;letter-spacing:.02em;}
+.mem-u-meta{min-width:0;}
+.mem-name{font-weight:700;font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mem-email{font-size:12.5px;color:var(--ink-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mem-badge{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;padding:3px 11px;border-radius:999px;}
+.mem-badge.pro{background:linear-gradient(135deg,#FFE6B0,#F4B740);color:#7a4a00;}
+.mem-badge.free{background:var(--line);color:var(--ink-soft);}
+.mem-date{font-size:13px;color:var(--ink-soft);white-space:nowrap;}
+.mem-acts{display:flex;gap:6px;justify-content:flex-start;}
+.mem-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border-radius:var(--r-sm);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line-2);background:#fff;color:var(--ink-soft);}
+.mem-btn:hover{border-color:var(--line-2);background:var(--cream);}
+.mem-btn.pro.on{border-color:#F4B740;background:linear-gradient(135deg,#FFE6B0,#F4B740);color:#7a4a00;}
+.mem-btn.del{color:#C0392B;border-color:#E6B8B2;}
+.mem-btn.del:hover{background:#FBEDEB;}
+.mem-btn:disabled{opacity:.5;cursor:default;}
+.mem-pager{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px;}
+.mem-pager-info{font-size:13px;color:var(--ink-soft);font-weight:600;}
+.mem-empty{padding:36px 16px;text-align:center;color:var(--ink-faint);}
+.adm-rt{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:8px;min-width:0;}
+.adm-rank{display:inline-flex;width:20px;height:20px;border-radius:6px;background:var(--cream);color:var(--accent);font-size:11px;font-weight:800;align-items:center;justify-content:center;flex-shrink:0;}
+.adm-rm{font-size:12px;color:var(--ink-faint);flex-shrink:0;}
+.adm-empty{padding:18px;text-align:center;color:var(--ink-faint);font-size:13px;}
+.adm-desc{font-size:13px;color:var(--ink-soft);margin:0 0 var(--s4);}
+.adm-addrow{display:flex;gap:8px;margin-bottom:var(--s3);}
+.adm-addrow input{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14px;background:#fff;color:var(--ink);}
+.adm-addrow .btn{flex-shrink:0;height:42px;}
+.adm-msg{font-size:13px;padding:9px 12px;border-radius:9px;margin-bottom:var(--s3);}
+.adm-msg.ok{background:#E9F7EE;color:#1F8B4C;}
+.adm-msg.err{background:#FDECEC;color:#C0392B;}
+.adm-admins{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+.adm-arow{display:flex;align-items:center;gap:11px;padding:12px 16px;border-bottom:1px solid var(--line);transition:background .12s;}
+.adm-arow:last-child{border-bottom:none;}
+.adm-arow:hover{background:var(--cream);}
+.adm-aav{width:32px;height:32px;border-radius:50%;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;}
+.adm-an{font-weight:600;font-size:14px;}
+.adm-ae{font-size:12px;color:var(--ink-faint);margin-left:auto;}
+.adm-rm-btn{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:border-color .12s,color .12s,background .12s;}
+.adm-rm-btn:hover{border-color:#E5484D;color:#E5484D;background:#FDECEC;}
+.adm-mt{margin-top:48px;}
+.adm .page-note{margin-top:var(--s5);}
+.adm-pro-btn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 11px;font-size:12px;font-weight:700;color:var(--ink-soft);cursor:pointer;flex-shrink:0;}
+.adm-pro-btn:hover{border-color:#E59A12;color:#A9760F;}
+.adm-pro-btn.on{background:linear-gradient(135deg,#F6C75A,#E59A12);border-color:transparent;color:#3a2807;}
+.adm-pro-btn:disabled{opacity:.5;cursor:default;}
+.adm-h2x{font-size:12px;font-weight:600;color:var(--ink-faint);margin-left:6px;}
+.adm-feed{display:flex;flex-direction:column;gap:2px;}
+.adm-frow{display:flex;align-items:center;gap:12px;padding:11px 10px;border-bottom:1px solid var(--line);transition:background .12s;}
+.adm-frow:last-child{border-bottom:none;}
+.adm-fic{width:30px;height:30px;border-radius:50%;background:var(--accent-tint);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;}
+.adm-fic.report{color:#E5484D;background:#FDECEC;}
+.adm-fbody{flex:1;min-width:0;}
+.adm-ft{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.adm-fs{font-size:12px;color:var(--ink-faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px;}
+.adm-fwhen{font-size:11px;color:var(--ink-faint);flex-shrink:0;white-space:nowrap;}
+.adm-fclick{cursor:pointer;}
+.adm-fclick:hover{background:var(--cream);}
+.adm-fclick:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+.adm-fgo{display:flex;align-items:center;color:var(--ink-faint);flex-shrink:0;margin-left:-2px;}
+.adm-fclick:hover .adm-fgo{color:var(--accent);}
+.adm-full{margin-top:var(--s6);}
+.adm-trend{display:flex;align-items:stretch;gap:10px;height:160px;}
+.adm-tcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+.adm-tn{font-size:12px;font-weight:700;color:var(--ink-soft);}
+.adm-ttrack{flex:1;width:70%;max-width:46px;background:var(--cream);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden;}
+.adm-tbar{width:100%;min-height:4px;background:linear-gradient(180deg,#FF7A33,var(--accent,#FF4F00));border-radius:8px;transition:height .6s cubic-bezier(.16,1,.3,1),filter .12s;}
+.adm-tcol:hover .adm-tbar{filter:brightness(1.07);}
+.adm-tl{font-size:11px;color:var(--ink-faint);}
+.adm-inq{display:flex;flex-direction:column;gap:11px;}
+.adm-iq{border:1px solid var(--line);border-radius:var(--r-lg);padding:15px 18px;background:#fff;box-shadow:0 1px 3px rgba(31,29,26,.04);transition:border-color .12s,box-shadow .12s,transform .12s,opacity .12s;}
+.adm-iq:hover{border-color:var(--line-2);box-shadow:0 7px 20px rgba(31,29,26,.08);transform:translateY(-1px);}
+.adm-iqh{display:flex;align-items:center;gap:7px;margin-bottom:8px;}
+.adm-iqtype{display:inline-flex;align-items:center;line-height:1;font-size:11px;font-weight:700;letter-spacing:-.01em;color:var(--ink-soft);background:var(--cream);border:1px solid var(--line);border-radius:99px;padding:4px 10px;}
+.adm-iqname{font-size:13px;font-weight:700;margin-left:3px;}
+.adm-iqwhen{font-size:11px;color:var(--ink-faint);margin-left:auto;}
+  .adm-ic svg{width:21px;height:21px}
+  .adm-ic.sm svg{width:16px;height:16px}
+  .adm-aav svg{width:16px;height:16px}
+  .adm-fic svg{width:15px;height:15px}
+  .adm-rm-btn svg,.adm-pro-btn svg,.mem-btn svg{width:14px;height:14px}
+  .adm-loading{display:flex;align-items:center;gap:10px;justify-content:center;padding:28px;color:var(--ink-faint);font-size:13px}
+  @media (max-width:760px){.adm-kpis{grid-template-columns:1fr 1fr}.adm-cols{grid-template-columns:1fr}.adm-stat2{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -426,53 +577,46 @@
     var paid=pub-free;
     var catArr=Object.keys(cats).map(function(k){return [k,cats[k]];}).sort(function(a,b){return b[1]-a[1];});
     var maxc=catArr.length?catArr[0][1]:1;
-    var kpis=[
-      ["photo","공개 작품",pub,"#fff4ee","#ff4f00"],
-      ["users","가입 사용자",c.users,"#eaf7ef","#1f9d57"],
-      ["download","총 다운로드",dl,"#eaf1fb","#2f6fd0"],
-      ["heart","받은 좋아요",lk,"#fbf2e0","#c98a1a"]
-    ];
-    var kpiHtml=kpis.map(function(k){return '<div class="kpi"><span class="kpi-ic" style="background:'+k[3]+';color:'+k[4]+'">'+svp(k[0])+'</span><div><div class="kpi-num">'+nfmt(k[2])+'</div><div class="kpi-lb">'+esc(k[1])+'</div></div></div>';}).join("");
-    var chips='<div class="chips"><span class="chip-s">무료<b>'+nfmt(free)+'</b></span><span class="chip-s">유료<b>'+nfmt(paid)+'</b></span><span class="chip-s">60×40<b>'+nfmt(g60)+'</b></span><span class="chip-s">96×64<b>'+nfmt(g96)+'</b></span></div>';
-    var bars=catArr.length?'<div class="bars">'+catArr.map(function(x){var pct=Math.round(x[1]/maxc*100);return '<div class="bar-row"><span class="bar-lb">'+esc(x[0])+'</span><span class="bar-tr"><span class="bar-fl" style="width:'+pct+'%"></span></span><span class="bar-v">'+nfmt(x[1])+'</span></div>';}).join("")+'</div>':'<p style="color:var(--ink-faint);font-size:13px;margin:0">아직 공개된 작품이 없어요.</p>';
+    var kpis=[["photo","공개 작품",pub],["users","가입 사용자",c.users],["download","총 다운로드",dl],["heart","받은 좋아요",lk]];
+    var kpiHtml=kpis.map(function(k){return '<div class="adm-kpi"><span class="adm-ic">'+svp(k[0])+'</span><div><div class="adm-v">'+nfmt(k[2])+'</div><div class="adm-l">'+esc(k[1])+'</div></div></div>';}).join("");
+    var mini='<div class="adm-mini"><span class="adm-mi">무료 <b>'+nfmt(free)+'</b></span><span class="adm-mi">유료 <b>'+nfmt(paid)+'</b></span><span class="adm-mi">60×40 <b>'+nfmt(g60)+'</b></span><span class="adm-mi">96×64 <b>'+nfmt(g96)+'</b></span></div>';
+    var bars=catArr.length?'<div class="adm-bars">'+catArr.map(function(x){var pct=Math.round(x[1]/maxc*100);return '<div class="adm-bar"><span class="adm-bl">'+esc(x[0])+'</span><span class="adm-bt"><span class="adm-bf" style="width:'+pct+'%"></span></span><span class="adm-bn">'+nfmt(x[1])+'</span></div>';}).join("")+'</div>':'<div class="adm-empty">아직 공개된 작품이 없어요.</div>';
     var comm=[["star","평가",c.reviews],["message-2","의뢰",c.commissions],["message","문의",c.inquiries],["flag","신고",c.reports],["license","요청",c.requests]];
-    var commHtml=comm.map(function(x){return '<div class="comm-c"><span class="ci">'+svp(x[0])+'</span><div class="comm-num">'+nfmt(x[2])+'</div><div class="comm-lb">'+esc(x[1])+'</div></div>';}).join("");
+    var commHtml=comm.map(function(x){return '<div class="adm-s2"><span class="adm-ic sm">'+svp(x[0])+'</span><b>'+nfmt(x[2])+'</b><span>'+esc(x[1])+'</span></div>';}).join("");
     var rr=Math.round(avg);
     var avgLine='<div class="adm-avg">평균 평점 <b>'+avg.toFixed(1)+'</b> <span class="adm-stars">'+"★".repeat(rr)+"☆".repeat(5-rr)+'</span></div>';
-    // 월별 신규 작품 (최근 6개월)
     var now=new Date(), months=[];
     for(var mi=5;mi>=0;mi--){months.push([new Date(now.getFullYear(),now.getMonth()-mi,1),0]);}
     works.forEach(function(w){if(!w.published_at)return;var d=new Date(w.published_at);for(var j=0;j<months.length;j++){if(months[j][0].getFullYear()===d.getFullYear()&&months[j][0].getMonth()===d.getMonth()){months[j][1]++;break;}}});
     var mmax=Math.max.apply(null,[1].concat(months.map(function(m){return m[1];})));
     var thisMonth=months.length?months[months.length-1][1]:0;
     var trend='<div class="adm-trend">'+months.map(function(m){var h=Math.round(m[1]/mmax*100);return '<div class="adm-tcol"><span class="adm-tn">'+nfmt(m[1])+'</span><span class="adm-ttrack"><span class="adm-tbar" style="height:'+h+'%"></span></span><span class="adm-tl">'+(m[0].getMonth()+1)+'월</span></div>';}).join("")+'</div>';
-    // 인기 작품 Top 5 (좋아요순) / 최근 업로드 (최신 6)
     var top5=works.slice().sort(function(a,b){return (b.likes||0)-(a.likes||0);}).slice(0,5);
-    var top5Html=top5.length?top5.map(function(w,i){return '<div class="adm-row"><span class="adm-rt"><b class="adm-rank r'+(i+1)+'">'+(i+1)+'</b><span class="t">'+esc(w.title||"제목 없음")+'</span></span><span class="adm-rm">♥ '+(w.likes||0)+' · ↓ '+(w.downloads||0)+'</span></div>';}).join(""):'<div class="muted-s">표시할 작품이 없어요.</div>';
+    var top5Html=top5.length?top5.map(function(w,i){return '<div class="adm-row"><span class="adm-rt"><span class="adm-rank">'+(i+1)+'</span>'+esc(w.title||"제목 없음")+'</span><span class="adm-rm">♥ '+(w.likes||0)+' · ↓ '+(w.downloads||0)+'</span></div>';}).join(""):'<div class="adm-empty">표시할 작품이 없어요.</div>';
     var recent=works.slice(0,6);
-    var recentHtml=recent.length?recent.map(function(w){return '<div class="adm-row"><span class="adm-rt"><span class="t">'+esc(w.title||"제목 없음")+'</span></span><span class="adm-rm">'+esc(w.category||"기타")+'</span></div>';}).join(""):'<div class="muted-s">표시할 작품이 없어요.</div>';
-    $("panel").innerHTML='<div class="dash">'+
-      '<div class="dash-h"><h2>데이터 대시보드</h2><p>플랫폼 데이터를 실시간으로 확인하고 운영해요.</p></div>'+
-      '<div class="kpis">'+kpiHtml+'</div>'+
-      '<div class="dash-2">'+
-        '<div class="sect"><div class="sect-h">콘텐츠 현황</div>'+chips+bars+'</div>'+
-        '<div class="sect"><div class="sect-h">커뮤니티 현황</div><div class="comm">'+commHtml+'</div>'+avgLine+'</div>'+
-      '</div>'+
-      '<div class="sect"><div class="sect-h">월별 신규 작품 <span class="sect-note">이번 달 '+nfmt(thisMonth)+'건</span></div>'+trend+'</div>'+
+    var recentHtml=recent.length?recent.map(function(w){return '<div class="adm-row"><span class="adm-rt">'+esc(w.title||"제목 없음")+'</span><span class="adm-rm">'+esc(w.category||"기타")+'</span></div>';}).join(""):'<div class="adm-empty">표시할 작품이 없어요.</div>';
+    $("panel").innerHTML='<div class="page-wrap adm">'+
+      '<div class="page-hd"><h1>데이터 대시보드</h1><p>플랫폼 데이터를 실시간으로 확인하고 운영해요.</p></div>'+
+      '<div class="adm-kpis">'+kpiHtml+'</div>'+
       '<div class="adm-cols">'+
-        '<div class="sect"><div class="sect-h">인기 작품 Top 5</div><div class="adm-recent">'+top5Html+'</div></div>'+
-        '<div class="sect"><div class="sect-h">최근 업로드</div><div class="adm-recent">'+recentHtml+'</div></div>'+
+        '<section class="adm-block"><h2 class="adm-h2">콘텐츠 현황</h2>'+mini+bars+'</section>'+
+        '<section class="adm-block"><h2 class="adm-h2">커뮤니티 현황</h2><div class="adm-stat2">'+commHtml+'</div>'+avgLine+'</section>'+
       '</div>'+
-      '<div class="sect" id="sect-admins"><div class="sect-h">관리자 설정</div><div id="adm-body"><div class="loading"><span class="spin" aria-hidden="true"></span><div>관리자를 불러오는 중…</div></div></div></div>'+
-      '<div class="sect" id="sect-members"><div class="sect-h">회원 관리</div><div id="mem-body"><div class="loading"><span class="spin" aria-hidden="true"></span><div>회원을 불러오는 중…</div></div></div></div>'+
-      '<div style="text-align:right;margin-top:-4px"><button class="refresh" type="button" id="dash-refresh">'+svp("refresh")+'새로고침</button></div>'+
+      '<section class="adm-block adm-full"><h2 class="adm-h2">월별 신규 작품 <span class="adm-h2x">이번 달 '+nfmt(thisMonth)+'건</span></h2>'+trend+'</section>'+
+      '<div class="adm-cols">'+
+        '<section class="adm-block adm-fill"><h2 class="adm-h2">인기 작품 Top 5</h2><div class="adm-recent">'+top5Html+'</div></section>'+
+        '<section class="adm-block adm-fill"><h2 class="adm-h2">최근 업로드</h2><div class="adm-recent">'+recentHtml+'</div></section>'+
+      '</div>'+
+      '<section class="adm-block adm-full" id="sect-admins"><h2 class="adm-h2">관리자 설정</h2><div id="adm-body"><div class="adm-loading"><span class="spin" aria-hidden="true"></span>관리자를 불러오는 중…</div></div></section>'+
+      '<section class="adm-block adm-full" id="sect-members"><h2 class="adm-h2">회원 관리</h2><div id="mem-body"><div class="adm-loading"><span class="spin" aria-hidden="true"></span>회원을 불러오는 중…</div></div></section>'+
+      '<div style="text-align:right;margin-top:var(--s4)"><button class="adm-rm-btn" type="button" id="dash-refresh">'+svp("refresh")+'새로고침</button></div>'+
       '</div>';
     var rb=$("dash-refresh");if(rb)rb.onclick=renderDashboard;
     loadAdmins(); loadMembers(true);
   }
 
   /* ---------- 관리자 설정 ---------- */
-  function setMsg(id,ok,text){var m=$(id);if(!m)return;m.className="msg "+(ok?"ok":"err");m.textContent=text;}
+  function setMsg(id,ok,text){var m=$(id);if(!m)return;if(!text){m.style.display="none";m.textContent="";return;}m.className="adm-msg "+(ok?"ok":"err");m.style.display="block";m.textContent=text;}
   function fmtDay(s){try{return new Date(s).toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"});}catch(e){return "";}}
 
   function loadAdmins(){
@@ -484,11 +628,11 @@
   }
   function renderAdmins(){
     var body=$("adm-body");if(!body)return;
-    var list=admins.length?'<div class="row-list">'+admins.map(function(a){
+    var list=admins.length?'<div class="adm-admins">'+admins.map(function(a){
       var nm=a.name||a.email||"관리자",init=(String(nm).charAt(0)||"?").toUpperCase();
-      return '<div class="urow"><span class="uav">'+esc(init)+'</span><div class="uinfo"><div class="uname">'+esc(nm)+'</div><div class="uemail">'+esc(a.email||"")+'</div></div><div class="uact"><button class="ubtn danger" type="button" data-rv="'+esc(a.user_id)+'">해제</button></div></div>';
-    }).join("")+'</div>':'<p class="muted-s">아직 등록된 관리자가 없어요.</p>';
-    body.innerHTML='<div class="adm-add"><input id="adm-email" type="email" placeholder="추가할 관리자 이메일 (예: name@dotincorp.com)" autocomplete="off"><button id="adm-addbtn" type="button">관리자 추가</button></div><div class="msg" id="adm-msg"></div>'+list;
+      return '<div class="adm-arow"><span class="adm-aav">'+esc(init)+'</span><span class="adm-an">'+esc(nm)+'</span><span class="adm-ae">'+esc(a.email||"")+'</span><button class="adm-rm-btn" type="button" data-rv="'+esc(a.user_id)+'">'+svp("trash")+'해제</button></div>';
+    }).join("")+'</div>':'<div class="adm-empty">아직 등록된 관리자가 없어요.</div>';
+    body.innerHTML='<p class="adm-desc">관리자를 추가하거나 해제할 수 있어요. 추가하려면 그 사람이 먼저 한 번 로그인한 적이 있어야 해요.</p><div class="adm-msg" id="adm-msg" style="display:none"></div><div class="adm-addrow"><input id="adm-email" type="email" placeholder="추가할 관리자 이메일 (예: name@dotincorp.com)" autocomplete="off"><button class="btn btn-accent" id="adm-addbtn" type="button">관리자 추가</button></div>'+list;
     $("adm-addbtn").onclick=addAdmin;
     $("adm-email").addEventListener("keydown",function(e){if(e.key==="Enter")addAdmin();});
     Array.prototype.forEach.call(body.querySelectorAll("[data-rv]"),function(b){b.onclick=function(){revokeAdmin(b.getAttribute("data-rv"));};});
@@ -542,20 +686,26 @@
     var chips=[["all","전체"],["pro","Pro"],["free","일반"]].map(function(f){
       return '<button class="fchip" type="button" data-flt="'+f[0]+'" aria-selected="'+(memFlt===f[0]?"true":"false")+'">'+f[1]+'</button>';
     }).join("");
-    var bar='<div class="mem-bar"><input class="mem-search" id="mem-q" type="text" placeholder="이름·이메일 검색 후 Enter" value="'+esc(memQ)+'">'+chips+'</div><div class="msg" id="mem-msg"></div>';
-    var list;
-    if(sqlErr){list='<p class="msg err" style="display:block">회원 목록을 불러오지 못했어요. 회원목록 SQL(admin_list_users)이 적용됐는지 확인해 주세요.</p>';}
-    else if(!members.length){list='<p class="muted-s">조건에 맞는 회원이 없어요.</p>';}
+    var bar='<div class="mem-bar"><div class="mem-bar-l">'+chips+'<span class="mem-count">총 '+nfmt(memTotal)+'명</span></div></div>'+
+            '<div class="mem-search"><input id="mem-q" type="text" placeholder="이름·이메일 검색 후 Enter" value="'+esc(memQ)+'"></div>'+
+            '<div class="adm-msg" id="mem-msg" style="display:none"></div>';
+    var inner;
+    if(sqlErr){inner='<div class="mem-empty">회원 목록을 불러오지 못했어요. 회원목록 SQL(admin_list_users)이 적용됐는지 확인해 주세요.</div>';}
+    else if(!members.length){inner='<div class="mem-empty">조건에 맞는 회원이 없어요.</div>';}
     else{
-      list='<div class="row-list">'+members.map(function(u){
+      var head='<div class="mem-head"><span>회원</span><span>등급</span><span>가입일</span><span>관리</span></div>';
+      var rowsH=members.map(function(u){
         var nm=u.name||u.email||"사용자",init=(String(nm).charAt(0)||"?").toUpperCase();
-        var badge=u.pro?'<span class="pro-b">Pro</span>':'<span class="free-b">일반</span>';
-        var sub=esc(u.email||"")+(u.created_at?' · 가입 '+esc(fmtDay(u.created_at)):'');
-        return '<div class="urow"><span class="uav">'+esc(init)+'</span><div class="uinfo"><div class="uname">'+esc(nm)+' '+badge+'</div><div class="uemail">'+sub+'</div></div><div class="uact"><button class="ubtn pro" type="button" data-pro="'+esc(u.user_id)+'">'+(u.pro?"Pro 해제":"Pro 부여")+'</button><button class="ubtn danger" type="button" data-del="'+esc(u.user_id)+'">탈퇴</button></div></div>';
-      }).join("")+'</div>';
-      if(members.length<memTotal){list+='<button class="mem-more" id="mem-more" type="button">더 보기 ('+members.length+'/'+memTotal+')</button>';}
+        var badge=u.pro?'<span class="mem-badge pro">Pro</span>':'<span class="mem-badge free">일반</span>';
+        return '<div class="mem-row"><div class="mem-user"><span class="mem-av" style="background:linear-gradient(135deg,#16150F,#FF4F00)">'+esc(init)+'</span><div class="mem-u-meta"><div class="mem-name">'+esc(nm)+'</div><div class="mem-email">'+esc(u.email||"")+'</div></div></div>'+
+          '<div>'+badge+'</div>'+
+          '<div class="mem-date">'+(u.created_at?esc(fmtDay(u.created_at)):"-")+'</div>'+
+          '<div class="mem-acts"><button class="adm-pro-btn'+(u.pro?" on":"")+'" type="button" data-pro="'+esc(u.user_id)+'">'+(u.pro?"Pro 해제":"Pro 부여")+'</button><button class="mem-btn del" type="button" data-del="'+esc(u.user_id)+'">탈퇴</button></div></div>';
+      }).join("");
+      inner='<div class="mem-table">'+head+rowsH+'</div>';
+      if(members.length<memTotal){inner+='<div class="mem-pager"><button class="mem-btn" id="mem-more" type="button">더 보기</button><span class="mem-pager-info">'+members.length+' / '+memTotal+'</span></div>';}
     }
-    body.innerHTML=bar+list;
+    body.innerHTML=bar+inner;
     $("mem-q").addEventListener("keydown",function(e){if(e.key==="Enter"){memQ=$("mem-q").value.trim();loadMembers(true);}});
     Array.prototype.forEach.call(body.querySelectorAll("[data-flt]"),function(b){b.onclick=function(){memFlt=b.getAttribute("data-flt");loadMembers(true);};});
     var mm=$("mem-more");if(mm)mm.onclick=function(){memOff=members.length;loadMembers(false);};
