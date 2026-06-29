@@ -1567,6 +1567,7 @@ react/cjs/react-jsx-runtime.production.js:
 .tw-card:focus-visible{outline:none;border-color:#ff4f00;box-shadow:0 0 0 2px rgba(255,79,0,.3)}
 .tw-chip{width:38px;height:38px;border-radius:11px;background:#ffe9e0;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .tw-chip svg{width:20px;height:20px;fill:none;stroke:#ff4f00;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tw-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .tw-tt{font-size:14.5px;font-weight:500;color:#16150f;line-height:1.3}
 .tw-ds{font-size:12.5px;color:#888780;line-height:1.3;margin-top:1px}
 .tw-chev{margin-left:auto;display:flex;color:#c9c4ba;flex:0 0 auto}
@@ -1620,7 +1621,7 @@ react/cjs/react-jsx-runtime.production.js:
   function bot(t){var w=document.createElement('div');w.className='tw-brow';w.innerHTML='<span class="tw-bav">'+sv('chat')+'</span>';var b=document.createElement('div');b.className='tw-bot';b.textContent=t;w.appendChild(b);log.appendChild(w);log.scrollTop=log.scrollHeight;}
   function usr(t){var b=document.createElement('div');b.className='tw-user';b.textContent=t;log.appendChild(b);log.scrollTop=log.scrollHeight;}
   function clr(){inArea.innerHTML='';}
-  function cards(list){clr();list.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='tw-card';b.innerHTML='<span class="tw-chip">'+sv(o.icon)+'</span><span><span class="tw-tt">'+o.label+'</span>'+(o.desc?'<span class="tw-ds">'+o.desc+'</span>':'')+'</span><span class="tw-chev">'+sv('chev')+'</span>';b.onclick=function(){usr(o.label);o.go();};inArea.appendChild(b);});var f=inArea.querySelector('button');if(f)f.focus();}
+  function cards(list){clr();list.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='tw-card';b.innerHTML='<span class="tw-chip">'+sv(o.icon)+'</span><span class="tw-txt"><span class="tw-tt">'+o.label+'</span>'+(o.desc?'<span class="tw-ds">'+o.desc+'</span>':'')+'</span><span class="tw-chev">'+sv('chev')+'</span>';b.onclick=function(){usr(o.label);o.go();};inArea.appendChild(b);});var f=inArea.querySelector('button');if(f)f.focus();}
 
   var BACK={label:'처음으로',icon:'back',desc:'메뉴로 돌아가기',go:start};
   function DIRECT(c){return {label:'직접 메시지 남기기',icon:'mail',desc:'받은함으로 바로 전달',go:function(){ctx=c||'직접 문의';direct();}};}
