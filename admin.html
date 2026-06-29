@@ -68,9 +68,9 @@
   .tab{display:inline-flex;align-items:center;gap:7px;background:#fff;color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:600;transition:background .14s,color .14s,border-color .14s,box-shadow .14s}
   .tab:hover{background:var(--accent-tint);border-color:var(--accent-line);color:var(--accent)}
   .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(255,79,0,.28)}
-  .tab.soon{color:var(--ink-mute)}
-  .tab.soon svg{opacity:.55}
-  .tab.soon:hover{background:#f6f4f0;border-color:var(--line);color:var(--ink-soft)}
+  .tab.soon:not([aria-selected="true"]){color:var(--ink-mute)}
+  .tab.soon:not([aria-selected="true"]) svg{opacity:.55}
+  .tab.soon:not([aria-selected="true"]):hover{background:#f6f4f0;border-color:var(--line);color:var(--ink-soft)}
   .tab .tcount{background:var(--accent-tint);color:var(--accent);border-radius:999px;padding:0 7px;font-size:11px;font-weight:700;min-width:18px;text-align:center}
   .tab[aria-selected="true"] .tcount{background:rgba(255,255,255,.28);color:#fff}
   .tab .soonbadge{font-size:10px;background:#f1efe8;color:var(--ink-faint);border-radius:5px;padding:1px 6px;font-weight:600}
