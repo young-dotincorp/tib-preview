@@ -1688,9 +1688,11 @@ react/cjs/react-jsx-runtime.production.js:
   .twr-hd-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .twr-hd-name{font-size:16px;font-weight:700;color:#1F1D1A;line-height:1.2}
   .twr-hd-sub{font-size:12px;color:#9A9384;margin-top:2px}
-  .twr-body{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:10px;background:#FBF8F2;min-height:120px;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.16) transparent}
-  .twr-body::-webkit-scrollbar{width:8px}
-  .twr-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:8px;border:2px solid transparent;background-clip:content-box}
+  .twr-body{flex:1;overflow-y:auto;padding:16px 24px;display:flex;flex-direction:column;gap:10px;background:#FBF8F2;min-height:120px;scrollbar-width:thin;scrollbar-color:rgba(124,116,100,.32) transparent}
+  .twr-body::-webkit-scrollbar{width:6px}
+  .twr-body::-webkit-scrollbar-track{background:transparent;margin:6px 0}
+  .twr-body::-webkit-scrollbar-thumb{background:rgba(124,116,100,.3);border-radius:999px}
+  .twr-body::-webkit-scrollbar-thumb:hover{background:rgba(124,116,100,.5)}
   .twr-row{display:flex}
   .twr-row.recv{justify-content:flex-start}
   .twr-row.sent{justify-content:flex-end}
@@ -1700,7 +1702,7 @@ react/cjs/react-jsx-runtime.production.js:
   .twr-b-text{white-space:pre-wrap;word-break:break-word}
   .twr-b-meta{margin-top:4px;font-size:12px;opacity:.85}
   .twr-b-time{margin-top:5px;font-size:11px;opacity:.6}
-  .twr-note{font-size:12px;color:#1E7E48;background:#E7F7EF;border:1px solid #BFE6CF;border-radius:10px;padding:8px 12px;margin:0 24px 14px;display:none}
+  .twr-note{font-size:12px;color:#1E7E48;background:#E7F7EF;border:1px solid #BFE6CF;border-radius:10px;padding:8px 12px;display:none}
   .twr-note.err{color:#C0392B;background:#FDECEA;border-color:#F7C9C2}
   .twr-note.show{display:block}
   .twr-foot{display:flex;gap:8px;align-items:flex-end;padding:16px 24px 24px;border-top:1px solid #ECE6DC;background:#fff}
@@ -1755,8 +1757,8 @@ react/cjs/react-jsx-runtime.production.js:
         '<div class="twr-body">'+
           bubble("recv", inq.message||"(\uB0B4\uC6A9 \uC5C6\uC74C)", "twr-b-meta", inq.email||"")+
           existing+
+          '<div class="twr-note" role="status"></div>'+
         '</div>'+
-        '<div class="twr-note" role="status"></div>'+
         '<div class="twr-foot">'+
           '<textarea class="twr-input" rows="1" placeholder="\uB2F5\uBCC0\uC744 \uC785\uB825\uD558\uC138\uC694\u2026 (Ctrl/\u2318+Enter\uB85C \uC804\uC1A1)"></textarea>'+
           '<button class="twr-send" type="button">'+svg(ICON_MSG)+'\uBCF4\uB0B4\uAE30</button>'+
@@ -1785,9 +1787,9 @@ react/cjs/react-jsx-runtime.production.js:
       sb.rpc("admin_reply_inquiry",{p_ticket:inq.ticket,p_reply:text}).then(function(res){
         if(res&&res.error){ sending=false; sendBtn.disabled=false; input.disabled=false; showNote("\uBCF4\uB0B4\uC9C0 \uBABB\uD588\uC5B4\uC694. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.",true); return; }
         body.insertAdjacentHTML("beforeend", bubble("sent", text, "twr-b-time", "\uBC29\uBB38\uC790 \uCC57\uBD07\uC5D0 \uC804\uB2EC\uB428"));
-        body.scrollTop=body.scrollHeight;
         input.value=""; autoGrow();
         showNote("\uB2F5\uBCC0\uC744 \uBCF4\uB0C8\uC5B4\uC694. \uBC29\uBB38\uC790\uAC00 \uCC57\uBD07 '\uB0B4\uAC00 \uBCF4\uB0B8 \uBB38\uC758'\uC5D0\uC11C \uD655\uC778\uD574\uC694.",false);
+        body.scrollTop=body.scrollHeight;
         input.disabled=false; sendBtn.disabled=false; sending=false;
         try{ if(typeof onDone==="function") onDone(); }catch(e){}
       }).catch(function(){ sending=false; sendBtn.disabled=false; input.disabled=false; showNote("\uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC5B4\uC694.",true); });
