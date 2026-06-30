@@ -1837,7 +1837,9 @@ react/cjs/react-jsx-runtime.production.js:
   function svg(i){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+i+'</svg>';}
   function esc(s){var d=document.createElement("div");d.textContent=(s==null?"":String(s));return d.innerHTML;}
   function SB(){return window.__TIB_SB__||{};}
-  function rpc(fn,body,cb){try{var sb=SB();fetch(sb.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':sb.key,'Authorization':'Bearer '+sb.key,'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.ok?r.json():null;}).then(function(j){cb(j);}).catch(function(){cb(null);});}catch(e){cb(null);}}
+  var SBC=null;try{var _sb0=SB();if(window.supabase&&window.supabase.createClient&&_sb0.url){SBC=window.supabase.createClient(_sb0.url,_sb0.key,{auth:{persistSession:true,autoRefreshToken:false,detectSessionInUrl:false}});}}catch(e){}
+  function tok(cb){if(!SBC){cb(null);return;}try{SBC.auth.getSession().then(function(r){var s=r&&r.data?r.data.session:null;cb(s?s.access_token:null);}).catch(function(){cb(null);});}catch(e){cb(null);}}
+  function rpc(fn,body,cb){try{var sb=SB();tok(function(t){fetch(sb.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':sb.key,'Authorization':'Bearer '+(t||sb.key),'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.ok?r.json():null;}).then(function(j){cb(j);}).catch(function(){cb(null);});});}catch(e){cb(null);}}
   function bubble(side,text){return '<div class="twr-row '+side+'"><div class="twr-bubble"><div class="twr-b-text">'+esc(text)+'</div></div></div>';}
   var cur=null;
   function close(){if(!cur)return;if(cur.poll){clearInterval(cur.poll);cur.poll=null;}var ov=cur.ov;cur=null;ov.classList.remove("in");document.removeEventListener("keydown",onKey,true);setTimeout(function(){if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);},200);}
