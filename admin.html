@@ -1620,19 +1620,28 @@ react/cjs/react-jsx-runtime.production.js:
   var KEY=SB.key||"sb_publishable_IThvI0wJJex8U4UiATHFyw_B_2jIphy";
   var ic={chat:'<path d="M8 9h8" /> <path d="M8 13h6" /> <path d="M9 18h-3a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-3l-3 3l-3 -3" />',game:'<path d="M2 6m0 2a2 2 0 0 1 2 -2h16a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-16a2 2 0 0 1 -2 -2z" /> <path d="M6 12h4" /> <path d="M8 10v4" /> <path d="M15 11l0 .01" /> <path d="M18 13l0 .01" />',file:'<path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 9l1 0" /><path d="M9 13l6 0" /><path d="M9 17l6 0" />',alert:'<path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" /><path d="M12 16h.01" />',mail:'<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" />',back:'<path d="M9 14l-4 -4l4 -4" /><path d="M5 10h11a4 4 0 1 1 0 8h-1" />',bt:'<path d="M7 8l10 8l-5 4l0 -16l5 4l-10 8" />',chev:'<path d="M9 6l6 6l-6 6" />',inbox:'<path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M4 13h3l3 3h4l3 -3h3" />'};
   function sv(n){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+ic[n]+'</svg>';}
-  var panel=document.getElementById('tw-cb-panel'),launcher=document.getElementById('tw-cb-launcher'),closeBtn=document.getElementById('tw-cb-close'),log=document.getElementById('tw-cb-log'),inArea=document.getElementById('tw-cb-in');var resetBtn=document.getElementById('tw-cb-reset');if(resetBtn)resetBtn.onclick=function(){start();};var txtEl=document.getElementById('tw-cb-text'),goEl=document.getElementById('tw-cb-go');function barSend(){if(!txtEl)return;var v=txtEl.value;txtEl.value='';sendMessage(v);if(txtEl)txtEl.focus();}if(goEl)goEl.onclick=barSend;if(txtEl)txtEl.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();barSend();}});
+  var panel=document.getElementById('tw-cb-panel'),launcher=document.getElementById('tw-cb-launcher'),closeBtn=document.getElementById('tw-cb-close'),log=document.getElementById('tw-cb-log'),inArea=document.getElementById('tw-cb-in');var resetBtn=document.getElementById('tw-cb-reset');if(resetBtn)resetBtn.onclick=function(){clearConv();_shown={};stopPollConv();clearPending();start();};var txtEl=document.getElementById('tw-cb-text'),goEl=document.getElementById('tw-cb-go');function barSend(){if(!txtEl)return;var v=txtEl.value;txtEl.value='';sendMessage(v);if(txtEl)txtEl.focus();}if(goEl)goEl.onclick=barSend;if(txtEl)txtEl.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();barSend();}});
 
   function bot(t){var w=document.createElement('div');w.className='tw-brow';w.innerHTML='<span class="tw-bav">'+sv('chat')+'</span>';var b=document.createElement('div');b.className='tw-bot';b.textContent=t;w.appendChild(b);log.appendChild(w);log.scrollTop=log.scrollHeight;}
   function usr(t){var b=document.createElement('div');b.className='tw-user';b.textContent=t;log.appendChild(b);log.scrollTop=log.scrollHeight;}
-  var _polls={},_await={};
+  var _polls={},_await={};var _shown={},_convPoll=null,_pendEl=null;
   function adminMsg(t){var w=document.createElement('div');w.className='tw-arow';var av=document.createElement('span');av.className='tw-aav';av.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6 -6h4a6 6 0 0 1 6 6v1"/></svg>';var box=document.createElement('div');box.style.cssText='max-width:84%';var lab=document.createElement('div');lab.className='tw-alabel';lab.textContent='담당자 답변';var b=document.createElement('div');b.className='tw-admin';b.textContent=t;box.appendChild(lab);box.appendChild(b);w.appendChild(av);w.appendChild(box);log.appendChild(w);log.scrollTop=log.scrollHeight;}
   function pendingMsg(tk){var w=document.createElement('div');w.className='tw-pending';w.setAttribute('data-tw-pending',tk);w.innerHTML='담당자가 확인하고 있어요<span class="tw-dots"><i></i><i></i><i></i></span>';log.appendChild(w);log.scrollTop=log.scrollHeight;return w;}
-  function stopPoll(tk){if(_polls[tk]){clearInterval(_polls[tk]);delete _polls[tk];}}
-  function checkTicket(tk){lookupTicket(tk,function(rec){if(rec&&rec.reply){var pe=log.querySelector('[data-tw-pending="'+tk+'"]');if(pe&&pe.parentNode)pe.parentNode.removeChild(pe);adminMsg(rec.reply);delete _await[tk];stopPoll(tk);}});}
-  function startPoll(tk){_await[tk]=1;stopPoll(tk);setTimeout(function(){checkTicket(tk);},2500);_polls[tk]=setInterval(function(){checkTicket(tk);},6000);}
-  function pausePolls(){for(var k in _polls){clearInterval(_polls[k]);}_polls={};}
-  function resumePolls(){for(var k in _await){startPoll(k);}}
-  function sendMessage(v){v=(v||'').trim();if(!v)return;var tk=ticket();usr(v);submit(ctx,'',v,tk,function(ok){if(ok){lsAdd({ticket:tk,type:ctx,msg:v,at:new Date().toLocaleString('ko-KR')});pendingMsg(tk);startPoll(tk);}else{bot('전송에 실패했어요. 잠시 후 다시 시도해 주세요.');}});}
+  function getConv(){try{return localStorage.getItem('tw_cb_conv')||'';}catch(e){return '';}}
+  function setConv(c){try{localStorage.setItem('tw_cb_conv',c);}catch(e){}}
+  function clearConv(){try{localStorage.removeItem('tw_cb_conv');}catch(e){}}
+  function chatList(conv,cb){try{fetch(URL+'/rest/v1/rpc/chat_list',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_conversation:conv})}).then(function(r){return r.ok?r.json():null;}).then(function(j){cb(j||[]);}).catch(function(){cb([]);});}catch(e){cb([]);}}
+  function chatUserPost(conv,b,cb){try{fetch(URL+'/rest/v1/rpc/chat_user_post',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_conversation:conv,p_body:b})}).then(function(r){return r.ok?r.json():null;}).then(function(row){cb(row||null);}).catch(function(){cb(null);});}catch(e){cb(null);}}
+  function clearPending(){if(_pendEl&&_pendEl.parentNode)_pendEl.parentNode.removeChild(_pendEl);_pendEl=null;}
+  function ensurePending(){if(!_pendEl)_pendEl=pendingMsg('live');}
+  function renderMsgs(list){(list||[]).forEach(function(m){if(!m||_shown[m.id])return;_shown[m.id]=1;if(m.sender==='admin'){clearPending();adminMsg(m.body);}else{usr(m.body);}});}
+  function pollConvOnce(conv){if(conv)chatList(conv,function(list){renderMsgs(list);});}
+  function stopPollConv(){if(_convPoll){clearInterval(_convPoll);_convPoll=null;}}
+  function startPollConv(conv){if(!conv)return;stopPollConv();_convPoll=setInterval(function(){pollConvOnce(conv);},4000);}
+  function pausePolls(){stopPollConv();}
+  function resumePolls(){var c=getConv();if(c){pollConvOnce(c);startPollConv(c);}}
+  function loadHistory(conv){var d=document.createElement('div');d.style.cssText='text-align:center;font-size:11px;color:#9A9384;padding:2px 0';d.textContent='지난 대화예요';log.appendChild(d);chatList(conv,function(list){renderMsgs(list);var last=list&&list.length?list[list.length-1]:null;if(last&&last.sender==='user')ensurePending();log.scrollTop=log.scrollHeight;});}
+  function sendMessage(v){v=(v||'').trim();if(!v)return;var conv=getConv();if(!conv){conv=ticket();setConv(conv);usr(v);submit(ctx,'',v,conv,function(ok){if(!ok){clearConv();bot('전송에 실패했어요. 잠시 후 다시 시도해 주세요.');return;}chatUserPost(conv,v,function(row){if(!(row&&row.id)){bot('전송에 실패했어요. 다시 시도해 주세요.');return;}_shown[row.id]=1;ensurePending();startPollConv(conv);});});}else{usr(v);chatUserPost(conv,v,function(row){if(!(row&&row.id)){bot('전송에 실패했어요. 다시 시도해 주세요.');return;}_shown[row.id]=1;ensurePending();startPollConv(conv);});}}
   function clr(){inArea.innerHTML='';}
   function cards(list){clr();var wrap=document.createElement('div');wrap.className='tw-pills';list.forEach(function(o){var b=document.createElement('button');b.type='button';b.className='tw-pill';b.textContent=o.label;b.onclick=function(){usr(o.label);if(wrap.parentNode)wrap.parentNode.removeChild(wrap);o.go();};wrap.appendChild(b);});log.appendChild(wrap);log.scrollTop=log.scrollHeight;var f=wrap.querySelector('button');if(f)f.focus();}
 
@@ -1676,7 +1685,7 @@ react/cjs/react-jsx-runtime.production.js:
     }catch(e){cb(false);}
   }
 
-  function open(){panel.classList.add('tw-open');launcher.setAttribute('aria-expanded','true');launcher.style.display='none';if(!log.children.length)start();resumePolls();closeBtn.focus();}
+  function open(){panel.classList.add('tw-open');launcher.setAttribute('aria-expanded','true');launcher.style.display='none';if(!log.children.length){var c=getConv();if(c){loadHistory(c);}else{start();}}resumePolls();closeBtn.focus();}
   function close(){pausePolls();panel.classList.remove('tw-open');launcher.setAttribute('aria-expanded','false');launcher.style.display='flex';launcher.focus();}
   launcher.addEventListener('click',open);
   closeBtn.addEventListener('click',close);
@@ -1742,6 +1751,7 @@ react/cjs/react-jsx-runtime.production.js:
   var cur=null;
   function close(){
     if(!cur)return;
+    if(cur.poll){clearInterval(cur.poll);cur.poll=null;}
     var ov=cur.ov; cur=null;
     ov.classList.remove("in");
     document.removeEventListener("keydown",onKey,true);
@@ -1765,10 +1775,7 @@ react/cjs/react-jsx-runtime.production.js:
       '<div class="twr-card">'+
         '<div class="twr-hd"><span class="twr-hd-ic">'+svg(ICON_MSG)+'</span>'+
           '<div><div class="twr-hd-name">'+esc(name)+'</div><div class="twr-hd-sub">'+esc(sub)+(inq.email?' \u00B7 '+esc(inq.email):'')+'</div></div></div>'+
-        '<div class="twr-body">'+
-          bubble("recv", inq.message||"(\uB0B4\uC6A9 \uC5C6\uC74C)", "twr-b-meta", inq.email||"")+
-          existing+
-          '<div class="twr-note" role="status"></div>'+
+        '<div class="twr-body">'+'<div class="twr-note" role="status"></div>'+
         '</div>'+
         '<div class="twr-foot">'+
           '<textarea class="twr-input" rows="1" placeholder="\uB2F5\uBCC0\uC744 \uC785\uB825\uD558\uC138\uC694\u2026 (Ctrl/\u2318+Enter\uB85C \uC804\uC1A1)"></textarea>'+
@@ -1780,7 +1787,7 @@ react/cjs/react-jsx-runtime.production.js:
     var body=ov.querySelector(".twr-body");
     var input=ov.querySelector(".twr-input");
     var sendBtn=ov.querySelector(".twr-send");
-    var note=ov.querySelector(".twr-note");
+    var note=ov.querySelector(".twr-note");var seen={};function addBubble(side,text,mc,mt){note.insertAdjacentHTML("beforebegin",bubble(side,text,mc,mt));body.scrollTop=body.scrollHeight;}function renderThread(list){(list||[]).forEach(function(m){if(!m||seen[m.id])return;seen[m.id]=1;if(m.sender==="admin"){addBubble("sent",m.body,"twr-b-time","방문자 챗봇에 전달됨");}else{addBubble("recv",m.body,"twr-b-meta","");}});}function fallback(){if(inq.message)addBubble("recv",inq.message,"twr-b-meta",inq.email||"");if(inq.reply)addBubble("sent",inq.reply,"twr-b-time","이미 보낸 답변");}if(inq.ticket&&sb&&sb.rpc){sb.rpc("chat_list",{p_conversation:inq.ticket}).then(function(res){var list=(res&&res.data)||[];if(list.length){renderThread(list);}else{fallback();}}).catch(function(){fallback();});if(cur)cur.poll=setInterval(function(){if(!sb||!sb.rpc)return;sb.rpc("chat_list",{p_conversation:inq.ticket}).then(function(res){renderThread((res&&res.data)||[]);}).catch(function(){});},4000);}else{fallback();}
     function showNote(msg,isErr){ note.textContent=msg; note.className="twr-note show"+(isErr?" err":""); }
     function autoGrow(){ input.style.height="auto"; input.style.height=Math.min(120,input.scrollHeight)+"px"; }
     input.addEventListener("input",autoGrow);
@@ -1795,11 +1802,11 @@ react/cjs/react-jsx-runtime.production.js:
       if(!inq.ticket){ showNote("\uC774 \uBB38\uC758\uB294 \uCC57\uBD07 \uC811\uC218\uBC88\uD638\uAC00 \uC5C6\uC5B4 \uCC57\uBD07 \uB2F5\uBCC0\uC744 \uBCF4\uB0BC \uC218 \uC5C6\uC5B4\uC694.",true); return; }
       if(!sb||!sb.rpc){ showNote("\uC5F0\uACB0\uC5D0 \uBB38\uC81C\uAC00 \uC788\uC5B4\uC694. \uC0C8\uB85C\uACE0\uCE68 \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.",true); return; }
       sending=true; sendBtn.disabled=true; input.disabled=true; note.className="twr-note";
-      sb.rpc("admin_reply_inquiry",{p_ticket:inq.ticket,p_reply:text}).then(function(res){
+      sb.rpc("admin_chat_post",{p_conversation:inq.ticket,p_body:text}).then(function(res){
         if(res&&res.error){ sending=false; sendBtn.disabled=false; input.disabled=false; showNote("\uBCF4\uB0B4\uC9C0 \uBABB\uD588\uC5B4\uC694. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.",true); return; }
-        body.insertAdjacentHTML("beforeend", bubble("sent", text, "twr-b-time", "\uBC29\uBB38\uC790 \uCC57\uBD07\uC5D0 \uC804\uB2EC\uB428"));
+        if(res&&res.data&&res.data.id)seen[res.data.id]=1;addBubble("sent", text, "twr-b-time", "방문자 챗봇에 전달됨");
         input.value=""; autoGrow();
-        showNote("\uB2F5\uBCC0\uC744 \uBCF4\uB0C8\uC5B4\uC694. \uBC29\uBB38\uC790\uAC00 \uCC57\uBD07 '\uB0B4\uAC00 \uBCF4\uB0B8 \uBB38\uC758'\uC5D0\uC11C \uD655\uC778\uD574\uC694.",false);
+        showNote("답변을 보냈어요. 방문자 대화창에 바로 표시돼요.",false);
         body.scrollTop=body.scrollHeight;
         input.disabled=false; sendBtn.disabled=false; sending=false;
         try{ if(typeof onDone==="function") onDone(); }catch(e){}
