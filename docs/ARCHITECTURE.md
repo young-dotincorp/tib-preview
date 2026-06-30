@@ -33,10 +33,14 @@ tactile-world-repo/
 │  └─ admin-bundle.html       admin 용 — 챗봇 자리에 마커만 있음
 │
 ├─ src/                       우리가 만든 소스 (여기만 고침)
-│  └─ chatbot/
-│     ├─ chatbot.css          챗봇 스타일
-│     ├─ chatbot.html         챗봇 마크업 (런처 버튼 + 패널)
-│     └─ chatbot.js           챗봇 동작 (로그인 게이트 + 토큰 인증 포함)
+│  ├─ chatbot/                오른쪽 아래 상담 챗봇
+│  │  ├─ chatbot.css          챗봇 스타일
+│  │  ├─ chatbot.html         챗봇 마크업 (런처 버튼 + 패널)
+│  │  └─ chatbot.js           챗봇 동작 (로그인 게이트 + 토큰 인증 포함)
+│  └─ chat-modal/             답변 모달 + 실시간 채팅 모달
+│     ├─ chat-modal.css       공유 스타일 (.twr-)
+│     ├─ reply.js             답변 모달 (__TW_REPLY__)
+│     └─ chat.js              실시간 채팅 모달 (__TW_CHAT__)
 │
 ├─ sql/                       DB 변경 이력 (순서대로, 재실행 안전)
 │  ├─ 001_chat_multiturn.sql
@@ -62,6 +66,7 @@ tactile-world-repo/
 
 1. `src/chatbot/` 안의 파일(주로 `chatbot.js`)만 고칩니다. 4.96MB 번들은 건드리지 않습니다.
 2. `python3 build/combine.py` 를 돌리면 `index.html` · `admin.html`이 새로 만들어집니다.
+   (combine은 `vendor/` 번들의 마커 두 곳에 `src/chatbot`과 `src/chat-modal`을 끼워 넣습니다.)
    - 비개발자는 직접 돌릴 필요 없어요. 세션에서 Claude가 합쳐 배포본을 만들어 드립니다.
 3. 만들어진 `index.html`(필요 시 `admin.html`)을 GitHub `tib-preview`에 업로드 → Vercel 자동 배포.
 
@@ -97,12 +102,11 @@ tactile-world-repo/
 
 ## 5. vendor 안에 아직 남아 있는 것 (다음에 정리)
 
-지금은 챗봇만 소스로 떼어냈습니다. 번들 안에는 우리가 만든 다른 vanilla 부품이
-더 있고, 같은 방식으로 차차 분리할 수 있습니다.
+지금은 챗봇과 채팅/답변 모달을 소스로 떼어냈습니다. 번들 안에는 아직
+React 앱 본체가 남아 있고, 원본 확보 시 정식 빌드로 전환할 수 있습니다.
 
-- `__TW_CHAT__` — 실시간 채팅 모달 (마이페이지에서 상담 이어보기)  ← 다음 차례
-- 그 밖의 모달/위젯 (답변 모달 등)
-- React 앱 본체 — 원본 `TIB.jsx`가 확보되면 정식 빌드 파이프라인으로 전환
+- React 앱 본체 — 원본 `TIB.jsx`가 확보되면 정식 빌드 파이프라인으로 전환  ← 다음 큰 과제
+- (필요 시) 그 밖의 작은 위젯이 더 있으면 같은 방식으로 분리
 
 원본 `TIB.jsx`가 오면: `vendor/`의 번들만 새 빌드로 교체하면 됩니다.
 우리가 만든 `src/` 소스는 그대로 살아 있어, 버리는 것이 하나도 없습니다.
@@ -123,5 +127,8 @@ tactile-world-repo/
 - 1단계 (보안 점검): 코드 안전성 확인 + 문의 노출 구멍 차단(004).
 - 2단계 (DB 잠금): 리뷰·챗봇 로그인 필수, 연락처는 안전하게 열어둠(005·006).
 - 첫 구조화: 챗봇을 번들에서 무손실 분리 → `src/chatbot/` 소스화, `combine.py` 빌드 도입.
+- 두 번째 구조화: 답변·실시간 채팅 모달을 무손실 분리 → `src/chat-modal/` 소스화.
+- 채팅 모달 인증 복구: DB 잠금(006) 이후 채팅 모달(`chat.js`)도 로그인 토큰으로 호출하도록 수정.
+- 실시간 준비: `chat_messages` 소유자 범위 SELECT 정책 + Realtime publication 등록(007).
 
-*다음 후보: `__TW_CHAT__` 모달 분리, 실시간 push(폴링→Realtime), Dot Games TTS 통일 등.*
+*다음 후보: 채팅 실시간 구독(폴링→즉시 반영) JS 연결, Dot Games TTS 통일, 원본 `TIB.jsx` 확보 시 정식 빌드 전환 등.*
