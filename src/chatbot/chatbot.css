@@ -5,7 +5,7 @@
 #tw-cb-launcher:hover{background:#e84800}
 #tw-cb-launcher:focus-visible{outline:none;box-shadow:0 0 0 3px var(--paper,#fff),0 0 0 6px var(--accent,#ff4f00)}
 #tw-cb-launcher svg{width:28px;height:28px;fill:none;stroke:var(--paper,#fff);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-#tw-cb-panel{position:fixed;right:24px;bottom:94px;width:min(380px,calc(100vw - 32px));max-height:min(580px,calc(100vh - 130px));background:var(--paper,#fff);border:0.5px solid #e5e0d7;border-radius:20px;overflow:hidden;z-index:2147483000;box-shadow:0 14px 44px rgba(0,0,0,.22);display:none;flex-direction:column}
+#tw-cb-panel{position:fixed;right:24px;bottom:94px;width:min(384px,calc(100vw - 28px));height:min(600px,calc(100vh - 112px));background:var(--paper,#fff);border:0.5px solid #e5e0d7;border-radius:20px;overflow:hidden;z-index:2147483000;box-shadow:0 14px 44px rgba(0,0,0,.22);display:none;flex-direction:column}
 #tw-cb-panel.tw-open{display:flex}
 .tw-hd{display:flex;align-items:center;justify-content:space-between;background:var(--accent,#ff4f00);color:var(--paper,#fff);padding:16px 18px;flex:0 0 auto}
 .tw-hd-l{display:flex;align-items:center;gap:11px}
@@ -49,3 +49,5 @@
 .tw-ghost:hover{background:#f1efe8}
 .tw-ft{border-top:1px solid #efe9e0;padding:10px 16px;color:#a8a39a;font-size:12px;display:flex;justify-content:center;gap:16px;background:var(--paper,#fff);flex:0 0 auto}
 .tw-ft svg{width:15px;height:15px;fill:none;stroke:#a8a39a;stroke-width:1.8;vertical-align:-3px;margin-right:3px}
+
+@media (max-width:440px){#tw-cb-panel{right:12px;left:12px;width:auto;height:calc(100vh - 120px)}}
