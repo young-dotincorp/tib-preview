@@ -1631,7 +1631,7 @@ react/cjs/react-jsx-runtime.production.js:
 
   function bot(t){var w=document.createElement('div');w.className='tw-brow';w.innerHTML='<span class="tw-bav">'+sv('chat')+'</span>';var b=document.createElement('div');b.className='tw-bot';b.textContent=t;w.appendChild(b);log.appendChild(w);log.scrollTop=log.scrollHeight;}
   function usr(t){var b=document.createElement('div');b.className='tw-user';b.textContent=t;log.appendChild(b);if(_pendEl)log.appendChild(_pendEl);log.scrollTop=log.scrollHeight;}
-  var _polls={},_await={};var _shown={},_convPoll=null,_pendEl=null;
+  var _polls={},_await={};var _shown={},_convPoll=null,_convCh=null,_pendEl=null;
   function adminMsg(t){var w=document.createElement('div');w.className='tw-arow';var av=document.createElement('span');av.className='tw-aav';av.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6 -6h4a6 6 0 0 1 6 6v1"/></svg>';var box=document.createElement('div');box.style.cssText='max-width:84%';var lab=document.createElement('div');lab.className='tw-alabel';lab.textContent='담당자 답변';var b=document.createElement('div');b.className='tw-admin';b.textContent=t;box.appendChild(lab);box.appendChild(b);w.appendChild(av);w.appendChild(box);log.appendChild(w);log.scrollTop=log.scrollHeight;}
   function pendingMsg(tk){var w=document.createElement('div');w.className='tw-pending';w.setAttribute('data-tw-pending',tk);w.innerHTML='담당자가 확인하고 있어요<span class="tw-dots"><i></i><i></i><i></i></span>';log.appendChild(w);log.scrollTop=log.scrollHeight;return w;}
   function getConv(){try{return localStorage.getItem('tw_cb_conv')||'';}catch(e){return '';}}
@@ -1648,8 +1648,8 @@ react/cjs/react-jsx-runtime.production.js:
   function ensurePending(){if(_pendEl){log.appendChild(_pendEl);}else{_pendEl=pendingMsg('live');}log.scrollTop=log.scrollHeight;}
   function renderMsgs(list){(list||[]).forEach(function(m){if(!m||_shown[m.id])return;_shown[m.id]=1;if(m.sender==='system'){if(_ended)return;clearPending();sysMsg(m.body);markEnded();}else if(m.sender==='admin'){clearPending();adminMsg(m.body);}else{usr(m.body);}});}
   function pollConvOnce(conv){if(conv)chatList(conv,function(list){renderMsgs(list);});}
-  function stopPollConv(){if(_convPoll){clearInterval(_convPoll);_convPoll=null;}}
-  function startPollConv(conv){if(!conv)return;stopPollConv();_convPoll=setInterval(function(){pollConvOnce(conv);},4000);}
+  function stopPollConv(){if(_convPoll){clearInterval(_convPoll);_convPoll=null;}if(_convCh){try{SBC.removeChannel(_convCh);}catch(e){}_convCh=null;}}
+  function startPollConv(conv){if(!conv)return;stopPollConv();_convPoll=setInterval(function(){pollConvOnce(conv);},4000);try{if(SBC&&SBC.channel){authState().then(function(){try{if(TOK&&SBC.realtime&&SBC.realtime.setAuth)SBC.realtime.setAuth(TOK);_convCh=SBC.channel("twcb-"+conv).on("postgres_changes",{event:"INSERT",schema:"public",table:"chat_messages",filter:"conversation=eq."+conv},function(){pollConvOnce(conv);}).subscribe();}catch(e){}});}}catch(e){}}
   function pausePolls(){stopPollConv();}
   function resumePolls(){var c=getConv();if(c){announceConv(c);pollConvOnce(c);startPollConv(c);}}
   function loadHistory(conv){var d=document.createElement('div');d.style.cssText='text-align:center;font-size:11px;color:#9A9384;padding:2px 0';d.textContent='지난 대화예요';log.appendChild(d);chatList(conv,function(list){renderMsgs(list);var last=list&&list.length?list[list.length-1]:null;if(last&&last.sender==='user')ensurePending();log.scrollTop=log.scrollHeight;updateEndbar();});}
@@ -1843,7 +1843,7 @@ react/cjs/react-jsx-runtime.production.js:
   function rpc(fn,body,cb){try{var sb=SB();tok(function(t){fetch(sb.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':sb.key,'Authorization':'Bearer '+(t||sb.key),'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.ok?r.json():null;}).then(function(j){cb(j);}).catch(function(){cb(null);});});}catch(e){cb(null);}}
   function bubble(side,text){return '<div class="twr-row '+side+'"><div class="twr-bubble"><div class="twr-b-text">'+esc(text)+'</div></div></div>';}
   var cur=null;
-  function close(){if(!cur)return;if(cur.poll){clearInterval(cur.poll);cur.poll=null;}var ov=cur.ov;cur=null;ov.classList.remove("in");document.removeEventListener("keydown",onKey,true);setTimeout(function(){if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);},200);}
+  function close(){if(!cur)return;if(cur.poll){clearInterval(cur.poll);cur.poll=null;}if(cur.ch){try{SBC.removeChannel(cur.ch);}catch(e){}cur.ch=null;}var ov=cur.ov;cur=null;ov.classList.remove("in");document.removeEventListener("keydown",onKey,true);setTimeout(function(){if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);},200);}
   function onKey(e){if(e.key==="Escape"){e.stopPropagation();close();}}
   window.__TW_CHAT__=function(conv,info){
     info=info||{};if(!conv)return;close();
@@ -1876,6 +1876,7 @@ react/cjs/react-jsx-runtime.production.js:
     document.addEventListener("keydown",onKey,true);
     load();
     cur.poll=setInterval(function(){rpc("chat_list",{p_conversation:conv},function(list){render(list);});},4000);
+    try{if(SBC&&SBC.channel){tok(function(t){try{if(t&&SBC.realtime&&SBC.realtime.setAuth)SBC.realtime.setAuth(t);cur.ch=SBC.channel("twc-"+conv).on("postgres_changes",{event:"INSERT",schema:"public",table:"chat_messages",filter:"conversation=eq."+conv},function(){rpc("chat_list",{p_conversation:conv},function(list){render(list);});}).subscribe();}catch(e){}});}}catch(e){}
     requestAnimationFrame(function(){ov.classList.add("in");setTimeout(function(){try{input.focus();}catch(e){}},120);});
   };
 })();
