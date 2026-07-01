@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
 <title>Tactile World · 관리자 허브</title>
 <style>
   :root{
@@ -11,8 +14,9 @@
     --ok:#0F6E56; --ok-bg:#E1F5EE; --warn-bg:#FAEEDA; --radius:14px;
   }
   *{box-sizing:border-box}
+  .ti{vertical-align:-.125em;line-height:1;}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Noto Sans KR","Malgun Gothic",system-ui,-apple-system,sans-serif;line-height:1.6;
+    font-family:'Noto Sans KR','Noto Sans',system-ui,-apple-system,sans-serif;line-height:1.6;
     -webkit-font-smoothing:antialiased;}
   .wrap{max-width:820px;margin:0 auto;padding:36px 18px 90px;}
 
@@ -90,10 +94,10 @@
 
   // 도구 목록 (준비되면 soon:false 로 바꾸고 href 연결)
   var TOOLS = [
-    { key:"review", t:"검수 대기열", d:"제출된 촉각 그래픽을 기준에 맞춰 검수하고 공개해요. 닷패드로 출력해 손끝으로 확인할 수 있어요.", href:"admin-review.html", ready:true, count:"pending" },
-    { key:"inbox",  t:"메시지함", d:"이용자 문의와 신고를 확인하고 답변해요.", ready:false },
-    { key:"members", t:"회원 · 관리자", d:"회원을 검색·관리하고(Pro·탈퇴), 운영 관리자를 지정해요.", href:"admin-members.html", ready:true },
-    { key:"dash",   t:"대시보드", d:"업로드·창작자·검수 현황을 한눈에 봐요.", href:"admin-dashboard.html", ready:true }
+    { key:"review", icon:"ti-checklist", t:"검수 대기열", d:"제출된 촉각 그래픽을 기준에 맞춰 검수하고 공개해요. 닷패드로 출력해 손끝으로 확인할 수 있어요.", href:"admin-review.html", ready:true, count:"pending" },
+    { key:"inbox",  icon:"ti-mail", t:"메시지함", d:"이용자 문의와 신고를 확인하고 답변해요.", ready:false },
+    { key:"members", icon:"ti-users", t:"회원 · 관리자", d:"회원을 검색·관리하고(Pro·탈퇴), 운영 관리자를 지정해요.", href:"admin-members.html", ready:true },
+    { key:"dash",   icon:"ti-chart-bar", t:"대시보드", d:"업로드·창작자·검수 현황을 한눈에 봐요.", href:"admin-dashboard.html", ready:true }
   ];
 
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
@@ -104,7 +108,7 @@
       var tag = x.ready ? "" : '<span class="tag">준비 중</span>';
       var badge = (x.ready && x.count==="pending") ? '<span class="badge" id="cnt-'+x.key+'">…</span>' : "";
       var inner =
-        '<p class="t">'+esc(x.t)+' '+tag+'</p>'+
+        '<p class="t"><i class="ti '+(x.icon||'ti-app-window')+'" style="color:var(--accent)"></i> '+esc(x.t)+' '+tag+'</p>'+
         '<p class="d">'+esc(x.d)+'</p>'+
         '<span class="go">'+(x.ready?"열기 →":"곧 제공돼요")+'</span>'+badge;
       if(x.ready){ html += '<a class="tool" href="'+x.href+'">'+inner+'</a>'; }

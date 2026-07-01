@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
 <title>Tactile World · 회원 · 관리자 (관리자)</title>
 <style>
   :root{
@@ -12,8 +15,9 @@
     --danger:#C0392B; --danger-bg:#FBEAF0; --radius:12px;
   }
   *{box-sizing:border-box}
+  .ti{vertical-align:-.125em;line-height:1;}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Noto Sans KR","Malgun Gothic",system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    font-family:'Noto Sans KR','Noto Sans',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:900px;margin:0 auto;padding:32px 18px 90px;}
   .top{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
   h1{font-size:21px;font-weight:800;margin:0;letter-spacing:-.01em;}
@@ -61,9 +65,9 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <h1>회원 · 관리자</h1>
+    <h1><i class="ti ti-users" style="color:var(--accent)"></i> 회원 · 관리자</h1>
     <div class="grow"></div>
-    <a class="back" href="admin-hub.html">← 허브</a>
+    <a class="back" href="admin-hub.html"><i class="ti ti-arrow-left"></i> 허브</a>
   </div>
   <p class="sub">회원을 관리하고, 운영 관리자를 지정해요.</p>
 
@@ -71,15 +75,15 @@
 
   <div id="app" class="hidden">
     <div class="tabs">
-      <button class="tab on" id="tab-members" type="button">회원 관리</button>
-      <button class="tab" id="tab-admins" type="button">관리자 설정</button>
+      <button class="tab on" id="tab-members" type="button"><i class="ti ti-user"></i> 회원 관리</button>
+      <button class="tab" id="tab-admins" type="button"><i class="ti ti-shield-lock"></i> 관리자 설정</button>
     </div>
 
     <!-- 회원 관리 -->
     <section id="sec-members">
       <div class="searchbar">
         <input id="q" type="text" placeholder="이메일 또는 이름으로 검색 (비우면 전체)"/>
-        <button class="accent" id="search" type="button">검색</button>
+        <button class="accent" id="search" type="button"><i class="ti ti-search"></i> 검색</button>
       </div>
       <div class="meta"><span id="m-total">전체 …</span></div>
       <div id="m-list" class="list"></div>
@@ -95,7 +99,7 @@
       <p class="hint">관리자를 추가하거나 해제할 수 있어요. 추가하려면 그 사람이 먼저 한 번 로그인한 적이 있어야 해요.</p>
       <div class="searchbar">
         <input id="a-email" type="email" placeholder="추가할 관리자 이메일"/>
-        <button class="accent" id="a-add" type="button">+ 관리자 추가</button>
+        <button class="accent" id="a-add" type="button"><i class="ti ti-plus"></i> 관리자 추가</button>
       </div>
       <div id="a-list" class="list"></div>
     </section>
@@ -163,14 +167,14 @@
         '<span class="tier'+(pro?" pro":"")+'">'+(pro?"Pro":"일반")+'</span>'+
         '<span class="joined">'+esc(fmtDate(u.created_at))+'</span>';
       var acts=document.createElement("div"); acts.className="acts";
-      var proBtn=document.createElement("button"); proBtn.textContent=pro?"Pro 해제":"Pro 부여";
+      var proBtn=document.createElement("button"); proBtn.innerHTML=pro?'<i class="ti ti-crown-off"></i> Pro 해제':'<i class="ti ti-crown"></i> Pro 부여';
       proBtn.addEventListener("click",function(){
         proBtn.disabled=true;
         sb.rpc("admin_set_pro",{ target_user:u.user_id, value:!pro }).then(function(r){
           if(r.error) throw r.error; toast(pro?"Pro를 해제했어요":"Pro를 부여했어요"); loadMembers();
         }).catch(function(e){ proBtn.disabled=false; toast("실패: "+(e.message||"오류")); });
       });
-      var delBtn=document.createElement("button"); delBtn.className="danger"; delBtn.textContent="탈퇴";
+      var delBtn=document.createElement("button"); delBtn.className="danger"; delBtn.innerHTML='<i class="ti ti-trash"></i> 탈퇴';
       delBtn.addEventListener("click",function(){
         if(u.user_id===myId){ toast("본인 계정은 여기서 삭제할 수 없어요"); return; }
         if(!window.confirm("'"+(u.email||u.name||"이 회원")+"' 계정을 완전히 삭제(탈퇴)할까요?\n되돌릴 수 없어요.")) return;
@@ -208,7 +212,7 @@
         '<div class="av">'+esc(initials(u.name||u.email))+'</div>'+
         '<div class="who"><div class="nm">'+esc(u.name||"이름 없음")+'</div><div class="em">'+esc(u.email||"")+'</div></div>';
       var acts=document.createElement("div"); acts.className="acts";
-      var rm=document.createElement("button"); rm.className="danger"; rm.textContent="해제";
+      var rm=document.createElement("button"); rm.className="danger"; rm.innerHTML='<i class="ti ti-user-minus"></i> 해제';
       rm.addEventListener("click",function(){
         if(u.user_id===myId){ toast("본인 권한은 여기서 해제할 수 없어요"); return; }
         if(!window.confirm("'"+(u.email||u.name)+"'의 관리자 권한을 해제할까요?")) return;

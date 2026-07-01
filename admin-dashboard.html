@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
 <title>Tactile World · 대시보드 (관리자)</title>
 <style>
   :root{
@@ -12,8 +15,9 @@
     --info:#0B5FA5; --info-bg:#E6F0F9; --radius:14px;
   }
   *{box-sizing:border-box}
+  .ti{vertical-align:-.125em;line-height:1;}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Noto Sans KR","Malgun Gothic",system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+    font-family:'Noto Sans KR','Noto Sans',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
   .wrap{max-width:900px;margin:0 auto;padding:32px 18px 90px;}
   .top{display:flex;align-items:center;gap:12px;margin-bottom:2px;}
   h1{font-size:21px;font-weight:800;margin:0;letter-spacing:-.01em;}
@@ -58,9 +62,9 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <h1>대시보드</h1>
+    <h1><i class="ti ti-chart-bar" style="color:var(--accent)"></i> 대시보드</h1>
     <div class="grow"></div>
-    <a class="back" href="admin-hub.html">← 허브</a>
+    <a class="back" href="admin-hub.html"><i class="ti ti-arrow-left"></i> 허브</a>
   </div>
   <p class="sub">Tactile World 사이트 전반 현황이에요.</p>
 

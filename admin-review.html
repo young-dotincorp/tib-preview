@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
 <title>Tactile World · 검수 대기열 (관리자)</title>
 <style>
   :root{
@@ -12,8 +15,9 @@
     --radius:12px;
   }
   *{box-sizing:border-box}
+  .ti{vertical-align:-.125em;line-height:1;}
   body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:"Noto Sans KR","Malgun Gothic",system-ui,-apple-system,sans-serif;line-height:1.6;}
+    font-family:'Noto Sans KR','Noto Sans',system-ui,-apple-system,sans-serif;line-height:1.6;}
   .wrap{max-width:840px;margin:0 auto;padding:24px 18px 80px;}
   header.top{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
   header.top h1{font-size:20px;margin:0;font-weight:700;}
@@ -62,7 +66,7 @@
 <body>
 <div class="wrap">
   <header class="top">
-    <h1>검수 대기열</h1>
+    <h1><i class="ti ti-checklist" style="color:var(--accent)"></i> 검수 대기열</h1>
     <span class="badge" id="count">…</span>
   </header>
   <p class="sub">제출된 촉각 그래픽을 기준에 맞춰 검수하고 공개해요. (관리자 전용)</p>
@@ -77,7 +81,7 @@
     <span id="pager" class="pager"></span>
     <button id="next" type="button">다음 →</button>
     <div class="grow"></div>
-    <button id="refresh" type="button">새로고침</button>
+    <button id="refresh" type="button"><i class="ti ti-refresh"></i> 새로고침</button>
   </div>
 
   <div id="root" aria-live="polite">
@@ -240,11 +244,11 @@ try{window.DotPadSDK=DotPadSDK;window.DotPadScanner=DotPadScanner;window.DotPadD
       reasons.appendChild(etcBtn);
 
       var act=document.createElement("div"); act.className="act";
-      var approve=document.createElement("button"); approve.className="accent"; approve.textContent="승인 · 공개"; approve.disabled=true;
-      var reject=document.createElement("button"); reject.className="ghost"; reject.textContent="반려";
+      var approve=document.createElement("button"); approve.className="accent"; approve.innerHTML='<i class="ti ti-check"></i> 승인 · 공개'; approve.disabled=true;
+      var reject=document.createElement("button"); reject.className="ghost"; reject.innerHTML='<i class="ti ti-x"></i> 반려';
       var confirmReject=document.createElement("button"); confirmReject.className="ghost"; confirmReject.textContent="반려 확정"; confirmReject.style.display="none";
-      var trust=document.createElement("button"); trust.type="button"; trust.className="trust"; trust.textContent="신뢰 창작자로 지정";
-      var dotbtn=document.createElement("button"); dotbtn.type="button"; dotbtn.className="dot"; dotbtn.textContent="닷패드로 출력";
+      var trust=document.createElement("button"); trust.type="button"; trust.className="trust"; trust.innerHTML='<i class="ti ti-star"></i> 신뢰 창작자로 지정';
+      var dotbtn=document.createElement("button"); dotbtn.type="button"; dotbtn.className="dot"; dotbtn.innerHTML='<i class="ti ti-braille"></i> 닷패드로 출력';
 
       function syncApprove(){ approve.disabled = !(checks[0]&&checks[1]&&checks[2]); }
 
