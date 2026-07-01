@@ -5,6 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Tactile World · 대시보드 (관리자)</title>
 <link rel="stylesheet" href="admin-shell.css"/>
+<style>
+  /* 대시보드 전용 (셸 토큰 재사용) */
+  .comm{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  @media(max-width:820px){ .comm{grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:480px){ .comm{grid-template-columns:repeat(2,1fr);} }
+  .stat{background:#FBF8F3;border:1px solid var(--line);border-radius:14px;padding:14px 15px;}
+  .stat .ic{width:34px;height:34px;border-radius:9px;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:var(--accent);font-size:18px;}
+  .stat .n{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:9px;}
+  .stat .l{font-size:12.5px;color:var(--ink-faint);}
+
+  .comm-foot{display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line);}
+  .rating{display:flex;align-items:center;gap:9px;}
+  .rating .num{font-size:19px;font-weight:800;}
+  .rating .stars{color:var(--accent);font-size:17px;line-height:1;}
+  .rating .stars .ti{color:#E7E0D4;} .rating .stars .ti.on{color:var(--accent);}
+  .rating .cap{font-size:12.5px;color:var(--ink-soft);}
+  .tiers{display:flex;align-items:center;gap:16px;font-size:13.5px;}
+  .tiers .t{display:inline-flex;align-items:center;gap:6px;font-weight:700;}
+  .tiers .t .ti{font-size:18px;} .tiers .g{color:#C08A2E;} .tiers .s{color:#8C8C94;} .tiers .b{color:#B06B3A;}
+  .tiers .t small{color:var(--ink-faint);font-weight:600;}
+
+  .rank{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .rank:last-child{border-bottom:none;}
+  .rank .rk{flex:0 0 24px;height:24px;border-radius:7px;background:#F0ECE3;color:var(--ink-soft);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .rank:nth-child(1) .rk{background:#FBF0D5;color:#B8860B;}
+  .rank .tt{flex:1;min-width:0;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .rank .st{flex:0 0 auto;font-size:12px;color:var(--ink-faint);display:flex;gap:10px;font-variant-numeric:tabular-nums;}
+  .rank .st .ti{font-size:14px;vertical-align:-.15em;margin-right:2px;}
+
+  .up{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .up:last-child{border-bottom:none;}
+  .up .tt{flex:1;min-width:0;font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .up .cat{flex:0 0 auto;font-size:11.5px;color:var(--ink-faint);}
+  .up .dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;}
+  .up .dot.published{background:var(--ok);} .up .dot.pending{background:var(--warn);} .up .dot.private{background:var(--ink-faint);} .up .dot.rejected{background:var(--danger);}
+
+  .mbars{display:flex;align-items:flex-end;gap:10px;height:190px;padding-top:22px;}
+  .mbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;}
+  .mbar .v{font-size:12px;font-weight:700;color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+  .mbar .col{width:100%;max-width:46px;background:#F0ECE3;border-radius:8px 8px 0 0;min-height:4px;transition:height .3s;}
+  .mbar.cur .col{background:var(--accent);}
+  .mbar .m{font-size:11.5px;color:var(--ink-faint);}
+  .mcap{font-size:12.5px;color:var(--ink-soft);margin-left:8px;font-weight:600;}
+
+  .feed{display:flex;flex-direction:column;}
+  .feed .row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .feed .row:last-child{border-bottom:none;}
+  .feed .ic{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:17px;}
+  .feed .ic.fb{background:#FBF0D5;color:#B8860B;}
+  .feed .tx{flex:1;min-width:0;}
+  .feed .tx .lb{font-size:13.5px;font-weight:700;}
+  .feed .tx .sb{font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .feed .wh{flex:0 0 auto;font-size:11.5px;color:var(--ink-faint);}
+</style>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -15,8 +69,30 @@
   AdminShell.mount({ active:"dashboard", title:"대시보드", icon:"ti-chart-bar" }).then(function(ctx){
     if(!ctx) return;
     var sb=ctx.sb, root=ctx.content, esc=ctx.esc;
+
     function n(x){ return (x==null?0:x).toLocaleString("ko-KR"); }
-    function fmt(iso){ try{ return new Date(iso).toLocaleString("ko-KR"); }catch(e){ return ""; } }
+    function fmtStamp(iso){ try{ return new Date(iso).toLocaleString("ko-KR"); }catch(e){ return ""; } }
+    function rel(iso){ try{ var s=(Date.now()-new Date(iso).getTime())/1000;
+      if(s<60) return "방금"; if(s<3600) return Math.floor(s/60)+"분 전"; if(s<86400) return Math.floor(s/3600)+"시간 전";
+      var dd=Math.floor(s/86400); return dd<30? dd+"일 전" : new Date(iso).toLocaleDateString("ko-KR"); }catch(e){ return ""; } }
+
+    function kpi(val,label,href,cls,go){
+      var inner='<div class="n">'+n(val)+'</div><div class="l">'+esc(label)+'</div>'+(go?'<span class="go">'+esc(go)+' <i class="ti ti-arrow-right"></i></span>':'');
+      var c='kpi'+(cls?' '+cls:'');
+      return href?'<a class="'+c+'" href="'+href+'">'+inner+'</a>':'<div class="'+c+'">'+inner+'</div>';
+    }
+    function stat(icon,val,label){
+      return '<div class="stat"><span class="ic"><i class="ti '+icon+'"></i></span><div class="n">'+n(val)+'</div><div class="l">'+esc(label)+'</div></div>';
+    }
+    function starRow(avg){
+      avg=Number(avg)||0; var full=Math.floor(avg), half=(avg-full)>=0.5, out="";
+      for(var i=1;i<=5;i++){
+        if(i<=full) out+='<i class="ti ti-star-filled on"></i>';
+        else if(i===full+1 && half) out+='<i class="ti ti-star-half-filled on"></i>';
+        else out+='<i class="ti ti-star-filled"></i>';
+      }
+      return out;
+    }
     function bars(items,total,color){
       var max=Math.max(1,total||items.reduce(function(a,b){return a+(b.n||0);},0));
       return items.map(function(it){
@@ -24,34 +100,93 @@
         return '<div class="trow"><span class="k">'+esc(it.name)+'</span><span class="track"><span class="fill" style="width:'+pct+'%;'+(color?'background:'+color+';':'')+'"></span></span><span class="v">'+n(it.n)+'</span></div>';
       }).join("");
     }
-    function kpi(val,label,href,cls,go){
-      var inner='<div class="n">'+n(val)+'</div><div class="l">'+esc(label)+'</div>'+(go?'<span class="go">'+esc(go)+' <i class="ti ti-arrow-right"></i></span>':'');
-      var c='kpi'+(cls?' '+cls:'');
-      return href?'<a class="'+c+'" href="'+href+'">'+inner+'</a>':'<div class="'+c+'">'+inner+'</div>';
-    }
+
     function render(d){
-      var g=d.graphics||{},p=d.profiles||{},m=d.messages||{},cats=d.categories||[];
+      var g=d.graphics||{}, p=d.profiles||{}, m=d.messages||{}, cats=d.categories||[],
+          c=d.community||{}, tiers=(c.tiers||{}), pop=d.popular||[], up=d.recent_uploads||[],
+          monthly=d.monthly||[], act=d.activity||[];
       var html="";
+
+      // 오늘 처리할 일
       html+='<div class="eyebrow">오늘 처리할 일</div><div class="kpis">';
       html+=kpi(g.pending,"검수 대기","admin-review.html",(g.pending>0?"warn":"ok"),"검수하러 가기");
       html+=kpi(m.inq_open,"미처리 문의","admin-inbox.html",(m.inq_open>0?"warn":"ok"),"메시지함 열기");
-      html+=kpi(m.rep_open,"미처리 신고","admin-inbox.html",(m.rep_open>0?"warn":"ok"),"신고 보기");
+      html+=kpi(m.rep_open,"미처리 신고","admin-inbox.html#reports",(m.rep_open>0?"warn":"ok"),"신고 보기");
       html+=kpi(g.published,"공개 그래픽",null,"ok","");
       html+='</div>';
+
+      // 커뮤니티 현황
+      html+='<div class="eyebrow">커뮤니티 현황</div><div class="panel">';
+      html+='<div class="comm">'+
+        stat("ti-star",c.feedback,"평가")+
+        stat("ti-briefcase",c.commissions,"의뢰")+
+        stat("ti-message",m.inq_total,"문의")+
+        stat("ti-flag",m.rep_total,"신고")+
+        stat("ti-bulb",c.requests,"요청")+
+      '</div>';
+      html+='<div class="comm-foot">'+
+        '<div class="rating"><span class="num">'+esc(String(c.avg_stars!=null?c.avg_stars:0))+'</span>'+
+          '<span class="stars">'+starRow(c.avg_stars)+'</span><span class="cap">평균 평점</span></div>'+
+        '<div class="tiers">'+
+          '<span class="t"><i class="ti ti-medal g"></i>우수 '+n(tiers.excellent)+' <small>50+</small></span>'+
+          '<span class="t"><i class="ti ti-medal s"></i>활동 '+n(tiers.active)+' <small>20–49</small></span>'+
+          '<span class="t"><i class="ti ti-medal b"></i>새싹 '+n(tiers.sprout)+' <small>10–19</small></span>'+
+        '</div>'+
+      '</div></div>';
+
+      // 인기 작품 Top5 · 최근 업로드
+      html+='<div class="two">';
+      var rankHtml = pop.length ? pop.map(function(it,i){
+        return '<div class="rank"><span class="rk">'+(i+1)+'</span><span class="tt">'+esc(it.title||"제목 없음")+'</span>'+
+          '<span class="st"><span><i class="ti ti-heart"></i>'+n(it.likes)+'</span><span><i class="ti ti-download"></i>'+n(it.downloads)+'</span></span></div>';
+      }).join("") : '<div class="l" style="color:var(--ink-faint);font-size:13px">아직 인기 작품이 없어요.</div>';
+      html+='<div class="panel"><h3>인기 작품 Top 5</h3>'+rankHtml+'</div>';
+
+      var upHtml = up.length ? up.map(function(it){
+        return '<div class="up"><span class="dot '+esc(it.status||"")+'"></span><span class="tt">'+esc(it.title||"제목 없음")+'</span><span class="cat">'+esc(it.category||"기타")+'</span></div>';
+      }).join("") : '<div class="l" style="color:var(--ink-faint);font-size:13px">최근 업로드가 없어요.</div>';
+      html+='<div class="panel"><h3>최근 업로드</h3>'+upHtml+'</div>';
+      html+='</div>';
+
+      // 월별 신규 작품
+      var thisMonth = monthly.length ? (monthly[monthly.length-1].n||0) : 0;
+      var mmax = monthly.reduce(function(a,b){ return Math.max(a, b.n||0); }, 0);
+      var mbarsHtml = monthly.map(function(it,i){
+        var pct = mmax>0 ? Math.max(3, Math.round((it.n||0)/mmax*100)) : 3;
+        var cur = (i===monthly.length-1) ? " cur" : "";
+        return '<div class="mbar'+cur+'"><span class="v">'+n(it.n)+'</span><span class="col" style="height:'+pct+'%"></span><span class="m">'+esc(it.label)+'</span></div>';
+      }).join("");
+      html+='<div class="eyebrow">월별 신규 작품<span class="mcap">이번 달 '+n(thisMonth)+'건</span></div>';
+      html+='<div class="panel"><div class="mbars">'+mbarsHtml+'</div></div>';
+
+      // 최근 활동
+      var feedHtml = act.length ? act.map(function(it){
+        var fb = it.kind==="feedback";
+        return '<div class="row"><span class="ic'+(fb?" fb":"")+'"><i class="ti '+(fb?"ti-star":"ti-message-2")+'"></i></span>'+
+          '<div class="tx"><div class="lb">'+esc(it.label||"")+'</div><div class="sb">'+esc(it.sub||"")+'</div></div>'+
+          '<span class="wh">'+esc(rel(it.at))+'</span></div>';
+      }).join("") : '<div class="l" style="color:var(--ink-faint);font-size:13px">최근 활동이 없어요.</div>';
+      html+='<div class="eyebrow">최근 활동</div><div class="panel"><div class="feed">'+feedHtml+'</div></div>';
+
+      // 분포
+      html+='<div class="eyebrow">분포</div><div class="two">';
+      html+='<div class="panel"><h3>상태</h3>'+bars([{name:"공개",n:g.published},{name:"검수 대기",n:g.pending},{name:"비공개",n:g.private},{name:"반려",n:g.rejected}],g.total)+'</div>';
+      html+='<div class="panel"><h3>규격</h3>'+bars([{name:"60×40",n:g.spec_60x40},{name:"96×64",n:g.spec_96x64}],g.total,"var(--info)")+'</div>';
+      html+='</div>';
+      html+='<div class="panel"><h3>카테고리 (상위)</h3>'+bars(cats.map(function(x){return {name:x.name,n:x.n};}),g.total,"var(--violet)")+'</div>';
+
+      // 전반 현황
       html+='<div class="eyebrow">전반 현황</div><div class="kpis">';
       html+=kpi(g.total,"전체 그래픽",null,"","");
       html+=kpi(p.trusted,"신뢰 창작자","admin-members.html","","전체 "+n(p.total)+"명 중");
       html+=kpi(g.uploaders,"업로드한 창작자",null,"","");
       html+=kpi(p.pro,"Pro 회원","admin-members.html","","");
       html+='</div>';
-      html+='<div class="eyebrow">분포</div><div class="two">';
-      html+='<div class="panel"><h3>상태</h3>'+bars([{name:"공개",n:g.published},{name:"검수 대기",n:g.pending},{name:"비공개",n:g.private},{name:"반려",n:g.rejected}],g.total)+'</div>';
-      html+='<div class="panel"><h3>규격</h3>'+bars([{name:"60×40",n:g.spec_60x40},{name:"96×64",n:g.spec_96x64}],g.total,"var(--info)")+'</div>';
-      html+='</div>';
-      html+='<div class="panel"><h3>카테고리 (상위)</h3>'+bars(cats.map(function(c){return {name:c.name,n:c.n};}),g.total,"var(--violet)")+'</div>';
-      html+='<div class="stamp">기준 시각 '+esc(fmt(d.generated_at))+'</div>';
+
+      html+='<div class="stamp">기준 시각 '+esc(fmtStamp(d.generated_at))+'</div>';
       root.innerHTML=html;
     }
+
     root.innerHTML='<div class="msg">집계 불러오는 중…</div>';
     sb.rpc("admin_dashboard_stats").then(function(res){
       if(res.error){ root.innerHTML='<div class="msg"><b>집계를 불러오지 못했어요.</b>'+esc(res.error.message||"관리자 권한이 필요할 수 있어요.")+'</div>'; return; }
