@@ -3,246 +3,163 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.24.0/dist/tabler-icons.min.css">
 <title>Tactile World · 회원 · 관리자 (관리자)</title>
+<link rel="stylesheet" href="admin-shell.css"/>
 <style>
-  :root{
-    --ink:#1F1D1A; --ink-soft:#5C574E; --ink-faint:#9A9384;
-    --accent:#FF4F00; --line:#ECE6DC; --bg:#FAF8F3; --card:#fff;
-    --ok:#0F6E56; --ok-bg:#E1F5EE; --pro:#B8860B; --pro-bg:#FBF0D5;
-    --danger:#C0392B; --danger-bg:#FBEAF0; --radius:12px;
-  }
-  *{box-sizing:border-box}
-  .ti{vertical-align:-.125em;line-height:1;}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:'Noto Sans KR','Noto Sans',system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:900px;margin:0 auto;padding:32px 18px 90px;}
-  .top{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
-  h1{font-size:21px;font-weight:800;margin:0;letter-spacing:-.01em;}
-  .grow{flex:1}
-  a.back{font-size:13px;color:var(--ink-soft);text-decoration:none;} a.back:hover{color:var(--accent);}
-  .sub{color:var(--ink-soft);font-size:13.5px;margin:2px 0 18px;}
-
-  .tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:18px;}
-  .tab{padding:9px 16px;font-size:14px;font-weight:700;color:var(--ink-faint);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;}
-  .tab.on{color:var(--accent);border-bottom-color:var(--accent);}
-
-  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid #D9D5CC;background:#fff;color:var(--ink);padding:8px 13px;font-size:13px;}
-  button:hover{background:#F4F1EA} button:disabled{opacity:.5;cursor:not-allowed}
-  button.accent{background:var(--accent);border-color:transparent;color:#fff;font-weight:700;}
-  button.danger{color:var(--danger);border-color:#E9AFBD;}
-  input{font:inherit;font-size:14px;border:1px solid #D9D5CC;border-radius:8px;padding:9px 12px;width:100%;}
-
-  .searchbar{display:flex;gap:8px;margin-bottom:14px;}
-  .searchbar input{flex:1;}
-  .meta{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);margin-bottom:10px;}
-
-  .list{display:flex;flex-direction:column;gap:8px;}
-  .item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;}
-  .av{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:#F0ECE3;color:var(--ink-soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
-  .who{flex:1;min-width:0;}
-  .who .nm{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .who .em{font-size:12.5px;color:var(--ink-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .tier{flex:0 0 auto;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:#F0ECE3;color:var(--ink-soft);}
-  .tier.pro{background:var(--pro-bg);color:var(--pro);}
+  /* 페이지 전용 소량 보강 (셸 토큰 재사용) */
   .joined{flex:0 0 auto;font-size:12px;color:var(--ink-faint);min-width:82px;text-align:right;}
-  .acts{flex:0 0 auto;display:flex;gap:6px;}
-  .acts button{padding:6px 10px;font-size:12.5px;}
-
-  .pager{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
-
-  .msg{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px 20px;text-align:center;color:var(--ink-soft);}
-  .msg b{color:var(--ink);display:block;font-size:15px;margin-bottom:6px;}
-  .msg a{color:var(--accent);font-weight:700;text-decoration:none;}
   .hint{font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;}
-  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#16150F;color:#fff;padding:10px 18px;border-radius:999px;font-size:13.5px;opacity:0;transition:opacity .2s;pointer-events:none;}
-  .toast.on{opacity:.96}
-  .hidden{display:none!important}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="top">
-    <h1><i class="ti ti-users" style="color:var(--accent)"></i> 회원 · 관리자</h1>
-    <div class="grow"></div>
-    <a class="back" href="admin-hub.html"><i class="ti ti-arrow-left"></i> 허브</a>
-  </div>
-  <p class="sub">회원을 관리하고, 운영 관리자를 지정해요.</p>
-
-  <div id="gate"><div class="msg">불러오는 중…</div></div>
-
-  <div id="app" class="hidden">
-    <div class="tabs">
-      <button class="tab on" id="tab-members" type="button"><i class="ti ti-user"></i> 회원 관리</button>
-      <button class="tab" id="tab-admins" type="button"><i class="ti ti-shield-lock"></i> 관리자 설정</button>
-    </div>
-
-    <!-- 회원 관리 -->
-    <section id="sec-members">
-      <div class="searchbar">
-        <input id="q" type="text" placeholder="이메일 또는 이름으로 검색 (비우면 전체)"/>
-        <button class="accent" id="search" type="button"><i class="ti ti-search"></i> 검색</button>
-      </div>
-      <div class="meta"><span id="m-total">전체 …</span></div>
-      <div id="m-list" class="list"></div>
-      <div class="pager">
-        <button id="m-prev" type="button">← 이전</button>
-        <span id="m-range"></span>
-        <button id="m-next" type="button">다음 →</button>
-      </div>
-    </section>
-
-    <!-- 관리자 설정 -->
-    <section id="sec-admins" class="hidden">
-      <p class="hint">관리자를 추가하거나 해제할 수 있어요. 추가하려면 그 사람이 먼저 한 번 로그인한 적이 있어야 해요.</p>
-      <div class="searchbar">
-        <input id="a-email" type="email" placeholder="추가할 관리자 이메일"/>
-        <button class="accent" id="a-add" type="button"><i class="ti ti-plus"></i> 관리자 추가</button>
-      </div>
-      <div id="a-list" class="list"></div>
-    </section>
-  </div>
-</div>
-<div class="toast" id="toast" role="status"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin-shell.js"></script>
 <script>
 (function(){
   "use strict";
-  var SB = window.__TIB_SB__ || {
-    url: "https://nqgaqzpbhmezkrrlbbhm.supabase.co",
-    key: "sb_publishable_IThvI0wJJex8U4UiATHFyw_B_2jIphy"
-  };
-  var gate=document.getElementById("gate"), app=document.getElementById("app"), toastEl=document.getElementById("toast");
-  var myId=null;
-  function toast(t){ toastEl.textContent=t; toastEl.classList.add("on"); setTimeout(function(){toastEl.classList.remove("on");},2400); }
-  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
-  function gmsg(html){ gate.innerHTML='<div class="msg">'+html+'</div>'; }
-  function initials(s){ s=(s||"").trim(); return s?s.slice(0,2):"·"; }
-  function fmtDate(iso){ try{ return new Date(iso).toLocaleDateString("ko-KR"); }catch(e){ return ""; } }
+  AdminShell.mount({ active:"members", title:"회원 · 관리자", icon:"ti-users" }).then(function(ctx){
+    if(!ctx) return;
+    var sb=ctx.sb, esc=ctx.esc, toast=ctx.toast, content=ctx.content;
+    var myId=ctx.user && ctx.user.id;
 
-  if(!(window.supabase && window.supabase.createClient)){ gmsg("<b>연결 라이브러리를 불러오지 못했어요.</b>새로고침해 주세요."); return; }
-  var sb = window.supabase.createClient(SB.url, SB.key,
-    { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:false } });
+    content.innerHTML =
+      '<div class="tabs">'+
+        '<button class="tab on" id="tab-members" type="button"><i class="ti ti-user"></i> 회원 관리</button>'+
+        '<button class="tab" id="tab-admins" type="button"><i class="ti ti-shield-lock"></i> 관리자 설정</button>'+
+      '</div>'+
+      '<section id="sec-members">'+
+        '<div class="searchbar">'+
+          '<input id="q" class="field" type="text" placeholder="이메일 또는 이름으로 검색 (비우면 전체)"/>'+
+          '<button class="btn btn-accent" id="search" type="button"><i class="ti ti-search"></i> 검색</button>'+
+        '</div>'+
+        '<div class="meta"><span id="m-total">전체 …</span></div>'+
+        '<div id="m-list" class="list"></div>'+
+        '<div class="pager">'+
+          '<button class="btn btn-sm" id="m-prev" type="button">← 이전</button>'+
+          '<span id="m-range"></span>'+
+          '<button class="btn btn-sm" id="m-next" type="button">다음 →</button>'+
+        '</div>'+
+      '</section>'+
+      '<section id="sec-admins" class="hidden">'+
+        '<p class="hint">관리자를 추가하거나 해제할 수 있어요. 추가하려면 그 사람이 먼저 한 번 로그인한 적이 있어야 해요.</p>'+
+        '<div class="searchbar">'+
+          '<input id="a-email" class="field" type="email" placeholder="추가할 관리자 이메일"/>'+
+          '<button class="btn btn-accent" id="a-add" type="button"><i class="ti ti-plus"></i> 관리자 추가</button>'+
+        '</div>'+
+        '<div id="a-list" class="list"></div>'+
+      '</section>';
 
-  /* ---------- 탭 ---------- */
-  var TM=document.getElementById("tab-members"), TA=document.getElementById("tab-admins");
-  var SM=document.getElementById("sec-members"), SA=document.getElementById("sec-admins");
-  TM.addEventListener("click",function(){ TM.classList.add("on");TA.classList.remove("on");SM.classList.remove("hidden");SA.classList.add("hidden"); });
-  TA.addEventListener("click",function(){ TA.classList.add("on");TM.classList.remove("on");SA.classList.remove("hidden");SM.classList.add("hidden"); if(!SA.dataset.loaded){ loadAdmins(); } });
+    function initials(s){ s=(s||"").trim(); return s?s.slice(0,2):"·"; }
+    function fmtDate(iso){ try{ return new Date(iso).toLocaleDateString("ko-KR"); }catch(e){ return ""; } }
 
-  /* ---------- 회원 관리 ---------- */
-  var PAGE=20, page=0, total=0, q="";
-  var mList=document.getElementById("m-list"), mTotal=document.getElementById("m-total"),
-      mRange=document.getElementById("m-range"), mPrev=document.getElementById("m-prev"), mNext=document.getElementById("m-next");
+    /* ---------- 탭 ---------- */
+    var TM=document.getElementById("tab-members"), TA=document.getElementById("tab-admins");
+    var SM=document.getElementById("sec-members"), SA=document.getElementById("sec-admins");
+    TM.addEventListener("click",function(){ TM.classList.add("on");TA.classList.remove("on");SM.classList.remove("hidden");SA.classList.add("hidden"); });
+    TA.addEventListener("click",function(){ TA.classList.add("on");TM.classList.remove("on");SA.classList.remove("hidden");SM.classList.add("hidden"); if(!SA.dataset.loaded){ loadAdmins(); } });
 
-  function loadMembers(){
-    mList.innerHTML='<div class="msg">불러오는 중…</div>';
-    sb.rpc("admin_list_users",{ q:q, lim:PAGE, off:page*PAGE }).then(function(res){
-      if(res.error||!res.data){ mList.innerHTML='<div class="msg"><b>목록을 불러오지 못했어요.</b>'+esc((res.error&&res.error.message)||"")+'</div>'; return; }
-      var rows=Array.isArray(res.data.rows)?res.data.rows:[];
-      total=(typeof res.data.total==="number")?res.data.total:rows.length;
-      if(page>0 && rows.length===0){ page--; return loadMembers(); }
-      renderMembers(rows);
-      updateMPager();
-    }).catch(function(){ mList.innerHTML='<div class="msg"><b>요청에 실패했어요.</b>새로고침해 주세요.</div>'; });
-  }
-  function updateMPager(){
-    var from=page*PAGE;
-    mTotal.textContent = "전체 "+total.toLocaleString("ko-KR")+"명";
-    mRange.textContent = total?((from+1)+"–"+Math.min(from+PAGE,total)+" / "+total):"";
-    mPrev.disabled=page<=0; mNext.disabled=(from+PAGE)>=total;
-  }
-  function renderMembers(rows){
-    if(!rows.length){ mList.innerHTML='<div class="msg"><b>회원이 없어요.</b>검색어를 지우면 전체가 보여요.</div>'; return; }
-    mList.innerHTML="";
-    rows.forEach(function(u){
-      var el=document.createElement("div"); el.className="item";
-      var pro=!!u.pro;
-      el.innerHTML=
-        '<div class="av">'+esc(initials(u.name||u.email))+'</div>'+
-        '<div class="who"><div class="nm">'+esc(u.name||"이름 없음")+'</div><div class="em">'+esc(u.email||"")+'</div></div>'+
-        '<span class="tier'+(pro?" pro":"")+'">'+(pro?"Pro":"일반")+'</span>'+
-        '<span class="joined">'+esc(fmtDate(u.created_at))+'</span>';
-      var acts=document.createElement("div"); acts.className="acts";
-      var proBtn=document.createElement("button"); proBtn.innerHTML=pro?'<i class="ti ti-crown-off"></i> Pro 해제':'<i class="ti ti-crown"></i> Pro 부여';
-      proBtn.addEventListener("click",function(){
-        proBtn.disabled=true;
-        sb.rpc("admin_set_pro",{ target_user:u.user_id, value:!pro }).then(function(r){
-          if(r.error) throw r.error; toast(pro?"Pro를 해제했어요":"Pro를 부여했어요"); loadMembers();
-        }).catch(function(e){ proBtn.disabled=false; toast("실패: "+(e.message||"오류")); });
+    /* ---------- 회원 관리 ---------- */
+    var PAGE=20, page=0, total=0, q="";
+    var mList=document.getElementById("m-list"), mTotal=document.getElementById("m-total"),
+        mRange=document.getElementById("m-range"), mPrev=document.getElementById("m-prev"), mNext=document.getElementById("m-next");
+
+    function loadMembers(){
+      mList.innerHTML='<div class="msg">불러오는 중…</div>';
+      sb.rpc("admin_list_users",{ q:q, lim:PAGE, off:page*PAGE }).then(function(res){
+        if(res.error||!res.data){ mList.innerHTML='<div class="msg"><b>목록을 불러오지 못했어요.</b>'+esc((res.error&&res.error.message)||"")+'</div>'; return; }
+        var rows=Array.isArray(res.data.rows)?res.data.rows:[];
+        total=(typeof res.data.total==="number")?res.data.total:rows.length;
+        if(page>0 && rows.length===0){ page--; return loadMembers(); }
+        renderMembers(rows);
+        updateMPager();
+      }).catch(function(){ mList.innerHTML='<div class="msg"><b>요청에 실패했어요.</b>새로고침해 주세요.</div>'; });
+    }
+    function updateMPager(){
+      var from=page*PAGE;
+      mTotal.textContent = "전체 "+total.toLocaleString("ko-KR")+"명";
+      mRange.textContent = total?((from+1)+"–"+Math.min(from+PAGE,total)+" / "+total):"";
+      mPrev.disabled=page<=0; mNext.disabled=(from+PAGE)>=total;
+    }
+    function renderMembers(rows){
+      if(!rows.length){ mList.innerHTML='<div class="msg"><b>회원이 없어요.</b>검색어를 지우면 전체가 보여요.</div>'; return; }
+      mList.innerHTML="";
+      rows.forEach(function(u){
+        var el=document.createElement("div"); el.className="item";
+        var pro=!!u.pro;
+        el.innerHTML=
+          '<div class="av">'+esc(initials(u.name||u.email))+'</div>'+
+          '<div class="who"><div class="nm">'+esc(u.name||"이름 없음")+'</div><div class="em">'+esc(u.email||"")+'</div></div>'+
+          '<span class="tier'+(pro?" pro":"")+'">'+(pro?"Pro":"일반")+'</span>'+
+          '<span class="joined">'+esc(fmtDate(u.created_at))+'</span>';
+        var acts=document.createElement("div"); acts.className="acts";
+        var proBtn=document.createElement("button"); proBtn.className="btn btn-sm"; proBtn.innerHTML=pro?'<i class="ti ti-crown-off"></i> Pro 해제':'<i class="ti ti-crown"></i> Pro 부여';
+        proBtn.addEventListener("click",function(){
+          proBtn.disabled=true;
+          sb.rpc("admin_set_pro",{ target_user:u.user_id, value:!pro }).then(function(r){
+            if(r.error) throw r.error; toast(pro?"Pro를 해제했어요":"Pro를 부여했어요"); loadMembers();
+          }).catch(function(e){ proBtn.disabled=false; toast("실패: "+(e.message||"오류")); });
+        });
+        var delBtn=document.createElement("button"); delBtn.className="btn btn-sm btn-danger"; delBtn.innerHTML='<i class="ti ti-trash"></i> 탈퇴';
+        delBtn.addEventListener("click",function(){
+          if(u.user_id===myId){ toast("본인 계정은 여기서 삭제할 수 없어요"); return; }
+          if(!window.confirm("'"+(u.email||u.name||"이 회원")+"' 계정을 완전히 삭제(탈퇴)할까요?\n되돌릴 수 없어요.")) return;
+          delBtn.disabled=true;
+          sb.rpc("admin_delete_user",{ target_user:u.user_id }).then(function(r){
+            if(r.error) throw r.error; toast("탈퇴 처리했어요"); loadMembers();
+          }).catch(function(e){ delBtn.disabled=false; toast("실패: "+(e.message||"오류")); });
+        });
+        acts.appendChild(proBtn); acts.appendChild(delBtn);
+        el.appendChild(acts); mList.appendChild(el);
       });
-      var delBtn=document.createElement("button"); delBtn.className="danger"; delBtn.innerHTML='<i class="ti ti-trash"></i> 탈퇴';
-      delBtn.addEventListener("click",function(){
-        if(u.user_id===myId){ toast("본인 계정은 여기서 삭제할 수 없어요"); return; }
-        if(!window.confirm("'"+(u.email||u.name||"이 회원")+"' 계정을 완전히 삭제(탈퇴)할까요?\n되돌릴 수 없어요.")) return;
-        delBtn.disabled=true;
-        sb.rpc("admin_delete_user",{ target_user:u.user_id }).then(function(r){
-          if(r.error) throw r.error; toast("탈퇴 처리했어요"); loadMembers();
-        }).catch(function(e){ delBtn.disabled=false; toast("실패: "+(e.message||"오류")); });
+    }
+    document.getElementById("search").addEventListener("click",function(){ q=document.getElementById("q").value.trim(); page=0; loadMembers(); });
+    document.getElementById("q").addEventListener("keydown",function(e){ if(e.key==="Enter"){ q=e.target.value.trim(); page=0; loadMembers(); } });
+    mPrev.addEventListener("click",function(){ if(page>0){ page--; loadMembers(); } });
+    mNext.addEventListener("click",function(){ if((page+1)*PAGE<total){ page++; loadMembers(); } });
+
+    /* ---------- 관리자 설정 ---------- */
+    var aList=document.getElementById("a-list");
+    function loadAdmins(){
+      SA.dataset.loaded="1";
+      aList.innerHTML='<div class="msg">불러오는 중…</div>';
+      sb.rpc("list_admins").then(function(res){
+        if(res.error||!res.data){ aList.innerHTML='<div class="msg"><b>관리자 목록을 불러오지 못했어요.</b>'+esc((res.error&&res.error.message)||"")+'</div>'; return; }
+        var rows=Array.isArray(res.data)?res.data:(res.data.rows||[]);
+        renderAdmins(rows);
+      }).catch(function(){ aList.innerHTML='<div class="msg"><b>요청에 실패했어요.</b>새로고침해 주세요.</div>'; });
+    }
+    function renderAdmins(rows){
+      if(!rows.length){ aList.innerHTML='<div class="msg">등록된 관리자가 없어요.</div>'; return; }
+      aList.innerHTML="";
+      rows.forEach(function(u){
+        var el=document.createElement("div"); el.className="item";
+        el.innerHTML=
+          '<div class="av">'+esc(initials(u.name||u.email))+'</div>'+
+          '<div class="who"><div class="nm">'+esc(u.name||"이름 없음")+'</div><div class="em">'+esc(u.email||"")+'</div></div>';
+        var acts=document.createElement("div"); acts.className="acts";
+        var rm=document.createElement("button"); rm.className="btn btn-sm btn-danger"; rm.innerHTML='<i class="ti ti-user-minus"></i> 해제';
+        rm.addEventListener("click",function(){
+          if(u.user_id===myId){ toast("본인 권한은 여기서 해제할 수 없어요"); return; }
+          if(!window.confirm("'"+(u.email||u.name)+"'의 관리자 권한을 해제할까요?")) return;
+          rm.disabled=true;
+          sb.rpc("revoke_admin",{ target_user:u.user_id }).then(function(r){
+            if(r.error) throw r.error; toast("관리자 권한을 해제했어요"); loadAdmins();
+          }).catch(function(e){ rm.disabled=false; toast("실패: "+(e.message||"오류")); });
+        });
+        acts.appendChild(rm); el.appendChild(acts); aList.appendChild(el);
       });
-      acts.appendChild(proBtn); acts.appendChild(delBtn);
-      el.appendChild(acts); mList.appendChild(el);
+    }
+    document.getElementById("a-add").addEventListener("click",function(){
+      var inp=document.getElementById("a-email"), email=inp.value.trim();
+      if(!email){ toast("이메일을 입력해 주세요"); return; }
+      var btn=this; btn.disabled=true;
+      sb.rpc("grant_admin",{ target_email:email }).then(function(r){
+        if(r.error) throw r.error; toast("관리자로 추가했어요"); inp.value=""; btn.disabled=false; loadAdmins();
+      }).catch(function(e){ btn.disabled=false; toast("실패: "+(e.message||"해당 이메일의 로그인 기록이 있는지 확인해 주세요")); });
     });
-  }
-  document.getElementById("search").addEventListener("click",function(){ q=document.getElementById("q").value.trim(); page=0; loadMembers(); });
-  document.getElementById("q").addEventListener("keydown",function(e){ if(e.key==="Enter"){ q=e.target.value.trim(); page=0; loadMembers(); } });
-  mPrev.addEventListener("click",function(){ if(page>0){ page--; loadMembers(); } });
-  mNext.addEventListener("click",function(){ if((page+1)*PAGE<total){ page++; loadMembers(); } });
 
-  /* ---------- 관리자 설정 ---------- */
-  var aList=document.getElementById("a-list");
-  function loadAdmins(){
-    SA.dataset.loaded="1";
-    aList.innerHTML='<div class="msg">불러오는 중…</div>';
-    sb.rpc("list_admins").then(function(res){
-      if(res.error||!res.data){ aList.innerHTML='<div class="msg"><b>관리자 목록을 불러오지 못했어요.</b>'+esc((res.error&&res.error.message)||"")+'</div>'; return; }
-      var rows=Array.isArray(res.data)?res.data:(res.data.rows||[]);
-      renderAdmins(rows);
-    }).catch(function(){ aList.innerHTML='<div class="msg"><b>요청에 실패했어요.</b>새로고침해 주세요.</div>'; });
-  }
-  function renderAdmins(rows){
-    if(!rows.length){ aList.innerHTML='<div class="msg">등록된 관리자가 없어요.</div>'; return; }
-    aList.innerHTML="";
-    rows.forEach(function(u){
-      var el=document.createElement("div"); el.className="item";
-      el.innerHTML=
-        '<div class="av">'+esc(initials(u.name||u.email))+'</div>'+
-        '<div class="who"><div class="nm">'+esc(u.name||"이름 없음")+'</div><div class="em">'+esc(u.email||"")+'</div></div>';
-      var acts=document.createElement("div"); acts.className="acts";
-      var rm=document.createElement("button"); rm.className="danger"; rm.innerHTML='<i class="ti ti-user-minus"></i> 해제';
-      rm.addEventListener("click",function(){
-        if(u.user_id===myId){ toast("본인 권한은 여기서 해제할 수 없어요"); return; }
-        if(!window.confirm("'"+(u.email||u.name)+"'의 관리자 권한을 해제할까요?")) return;
-        rm.disabled=true;
-        sb.rpc("revoke_admin",{ target_user:u.user_id }).then(function(r){
-          if(r.error) throw r.error; toast("관리자 권한을 해제했어요"); loadAdmins();
-        }).catch(function(e){ rm.disabled=false; toast("실패: "+(e.message||"오류")); });
-      });
-      acts.appendChild(rm); el.appendChild(acts); aList.appendChild(el);
-    });
-  }
-  document.getElementById("a-add").addEventListener("click",function(){
-    var inp=document.getElementById("a-email"), email=inp.value.trim();
-    if(!email){ toast("이메일을 입력해 주세요"); return; }
-    var btn=this; btn.disabled=true;
-    sb.rpc("grant_admin",{ target_email:email }).then(function(r){
-      if(r.error) throw r.error; toast("관리자로 추가했어요"); inp.value=""; btn.disabled=false; loadAdmins();
-    }).catch(function(e){ btn.disabled=false; toast("실패: "+(e.message||"해당 이메일의 로그인 기록이 있는지 확인해 주세요")); });
+    loadMembers();
   });
-
-  /* ---------- 관리자 로그인 확인 ---------- */
-  sb.auth.getSession().then(function(r){
-    var s=r&&r.data?r.data.session:null;
-    if(!s){ gmsg('<b>관리자 로그인이 필요해요.</b>먼저 <a href="/#/">메인 사이트</a>에 관리자 계정으로 로그인한 뒤, 이 페이지를 새로고침해 주세요.'); return; }
-    myId=s.user&&s.user.id;
-    sb.from("app_admins").select("user_id").eq("user_id",myId).maybeSingle().then(function(a){
-      if(a.error||!a.data){ gmsg("<b>관리자 전용 페이지예요.</b>이 계정에는 운영 권한이 없어요."); return; }
-      gate.classList.add("hidden"); app.classList.remove("hidden"); loadMembers();
-    });
-  }).catch(function(){ gmsg("<b>세션 확인에 실패했어요.</b>새로고침해 주세요."); });
 })();
 </script>
 </body>
