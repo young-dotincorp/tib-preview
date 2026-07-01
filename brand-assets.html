@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tactile World · 브랜드 자산</title>
+<link rel="stylesheet" href="admin-shell.css"/>
+<style>
+  body{padding:0;}
+  .sheet{max-width:960px;margin:0 auto;padding:40px 22px 90px;}
+  .head h1{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px;}
+  .head p{color:var(--ink-soft);font-size:14px;margin:0;}
+  .eyebrow{font-size:11.5px;font-weight:800;letter-spacing:.09em;color:var(--ink-faint);text-transform:uppercase;margin:34px 0 14px;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:720px){ .two{grid-template-columns:1fr;} }
+  .logo-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .logo-stage{display:flex;align-items:center;justify-content:center;padding:44px 24px;min-height:150px;}
+  .logo-stage .tw-logo{height:40px;width:auto;display:block;}
+  .stage-light{background:var(--card);} .stage-light .tw-logo{color:var(--ink);}
+  .stage-dark{background:var(--side);} .stage-dark .tw-logo{color:#fff;}
+  .logo-meta{display:flex;align-items:center;gap:10px;padding:12px 15px;border-top:1px solid var(--line);background:#fff;}
+  .logo-meta .lb{font-size:12.5px;font-weight:700;flex:1;}
+  .logo-meta .hx{font-size:11.5px;color:var(--ink-faint);font-variant-numeric:tabular-nums;}
+  .logo-meta a{font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:4px;}
+  .usage{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;}
+  .usage h3{font-size:14px;margin:0 0 10px;font-weight:800;}
+  .usage p{font-size:13.5px;color:var(--ink-soft);margin:0 0 10px;}
+  .code{background:#17150F;color:#EDE8DE;border-radius:10px;padding:12px 14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;line-height:1.7;overflow-x:auto;white-space:pre;}
+  .code .k{color:#FF8A4C;} .code .s{color:#9BD1A2;} .code .c{color:#8C8577;}
+  .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:720px){ .slots{grid-template-columns:1fr;} }
+  .slot{border:1.5px dashed #D9D1C2;border-radius:14px;padding:26px 16px;text-align:center;background:#FCFAF5;}
+  .slot .ic{width:40px;height:40px;border-radius:10px;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:var(--ink-faint);font-size:20px;margin-bottom:10px;}
+  .slot .nm{font-size:14px;font-weight:800;}
+  .slot .st{font-size:12px;color:var(--ink-faint);margin-top:3px;}
+  .note{margin-top:30px;font-size:12.5px;color:var(--ink-soft);background:var(--info-bg);border:1px solid #CFE0F1;border-radius:12px;padding:14px 16px;}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="head">
+    <h1>브랜드 자산</h1>
+    <p>플랫폼 로고를 필요한 곳에서 꺼내 쓰는 단일 자산 모듈입니다. 웹은 <code>brand-logos.js</code>, 디자인은 <code>.svg</code> 파일을 사용하세요.</p>
+  </div>
+
+  <div class="eyebrow">Tactile World · 공식 로고</div>
+  <div class="two">
+    <div class="logo-card">
+      <div class="logo-stage stage-light" id="stage-light"></div>
+      <div class="logo-meta"><span class="lb">밝은 배경</span><span class="hx">#1F1D1A</span><a href="tactile-world-black.svg" download><i class="ti ti-download"></i> SVG</a></div>
+    </div>
+    <div class="logo-card">
+      <div class="logo-stage stage-dark" id="stage-dark"></div>
+      <div class="logo-meta"><span class="lb">어두운 배경</span><span class="hx">#FFFFFF</span><a href="tactile-world-white.svg" download><i class="ti ti-download"></i> SVG</a></div>
+    </div>
+  </div>
+
+  <div class="eyebrow">사용법</div>
+  <div class="usage">
+    <h3>웹 화면에서 (모듈)</h3>
+    <p>페이지에 <code>brand-logos.js</code>를 불러온 뒤, 로고가 필요한 곳에 넣습니다. 색은 CSS <code>color</code>로 제어돼요(로고가 <code>currentColor</code>라 배경에 맞춰 흑/백 자동).</p>
+    <div class="code"><span class="c">// &lt;script src="brand-logos.js"&gt;&lt;/script&gt; 로드 후</span>
+el.innerHTML = <span class="k">TWBrand</span>.tactileWorld();   <span class="c">// SVG 삽입</span>
+<span class="c">/* CSS */</span> .logo <span class="k">{</span> height:<span class="s">28px</span>; color:<span class="s">#fff</span>; <span class="k">}</span>  <span class="c">// 어두운 배경이면 흰색</span></div>
+    <h3 style="margin-top:16px">디자인 작업에서 (파일)</h3>
+    <p>Figma·문서 등에는 위 <b>SVG 파일</b>을 그대로 넣으세요. 밝은 배경엔 black, 어두운 배경엔 white 버전을 씁니다. 벡터라 어떤 크기로도 선명해요.</p>
+  </div>
+
+  <div class="eyebrow">하위 브랜드 (자산 준비 중)</div>
+  <div class="slots">
+    <div class="slot"><span class="ic"><i class="ti ti-photo"></i></span><div class="nm">Tactile Image Bank</div><div class="st">공식 벡터 로고 필요</div></div>
+    <div class="slot"><span class="ic"><i class="ti ti-device-gamepad-2"></i></span><div class="nm">Dot Games</div><div class="st">공식 벡터 로고 필요</div></div>
+    <div class="slot"><span class="ic"><i class="ti ti-sparkles"></i></span><div class="nm">Super Dot</div><div class="st">공식 벡터 로고 필요</div></div>
+  </div>
+
+  <div class="note">
+    현재 소스(index.html)에 <b>벡터 로고로 존재하는 건 Tactile World 하나</b>뿐이에요. 위 세 하위 브랜드는 지금 텍스트+아이콘으로만 표기돼요.
+    공식 로고 파일을 주시면 <code>TWBrand.register('dotGames', '&lt;svg…&gt;')</code>로 등록해 전 화면에 바로 반영하거나,
+    Tactile World와 어울리는 하위 브랜드 워드마크를 제가 시안으로 만들어 드릴 수도 있어요.
+  </div>
+</div>
+
+<script src="brand-logos.js"></script>
+<script>
+(function(){
+  "use strict";
+  function put(id){ var el=document.getElementById(id); if(el && window.TWBrand) el.innerHTML=window.TWBrand.tactileWorld(); }
+  put("stage-light"); put("stage-dark");
+})();
+</script>
+</body>
+</html>
