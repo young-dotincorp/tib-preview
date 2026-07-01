@@ -9,10 +9,9 @@
   body{min-height:100vh;display:flex;align-items:center;justify-content:center;
     background:radial-gradient(1200px 600px at 50% -10%, #FFF3EC 0%, var(--bg) 55%);padding:24px;}
   .login{width:100%;max-width:400px;}
-  .brand{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:22px;}
-  .brand .tw-logo{border-radius:12px;box-shadow:0 10px 30px rgba(255,79,0,.16);}
-  .brand h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:14px 0 2px;}
-  .brand p{font-size:13px;color:var(--ink-soft);margin:0;}
+  .brand{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:24px;}
+  .brand .tw-logo{height:38px;width:auto;color:var(--ink);display:block;}
+  .brand p{font-size:13px;color:var(--ink-soft);margin:14px 0 0;}
   .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 20px;box-shadow:0 4px 24px rgba(31,29,26,.05);}
   .gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #D9D5CC;background:#fff;border-radius:11px;padding:12px;font-size:14px;font-weight:700;color:var(--ink);}
   .gbtn:hover{background:#F7F4EE}
@@ -50,8 +49,8 @@
 
   // 로고 + 워드마크
   document.getElementById("brand").innerHTML =
-    (window.AdminShellLogo?window.AdminShellLogo(56):"")+
-    '<h1>Tactile World</h1><p>관리자 콘솔에 로그인</p>';
+    (window.AdminShellLogo?window.AdminShellLogo():"")+
+    '<p>관리자 콘솔에 로그인</p>';
 
   if(!(window.supabase && window.supabase.createClient)){
     body.innerHTML='<div class="state"><b>연결 라이브러리를 불러오지 못했어요.</b><br>새로고침해 주세요.</div>'; return;

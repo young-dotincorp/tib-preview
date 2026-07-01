@@ -36,10 +36,9 @@ button{font:inherit;cursor:pointer}
   position:fixed;inset:0 auto 0 0;width:var(--sidebar-w);background:var(--side);color:#EDE8DE;
   display:flex;flex-direction:column;z-index:40;transition:transform .22s ease;
 }
-.ac-brand{display:flex;align-items:center;gap:11px;padding:18px 18px 16px;}
-.ac-brand .tw-logo{flex:0 0 auto;display:block;border-radius:9px;}
-.ac-brand .bt{font-size:14.5px;font-weight:800;letter-spacing:-.01em;line-height:1.15;}
-.ac-brand .bt small{display:block;font-size:11px;font-weight:600;color:var(--side-soft);letter-spacing:.02em;}
+.ac-brand{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:20px 18px 16px;}
+.ac-brand .tw-logo{height:22px;width:auto;display:block;color:#fff;}
+.ac-brand .ac-sub{font-size:11px;font-weight:600;color:var(--side-soft);letter-spacing:.04em;text-transform:uppercase;padding-left:1px;}
 .ac-nav{flex:1;padding:8px 12px;overflow-y:auto;}
 .ac-nav .grp{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#6B6558;text-transform:uppercase;padding:14px 12px 6px;}
 .ac-nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;color:#CFC9BD;text-decoration:none;font-size:14px;font-weight:600;margin-bottom:2px;transition:background .12s,color .12s;}
