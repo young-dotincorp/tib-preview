@@ -28,6 +28,18 @@
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
   function initials(s){ s=(s||"").trim(); return s?s.slice(0,2).toUpperCase():"·"; }
 
+  // Tactile World 로고 (점자 셀 모티프) — 재사용 SVG
+  function LOGO(size){
+    var s=size||34;
+    return '<svg class="tw-logo" width="'+s+'" height="'+s+'" viewBox="0 0 40 40" role="img" aria-label="Tactile World">'+
+      '<rect x="2" y="2" width="36" height="36" rx="10" fill="#17150F"/>'+
+      '<circle cx="15" cy="13" r="3.1" fill="#FF4F00"/><circle cx="25" cy="13" r="3.1" fill="#FF4F00"/>'+
+      '<circle cx="15" cy="20" r="3.1" fill="#4A463E"/><circle cx="25" cy="20" r="3.1" fill="#FF4F00"/>'+
+      '<circle cx="15" cy="27" r="3.1" fill="#FF4F00"/><circle cx="25" cy="27" r="3.1" fill="#4A463E"/>'+
+      '</svg>';
+  }
+  window.AdminShellLogo = LOGO;
+
   function buildShell(active, title, icon){
     var nav = NAV.map(function(it){
       if(it.grp) return '<div class="grp">'+esc(it.grp)+'</div>';
@@ -39,7 +51,7 @@
     var shell =
       '<div class="ac-shell">'+
       '<aside class="ac-side" id="ac-side">'+
-        '<div class="ac-brand"><div class="dots" aria-hidden="true"><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i><i class="on"></i><i class="on"></i><i></i></div>'+
+        '<div class="ac-brand">'+LOGO(34)+
           '<div class="bt">Tactile World<small>관리자 콘솔</small></div></div>'+
         '<nav class="ac-nav">'+nav+'</nav>'+
         '<div class="foot">© Dot Inc. · Tactile World</div>'+
@@ -72,16 +84,16 @@
     setTimeout(function(){ toastEl.classList.remove("on"); }, 2400);
   }
 
-  function gate(sb, contentEl){
+  function gate(sb){
     return sb.auth.getSession().then(function(r){
       var s=r&&r.data?r.data.session:null;
-      if(!s){ contentEl.innerHTML='<div class="msg"><b>관리자 로그인이 필요해요.</b>먼저 <a href="/#/">메인 사이트</a>에 관리자 계정으로 로그인한 뒤, 이 페이지를 새로고침해 주세요.</div>'; return null; }
+      if(!s){ location.replace("admin-login.html"); return null; }
       var uid=s.user&&s.user.id;
       return sb.from("app_admins").select("user_id").eq("user_id",uid).maybeSingle().then(function(a){
-        if(a.error||!a.data){ contentEl.innerHTML='<div class="msg"><b>관리자 전용 콘솔이에요.</b>이 계정에는 운영 권한이 없어요.</div>'; return null; }
+        if(a.error||!a.data){ location.replace("admin-login.html"); return null; }
         return s.user;
       });
-    }).catch(function(){ contentEl.innerHTML='<div class="msg"><b>세션 확인에 실패했어요.</b>새로고침해 주세요.</div>'; return null; });
+    }).catch(function(){ location.replace("admin-login.html"); return null; });
   }
 
   function renderUser(sb, user){
@@ -118,7 +130,7 @@
       var sb=window.supabase.createClient(SB.url, SB.key,
         { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:false } });
       this.sb=sb;
-      return gate(sb, contentEl).then(function(user){
+      return gate(sb).then(function(user){
         if(!user) return null;
         renderUser(sb, user);
         fillBadges(sb);

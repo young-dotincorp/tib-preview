@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tactile World · 관리자 로그인</title>
+<link rel="stylesheet" href="admin-shell.css"/>
+<style>
+  body{min-height:100vh;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(1200px 600px at 50% -10%, #FFF3EC 0%, var(--bg) 55%);padding:24px;}
+  .login{width:100%;max-width:400px;}
+  .brand{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:22px;}
+  .brand .tw-logo{border-radius:12px;box-shadow:0 10px 30px rgba(255,79,0,.16);}
+  .brand h1{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:14px 0 2px;}
+  .brand p{font-size:13px;color:var(--ink-soft);margin:0;}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 20px;box-shadow:0 4px 24px rgba(31,29,26,.05);}
+  .gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #D9D5CC;background:#fff;border-radius:11px;padding:12px;font-size:14px;font-weight:700;color:var(--ink);}
+  .gbtn:hover{background:#F7F4EE}
+  .gbtn svg{width:18px;height:18px;flex:0 0 auto}
+  .divider{display:flex;align-items:center;gap:12px;margin:16px 0;color:var(--ink-faint);font-size:12px;}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+  .lbl{font-size:12.5px;font-weight:700;color:var(--ink-soft);margin:12px 0 5px;display:block;}
+  .login .field{margin-bottom:2px;}
+  .primary{width:100%;margin-top:16px;padding:12px;font-size:14px;}
+  .note{font-size:12px;color:var(--ink-faint);text-align:center;margin-top:16px;line-height:1.6;}
+  .state{text-align:center;padding:10px 0;color:var(--ink-soft);font-size:14px;}
+  .err{background:var(--danger-bg);color:#8A2540;border:1px solid #E9AFBD;border-radius:10px;padding:10px 12px;font-size:13px;margin-top:14px;display:none;}
+  .err.on{display:block}
+  .foot{text-align:center;font-size:11.5px;color:var(--ink-faint);margin-top:20px;}
+</style>
+</head>
+<body>
+<div class="login">
+  <div class="brand" id="brand"></div>
+  <div class="panel"><div id="auth-body"><div class="state">확인 중…</div></div></div>
+  <div class="foot">© Dot Inc. · Tactile World · 관리자 전용</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin-shell.js"></script>
+<script>
+(function(){
+  "use strict";
+  var SB = window.__TIB_SB__ || { url:"https://nqgaqzpbhmezkrrlbbhm.supabase.co", key:"sb_publishable_IThvI0wJJex8U4UiATHFyw_B_2jIphy" };
+  var esc=(window.AdminShell&&window.AdminShell.esc)||function(s){return String(s==null?"":s);};
+  var body=document.getElementById("auth-body");
+  var toastEl=document.getElementById("toast");
+  function toast(t){ toastEl.textContent=t; toastEl.classList.add("on"); setTimeout(function(){toastEl.classList.remove("on");},2400); }
+
+  // 로고 + 워드마크
+  document.getElementById("brand").innerHTML =
+    (window.AdminShellLogo?window.AdminShellLogo(56):"")+
+    '<h1>Tactile World</h1><p>관리자 콘솔에 로그인</p>';
+
+  if(!(window.supabase && window.supabase.createClient)){
+    body.innerHTML='<div class="state"><b>연결 라이브러리를 불러오지 못했어요.</b><br>새로고침해 주세요.</div>'; return;
+  }
+  var sb = window.supabase.createClient(SB.url, SB.key,
+    { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true } });
+
+  var navigating=false;
+  function goDashboard(){ if(navigating) return; navigating=true; location.replace("admin-dashboard.html"); }
+
+  function checkAdmin(session){
+    if(!session||navigating) return;
+    var uid=session.user&&session.user.id;
+    body.innerHTML='<div class="state">권한 확인 중…</div>';
+    sb.from("app_admins").select("user_id").eq("user_id",uid).maybeSingle().then(function(a){
+      if(a.data){ goDashboard(); }
+      else { showNoPermission(session); }
+    }).catch(function(){ showForm("권한 확인에 실패했어요. 다시 시도해 주세요."); });
+  }
+
+  function showNoPermission(session){
+    var email=(session.user&&session.user.email)||"";
+    body.innerHTML=
+      '<div class="state"><b style="color:var(--ink);font-size:15px;display:block;margin-bottom:6px">관리자 권한이 없는 계정이에요</b>'+
+      esc(email)+' 계정에는 운영 권한이 없어요.<br>관리자 계정으로 다시 로그인해 주세요.</div>'+
+      '<button class="btn primary" id="signout" type="button"><i class="ti ti-logout"></i> 다른 계정으로 로그인</button>';
+    document.getElementById("signout").addEventListener("click",function(){
+      sb.auth.signOut().then(function(){ navigating=false; showForm(); }).catch(function(){ showForm(); });
+    });
+  }
+
+  function showForm(errMsg){
+    body.innerHTML=
+      '<button class="gbtn" id="google" type="button">'+
+        '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.7-6.7C35.6 2.6 30.2 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.8 6.1C12.2 13.5 17.6 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.5 3-2.2 5.5-4.7 7.2l7.3 5.7c4.3-4 6.8-9.9 6.8-17.4z"/><path fill="#FBBC05" d="M10.4 28.3c-.5-1.4-.8-2.9-.8-4.3s.3-3 .8-4.3l-7.8-6.1C.9 16.7 0 20.2 0 24s.9 7.3 2.6 10.4l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.3-5.7c-2 1.4-4.7 2.3-8.6 2.3-6.4 0-11.8-4-13.6-9.8l-7.8 6.1C6.5 42.6 14.6 48 24 48z"/></svg>'+
+        'Google로 로그인</button>'+
+      '<div class="divider">또는 이메일로</div>'+
+      '<label class="lbl" for="email">이메일</label>'+
+      '<input id="email" class="field" type="email" autocomplete="username" placeholder="you@dotincorp.com"/>'+
+      '<label class="lbl" for="pw">비밀번호</label>'+
+      '<input id="pw" class="field" type="password" autocomplete="current-password" placeholder="비밀번호"/>'+
+      '<button class="btn btn-accent primary" id="login" type="button">로그인</button>'+
+      '<div class="err" id="err"></div>'+
+      '<div class="note">관리자 권한이 있는 계정만 콘솔에 접근할 수 있어요.<br>로그인 세션은 메인 사이트와 공유됩니다.</div>';
+
+    var err=document.getElementById("err");
+    function showErr(m){ err.textContent=m; err.classList.add("on"); }
+    if(errMsg) showErr(errMsg);
+
+    document.getElementById("google").addEventListener("click",function(){
+      err.classList.remove("on");
+      var redirectTo=location.origin+location.pathname;
+      sb.auth.signInWithOAuth({ provider:"google", options:{ redirectTo:redirectTo } })
+        .then(function(r){ if(r.error) showErr("Google 로그인을 시작하지 못했어요: "+(r.error.message||"")); })
+        .catch(function(e){ showErr("Google 로그인 오류: "+((e&&e.message)||"")); });
+    });
+
+    function doLogin(){
+      var email=document.getElementById("email").value.trim();
+      var pw=document.getElementById("pw").value;
+      if(!email||!pw){ showErr("이메일과 비밀번호를 입력해 주세요."); return; }
+      var btn=document.getElementById("login"); btn.disabled=true; err.classList.remove("on");
+      sb.auth.signInWithPassword({ email:email, password:pw }).then(function(r){
+        if(r.error){ btn.disabled=false; showErr("로그인 실패: 이메일·비밀번호를 확인해 주세요."); return; }
+        checkAdmin(r.data.session);
+      }).catch(function(){ btn.disabled=false; showErr("로그인 요청에 실패했어요."); });
+    }
+    document.getElementById("login").addEventListener("click",doLogin);
+    document.getElementById("pw").addEventListener("keydown",function(e){ if(e.key==="Enter") doLogin(); });
+  }
+
+  // OAuth 리다이렉트 복귀 또는 기존 세션 감지
+  sb.auth.onAuthStateChange(function(event, session){ if(session) checkAdmin(session); });
+  sb.auth.getSession().then(function(r){
+    var s=r&&r.data?r.data.session:null;
+    // URL에 OAuth 오류가 담겨 온 경우
+    var hash=location.hash||"", errInUrl=/error=/.test(hash)||/error=/.test(location.search);
+    if(s){ checkAdmin(s); }
+    else { showForm(errInUrl?"로그인이 취소되었거나 실패했어요. 다시 시도해 주세요.":""); }
+  }).catch(function(){ showForm(); });
+})();
+</script>
+</body>
+</html>

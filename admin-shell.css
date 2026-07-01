@@ -37,9 +37,7 @@ button{font:inherit;cursor:pointer}
   display:flex;flex-direction:column;z-index:40;transition:transform .22s ease;
 }
 .ac-brand{display:flex;align-items:center;gap:11px;padding:18px 18px 16px;}
-.ac-brand .dots{display:grid;grid-template-columns:repeat(2,6px);gap:4px;padding:7px;background:#000;border-radius:8px;}
-.ac-brand .dots i{width:6px;height:6px;border-radius:50%;background:#4A463E;display:block;}
-.ac-brand .dots i.on{background:var(--accent);}
+.ac-brand .tw-logo{flex:0 0 auto;display:block;border-radius:9px;}
 .ac-brand .bt{font-size:14.5px;font-weight:800;letter-spacing:-.01em;line-height:1.15;}
 .ac-brand .bt small{display:block;font-size:11px;font-weight:600;color:var(--side-soft);letter-spacing:.02em;}
 .ac-nav{flex:1;padding:8px 12px;overflow-y:auto;}
