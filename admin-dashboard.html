@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Tactile World · 대시보드 (관리자)</title>
+<style>
+  :root{
+    --ink:#1F1D1A; --ink-soft:#5C574E; --ink-faint:#9A9384;
+    --accent:#FF4F00; --line:#ECE6DC; --bg:#FAF8F3; --card:#fff;
+    --ok:#0F6E56; --ok-bg:#E1F5EE; --warn:#854F0B; --warn-bg:#FAEEDA;
+    --info:#0B5FA5; --info-bg:#E6F0F9; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Noto Sans KR","Malgun Gothic",system-ui,-apple-system,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:900px;margin:0 auto;padding:32px 18px 90px;}
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:2px;}
+  h1{font-size:21px;font-weight:800;margin:0;letter-spacing:-.01em;}
+  a.back{font-size:13px;color:var(--ink-soft);text-decoration:none;}
+  a.back:hover{color:var(--accent);}
+  .sub{color:var(--ink-soft);font-size:13.5px;margin:2px 0 22px;}
+  .bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .grow{flex:1}
+  button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid #D9D5CC;background:#fff;color:var(--ink);padding:7px 13px;font-size:13px;}
+  button:hover{background:#F4F1EA}
+
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--ink-faint);text-transform:uppercase;margin:22px 0 10px;}
+
+  /* 액션 카드 (밀린 일 강조) */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media(max-width:720px){ .kpis{grid-template-columns:repeat(2,1fr);} }
+  .kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;text-decoration:none;color:inherit;display:block;position:relative;transition:border-color .15s,transform .15s;}
+  a.kpi:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .kpi .n{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1;}
+  .kpi .l{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .kpi .go{font-size:12px;font-weight:700;color:var(--accent);margin-top:8px;display:inline-block;}
+  .kpi.warn .n{color:var(--warn);} .kpi.warn{background:var(--warn-bg);border-color:#F0D9A8;}
+  .kpi.ok .n{color:var(--ok);}
+
+  /* 분포 막대 */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin-bottom:14px;}
+  .panel h3{font-size:14px;margin:0 0 14px;font-weight:800;}
+  .row{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px;}
+  .row .k{flex:0 0 92px;color:var(--ink-soft);}
+  .row .track{flex:1;height:10px;background:#F0ECE3;border-radius:999px;overflow:hidden;}
+  .row .fill{height:100%;border-radius:999px;background:var(--accent);}
+  .row .v{flex:0 0 auto;font-variant-numeric:tabular-nums;font-weight:700;min-width:52px;text-align:right;color:var(--ink);}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:720px){ .two{grid-template-columns:1fr;} }
+
+  .msg{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:30px 22px;text-align:center;color:var(--ink-soft);}
+  .msg b{color:var(--ink);display:block;font-size:16px;margin-bottom:6px;}
+  .msg a{color:var(--accent);font-weight:700;text-decoration:none;}
+  .stamp{font-size:11.5px;color:var(--ink-faint);text-align:right;margin-top:16px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>대시보드</h1>
+    <div class="grow"></div>
+    <a class="back" href="admin-hub.html">← 허브</a>
+  </div>
+  <p class="sub">Tactile World 사이트 전반 현황이에요.</p>
+
+  <div id="root" aria-live="polite">
+    <div class="msg">불러오는 중…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  "use strict";
+  var SB = window.__TIB_SB__ || {
+    url: "https://nqgaqzpbhmezkrrlbbhm.supabase.co",
+    key: "sb_publishable_IThvI0wJJex8U4UiATHFyw_B_2jIphy"
+  };
+  var root = document.getElementById("root");
+  function msg(html){ root.innerHTML='<div class="msg">'+html+'</div>'; }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function n(x){ return (x==null?0:x).toLocaleString("ko-KR"); }
+
+  if(!(window.supabase && window.supabase.createClient)){
+    msg("<b>연결 라이브러리를 불러오지 못했어요.</b>네트워크 확인 후 새로고침해 주세요."); return;
+  }
+  var sb = window.supabase.createClient(SB.url, SB.key,
+    { auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:false } });
+
+  function bars(items, total, color){
+    var max = Math.max(1, total||items.reduce(function(a,b){return a+(b.n||0);},0));
+    return items.map(function(it){
+      var pct = Math.round(((it.n||0)/max)*100);
+      return '<div class="row"><span class="k">'+esc(it.name)+'</span>'+
+             '<span class="track"><span class="fill" style="width:'+pct+'%;'+(color?'background:'+color+';':'')+'"></span></span>'+
+             '<span class="v">'+n(it.n)+'</span></div>';
+    }).join("");
+  }
+
+  function render(d){
+    var g=d.graphics||{}, p=d.profiles||{}, m=d.messages||{}, cats=d.categories||[];
+    var statusItems=[
+      {name:"공개", n:g.published},
+      {name:"검수 대기", n:g.pending},
+      {name:"비공개", n:g.private},
+      {name:"반려", n:g.rejected}
+    ];
+    var specItems=[
+      {name:"60×40", n:g.spec_60x40},
+      {name:"96×64", n:g.spec_96x64}
+    ];
+    var html="";
+
+    // 오늘 처리할 일 (밀린 것 강조)
+    html+='<div class="eyebrow">오늘 처리할 일</div><div class="kpis">';
+    html+= kpi(g.pending, "검수 대기", "admin-review.html", (g.pending>0?"warn":"ok"), "검수하러 가기 →");
+    html+= kpi(m.inq_open, "미처리 문의", null, (m.inq_open>0?"warn":"ok"), (m.inq_open>0?"메시지함 준비 중":""));
+    html+= kpi(m.rep_open, "미처리 신고", null, (m.rep_open>0?"warn":"ok"), (m.rep_open>0?"메시지함 준비 중":""));
+    html+= kpi(g.published, "공개 그래픽", null, "ok", "");
+    html+='</div>';
+
+    // 요약
+    html+='<div class="eyebrow">전반 현황</div><div class="kpis">';
+    html+= kpi(g.total, "전체 그래픽", null, "", "");
+    html+= kpi(p.trusted, "신뢰 창작자", null, "", "전체 "+n(p.total)+"명 중");
+    html+= kpi(g.uploaders, "업로드한 창작자", null, "", "");
+    html+= kpi(p.pro, "Pro 회원", null, "", "");
+    html+='</div>';
+
+    // 분포
+    html+='<div class="eyebrow">분포</div><div class="two">';
+    html+='<div class="panel"><h3>상태</h3>'+bars(statusItems, g.total)+'</div>';
+    html+='<div class="panel"><h3>규격</h3>'+bars(specItems, g.total, "#0B5FA5")+'</div>';
+    html+='</div>';
+    html+='<div class="panel"><h3>카테고리 (상위)</h3>'+
+          bars(cats.map(function(c){return {name:c.name,n:c.n};}), (g.total||0), "#7A5AF8")+'</div>';
+
+    html+='<div class="stamp">기준 시각 '+esc(fmt(d.generated_at))+'</div>';
+    root.innerHTML=html;
+  }
+
+  function kpi(val, label, href, cls, go){
+    var inner='<div class="n">'+n(val)+'</div><div class="l">'+esc(label)+'</div>'+(go?'<span class="go">'+esc(go)+'</span>':'');
+    var c='kpi'+(cls?' '+cls:'');
+    return href ? '<a class="'+c+'" href="'+href+'">'+inner+'</a>' : '<div class="'+c+'">'+inner+'</div>';
+  }
+  function fmt(iso){ try{ var dt=new Date(iso); return dt.toLocaleString("ko-KR"); }catch(e){ return ""; } }
+
+  function load(){
+    msg("불러오는 중…");
+    sb.auth.getSession().then(function(r){
+      var s=r&&r.data?r.data.session:null;
+      if(!s){ msg('<b>관리자 로그인이 필요해요.</b>먼저 <a href="/#/">메인 사이트</a>에 관리자 계정으로 로그인한 뒤, 이 페이지를 새로고침해 주세요.'); return; }
+      sb.rpc("admin_dashboard_stats").then(function(res){
+        if(res.error){ msg("<b>집계를 불러오지 못했어요.</b>"+esc(res.error.message||"관리자 권한이 필요할 수 있어요.")); return; }
+        try{ render(res.data||{}); }catch(e){ msg("<b>표시 중 오류가 났어요.</b>새로고침해 주세요."); }
+      }).catch(function(){ msg("<b>집계 요청에 실패했어요.</b>새로고침해 주세요."); });
+    }).catch(function(){ msg("<b>세션 확인에 실패했어요.</b>새로고침해 주세요."); });
+  }
+  load();
+})();
+</script>
+</body>
+</html>
