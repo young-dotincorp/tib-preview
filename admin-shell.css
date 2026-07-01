@@ -37,7 +37,7 @@ button{font:inherit;cursor:pointer}
   display:flex;flex-direction:column;z-index:40;transition:transform .22s ease;
 }
 .ac-brand{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:20px 18px 16px;}
-.ac-brand .tw-logo{height:22px;width:auto;display:block;color:#fff;}
+.ac-brand .tw-logo{height:28px;width:auto;display:block;color:#fff;}
 .ac-brand .ac-sub{font-size:11px;font-weight:600;color:var(--side-soft);letter-spacing:.04em;text-transform:uppercase;padding-left:1px;}
 .ac-nav{flex:1;padding:8px 12px;overflow-y:auto;}
 .ac-nav .grp{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#6B6558;text-transform:uppercase;padding:14px 12px 6px;}
