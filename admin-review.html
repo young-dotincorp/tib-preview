@@ -21,6 +21,7 @@
   .badge{font-size:12px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--warn-bg);color:#854F0B;}
   .bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
   .bar .grow{flex:1}
+  .pager{font-size:12.5px;color:var(--ink-soft);min-width:64px;text-align:center;}
   button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid #D9D5CC;background:#fff;color:var(--ink);padding:8px 14px;font-size:13.5px;}
   button:hover{background:#F4F1EA}
   button:disabled{opacity:.5;cursor:not-allowed}
@@ -71,6 +72,9 @@
   </div>
 
   <div class="bar">
+    <button id="prev" type="button">← 이전</button>
+    <span id="pager" class="pager"></span>
+    <button id="next" type="button">다음 →</button>
     <div class="grow"></div>
     <button id="refresh" type="button">새로고침</button>
   </div>
@@ -148,8 +152,6 @@
   }
 
   function render(rows){
-    countEl.textContent = rows.length+"건 대기";
-    if(!rows.length){ msg("<b>검수할 작품이 없어요.</b>새로 제출된 그래픽이 여기에 표시됩니다."); return; }
     root.innerHTML="";
     rows.forEach(function(g){
       var card=document.createElement("div"); card.className="card";
@@ -203,7 +205,7 @@
         act.innerHTML=""; chk.remove(); reasons.remove();
         var r=document.createElement("span"); r.className="result "+(kind==="approved"?"ok":"no");
         r.textContent=(kind==="approved"?"공개 승인됨":"반려됨"); act.appendChild(r);
-        setTimeout(function(){ card.style.transition="opacity .4s"; card.style.opacity="0"; setTimeout(function(){ card.remove(); decCount(); },420); }, 700);
+        setTimeout(function(){ card.style.transition="opacity .4s"; card.style.opacity="0"; setTimeout(function(){ card.remove(); total=Math.max(0,total-1); updatePager(); if(!root.querySelector(".card")) loadPage(); },420); }, 700);
       }
 
       approve.addEventListener("click",function(){
@@ -239,10 +241,30 @@
       card.appendChild(pv); card.appendChild(body); root.appendChild(card);
     });
   }
-  function decCount(){
-    var n=root.querySelectorAll(".card").length;
-    countEl.textContent=n+"건 대기";
-    if(!n) msg("<b>검수할 작품이 없어요.</b>새로 제출된 그래픽이 여기에 표시됩니다.");
+  var PAGE_SIZE=10, page=0, total=0;
+  var prevBtn=document.getElementById("prev"), nextBtn=document.getElementById("next"), pagerEl=document.getElementById("pager");
+
+  function updatePager(){
+    countEl.textContent = total+"건 대기";
+    var from=page*PAGE_SIZE;
+    pagerEl.textContent = total ? ((from+1)+"–"+Math.min(from+PAGE_SIZE,total)+" / "+total) : "";
+    prevBtn.disabled = page<=0;
+    nextBtn.disabled = (from+PAGE_SIZE)>=total;
+  }
+
+  function loadPage(){
+    msg("불러오는 중…");
+    var from=page*PAGE_SIZE, to=from+PAGE_SIZE-1;
+    sb.from("graphics").select("id,title,creator_name,spec,items,created_at,submitted_by",{count:"exact"})
+      .eq("status","pending").order("created_at",{ascending:true}).range(from,to)
+      .then(function(res){
+        if(res.error){ msg("<b>목록을 불러오지 못했어요.</b>"+esc(res.error.message||"")); return; }
+        total=res.count||0;
+        var rows=res.data||[];
+        if(from>0 && rows.length===0){ page=Math.max(0,page-1); return loadPage(); }
+        if(!rows.length){ root.innerHTML=""; msg("<b>검수할 작품이 없어요.</b>새로 제출된 그래픽이 여기에 표시됩니다."); updatePager(); return; }
+        render(rows); updatePager();
+      });
   }
 
   function load(){
@@ -253,16 +275,13 @@
       var uid=s.user&&s.user.id;
       sb.from("app_admins").select("user_id").eq("user_id",uid).maybeSingle().then(function(a){
         if(a.error||!a.data){ msg("<b>관리자 전용 페이지예요.</b>이 계정에는 검수 권한이 없어요."); return; }
-        sb.from("graphics").select("id,title,creator_name,spec,items,created_at,submitted_by")
-          .eq("status","pending").order("created_at",{ascending:true})
-          .then(function(res){
-            if(res.error){ msg("<b>목록을 불러오지 못했어요.</b>"+esc(res.error.message||"")); return; }
-            render(res.data||[]);
-          });
+        page=0; loadPage();
       });
     }).catch(function(){ msg("<b>세션 확인에 실패했어요.</b>새로고침해 주세요."); });
   }
 
+  prevBtn.addEventListener("click",function(){ if(page>0){ page--; loadPage(); } });
+  nextBtn.addEventListener("click",function(){ if((page+1)*PAGE_SIZE<total){ page++; loadPage(); } });
   document.getElementById("refresh").addEventListener("click", load);
   load();
 })();
