@@ -46,6 +46,8 @@
   .retc.on{display:block}
   textarea{width:100%;font:inherit;font-size:13px;border:1px solid #D9D5CC;border-radius:8px;padding:8px;resize:vertical;min-height:52px;}
   .act{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap;}
+  .act .trust{margin-left:auto;font-size:12.5px;color:var(--ok);border-color:#B9E3D3;}
+  .act .trust.on{background:var(--ok-bg);color:var(--ok);border-color:transparent;font-weight:700;}
   .done{opacity:.55}
   .result{font-size:13px;font-weight:700;padding:6px 12px;border-radius:999px;}
   .result.ok{background:var(--ok-bg);color:var(--ok);}
@@ -191,6 +193,7 @@
       var approve=document.createElement("button"); approve.className="accent"; approve.textContent="승인 · 공개"; approve.disabled=true;
       var reject=document.createElement("button"); reject.className="ghost"; reject.textContent="반려";
       var confirmReject=document.createElement("button"); confirmReject.className="ghost"; confirmReject.textContent="반려 확정"; confirmReject.style.display="none";
+      var trust=document.createElement("button"); trust.type="button"; trust.className="trust"; trust.textContent="신뢰 창작자로 지정";
 
       function syncApprove(){ approve.disabled = !(checks[0]&&checks[1]&&checks[2]); }
 
@@ -223,7 +226,15 @@
           .catch(function(e){ lock(false); toast("실패: "+(e.message||"오류")); });
       });
 
-      act.appendChild(approve); act.appendChild(reject); act.appendChild(confirmReject);
+      trust.addEventListener("click",function(){
+        if(!g.submitted_by){ toast("창작자 정보를 찾을 수 없어요"); return; }
+        if(!window.confirm("이 창작자를 신뢰 창작자로 지정할까요?\n지정하면 이후 이 창작자의 업로드는 검수 없이 자동 공개됩니다.")) return;
+        trust.disabled=true;
+        sb.rpc("set_trusted",{ p_user:g.submitted_by, p_trusted:true })
+          .then(function(res){ if(res.error) throw res.error; toast("신뢰 창작자로 지정했어요"); trust.textContent="신뢰 창작자 ✓"; trust.classList.add("on"); })
+          .catch(function(e){ trust.disabled=false; toast("실패: "+(e.message||"오류")); });
+      });
+      act.appendChild(approve); act.appendChild(reject); act.appendChild(confirmReject); act.appendChild(trust);
       body.appendChild(reasons); body.appendChild(etc); body.appendChild(act);
       card.appendChild(pv); card.appendChild(body); root.appendChild(card);
     });
@@ -242,7 +253,7 @@
       var uid=s.user&&s.user.id;
       sb.from("app_admins").select("user_id").eq("user_id",uid).maybeSingle().then(function(a){
         if(a.error||!a.data){ msg("<b>관리자 전용 페이지예요.</b>이 계정에는 검수 권한이 없어요."); return; }
-        sb.from("graphics").select("id,title,creator_name,spec,items,created_at")
+        sb.from("graphics").select("id,title,creator_name,spec,items,created_at,submitted_by")
           .eq("status","pending").order("created_at",{ascending:true})
           .then(function(res){
             if(res.error){ msg("<b>목록을 불러오지 못했어요.</b>"+esc(res.error.message||"")); return; }
